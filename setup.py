@@ -10,9 +10,14 @@ setup(
     version="0.1.0",
     package_dir = {'': 'lib'},
     py_modules = ['sphinxter'],
+    install_requires=[
+        'Sphinx==5.1.1',
+        'PyYAML==6.0'
+    ],
     url="https://github.com/gaf3/sphinxter",
     author="Gaffer Fitch",
     author_email="sphinxter@gaf3.com",
+    description="Converts YAML docstrings to sphinx documentation",
     long_description=long_description,
     long_description_content_type="text/markdown",
     license_files=('LICENSE.txt',),

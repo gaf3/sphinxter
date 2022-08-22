@@ -8,25 +8,23 @@ VOLUMES=-v ${PWD}/lib:/opt/service/lib \
 		-v ${PWD}/test:/opt/service/test \
 		-v ${PWD}/docs:/opt/service/docs \
 		-v ${PWD}/.pylintrc:/opt/service/.pylintrc \
-		-v ${PWD}/setup.py:/opt/service/setup.py
+		-v ${PWD}/setup.py:/opt/service/setup.py \
+		-v ${PWD}/docs.py:/opt/service/docs.py
 ENVIRONMENT=-e PYTHONDONTWRITEBYTECODE=1 \
 			-e PYTHONUNBUFFERED=1 \
 			-e test="python -m unittest -v" \
 			-e debug="python -m ptvsd --host 0.0.0.0 --port 5678 --wait -m unittest -v"
-.PHONY: build shell debug test lint setup sphinx tag untag
+PYPI=-v ${PWD}/LICENSE.txt:/opt/service/LICENSE.txt \
+	-v ${PWD}/PYPI.md:/opt/service/README.md \
+	-v ${HOME}/.pypirc:/opt/service/.pypirc
+
+.PHONY: build shell debug test lint setup sphinx tag untag testpypi pypi sphinx docs html
 
 build:
 	docker build . -t $(ACCOUNT)/$(IMAGE):$(VERSION)
 
 shell:
 	docker run $(TTY) $(VOLUMES) $(ENVIRONMENT) -p 127.0.0.1:$(DEBUG_PORT):5678 $(ACCOUNT)/$(IMAGE):$(VERSION) sh
-
-sphinx:
-	docker run $(TTY) $(VOLUMES) $(ENVIRONMENT) $(ACCOUNT)/$(IMAGE):$(VERSION) sh -c "sphinx-quickstart docs --sep -p $(IMAGE) -a 'George A. Fitch III (gaf3)' -r $(VERSION) -l en"
-
-html:
-	docker run $(TTY) $(VOLUMES) $(ENVIRONMENT) $(ACCOUNT)/$(IMAGE):$(VERSION) sh -c "sphinx-build -b html docs/source/ docs/build/html"
-	open -a Firefox "file://$(PWD)/docs/build/html/index.html"
 
 debug:
 	docker run $(TTY) $(VOLUMES) $(ENVIRONMENT) -p 127.0.0.1:$(DEBUG_PORT):5678 $(ACCOUNT)/$(IMAGE):$(VERSION) sh -c "python -m ptvsd --host 0.0.0.0 --port 5678 --wait -m unittest discover -v test"
@@ -38,7 +36,7 @@ lint:
 	docker run $(TTY) $(VOLUMES) $(ENVIRONMENT) $(ACCOUNT)/$(IMAGE):$(VERSION) sh -c "pylint --rcfile=.pylintrc lib/"
 
 setup:
-	docker run $(TTY) $(VOLUMES) $(INSTALL) sh -c "cp -r /opt/service /opt/install && cd /opt/install/ && \
+	docker run $(TTY) $(VOLUMES) $(PYPI) $(INSTALL) sh -c "cp -r /opt/service /opt/install && cd /opt/install/ && \
 	python setup.py install && \
 	python -m sphinxter"
 
@@ -49,3 +47,23 @@ tag:
 untag:
 	-git tag -d $(VERSION)
 	git push origin ":refs/tags/$(VERSION)
+
+testpypi:
+	docker run $(TTY) $(VOLUMES) $(PYPI) gaf3/pypi sh -c "cd /opt/service && \
+	python -m build && \
+	python -m twine upload -r testpypi --config-file=.pypirc dist/*"
+
+pypi:
+	docker run $(TTY) $(VOLUMES) $(PYPI) gaf3/pypi sh -c "cd /opt/service && \
+	python -m build && \
+	python -m twine upload --config-file=.pypirc dist/*"
+
+sphinx:
+	docker run $(TTY) $(VOLUMES) $(ENVIRONMENT) $(ACCOUNT)/$(IMAGE):$(VERSION) sh -c "sphinx-quickstart docs --sep -p $(IMAGE) -a 'George A. Fitch III (gaf3)' -r $(VERSION) -l en"
+
+docs:
+	docker run $(TTY) $(VOLUMES) $(ENVIRONMENT) $(ACCOUNT)/$(IMAGE):$(VERSION) sh -c "./docs.py"
+
+html:
+	docker run $(TTY) $(VOLUMES) $(ENVIRONMENT) $(ACCOUNT)/$(IMAGE):$(VERSION) sh -c "sphinx-build -b html docs/source/ docs/build/html"
+	open -a Firefox "file://$(PWD)/docs/build/html/index.html"
