@@ -123,8 +123,7 @@ class Reader:
 
         parsed = {
             "name": resource.__name__,
-            "signature": str(signature),
-            "parameters": []
+            "signature": str(signature)
         }
 
         if method:
@@ -134,6 +133,8 @@ class Reader:
         parameters = cls.parameters(resource)
 
         for name in signature.parameters:
+
+            parsed.setdefault("parameters", [])
 
             parameter = {
                 "name": name
@@ -220,8 +221,7 @@ class Reader:
 
         except TypeError:
 
-            parsed["signature"] = ""
-            parsed["parameters"] = []
+            pass
 
         attributes = cls.attributes(resource, body=True)
 
@@ -301,7 +301,7 @@ class Content:
         self.parsed = parsed
 
 
-class Doc:
+class Document:
     """
     Class for a documentation file
     """
@@ -324,183 +324,198 @@ class Doc:
 
 class Writer:
 
-    doc = None
+    document = None
     file = None
 
-    def __init__(self, doc, file):
+    def __init__(self, document, file):
 
-        self.doc = doc
+        self.document = document
         self.file = file
 
-    def line(self, indent, line, extra=False):
+    def line(self, line='', indent=0, before=False, after=False):
 
-        self.file.write(f"{self.doc.indent * indent}{line}\n")
-
-        if extra:
+        if before:
             self.file.write("\n")
 
-    def lines(self, indent, lines, extra=False):
+        self.file.write(f"{self.document.indent * indent}{line}".rstrip())
+
+        self.file.write("\n")
+
+        if after:
+            self.file.write("\n")
+
+    def lines(self, lines, indent, before=False, after=False):
+
+        if before:
+            self.file.write("\n")
 
         for line in lines.split("\n"):
-            self.line(indent, line)
+            self.line(line, indent)
 
-        if extra:
+        if after:
             self.file.write("\n")
 
-    def types(zelf, types):
+    @staticmethod
+    def types(types):
 
         if not isinstance(types, list):
             types = [types]
 
         return " or ".join(types)
 
-    def description(self, indent, parsed):
+    def description(self, parsed, indent):
+
+        if "description" not in parsed:
+            return
+
+        self.lines(parsed["description"].rstrip(), indent, before=True)
+
+    def parameter(self, parsed, indent):
 
         if "description" in parsed:
-            self.lines(indent, parsed["description"], True)
-
-    def parameter(self, indent, parsed):
-
-        self.line(indent, f":param {parsed['name']}: {parsed.get('description', '')}")
+            self.line(f":param {parsed['name']}: {parsed['description']}", indent)
+        else:
+            self.line(f":param {parsed['name']}:", indent)
 
         if "type" in parsed:
-            self.line(indent, f":type: {self.types(parsed['type'])}")
+            self.line(f":type {parsed['name']}: {self.types(parsed['type'])}", indent)
 
-    def parameters(self, indent, parsed):
+    def parameters(self, parsed, indent):
 
-        if not parsed["parameters"]:
+        if "parameters" not in parsed:
             return
 
         for parameter in parsed["parameters"]:
-            self.parameter(indent, parameter)
+            self.parameter(parameter, indent)
 
-        self.line(0,"")
-
-    def returns(self, indent, parsed):
+    def returns(self, parsed, indent):
 
         if "return" not in parsed:
             return
 
-        self.line(indent, f":return: {parsed['return'].get('description', '')}")
+        if "description" in parsed['return']:
+            self.line(f":return: {parsed['return']['description']}", indent)
 
         if "type" in parsed['return']:
-            self.line(indent, f":rtype: {self.types(parsed['return']['type'])}")
+            self.line(f":rtype: {self.types(parsed['return']['type'])}", indent)
 
-    def raises(self, indent, parsed):
+    def raises(self, parsed, indent):
 
         if "raises" not in parsed:
             return
 
         for exception in sorted(parsed["raises"].keys()):
-            self.line(indent, f":raises {exception}: {parsed['raises'][exception]}")
+            self.line(f":raises {exception}: {parsed['raises'][exception]}", indent)
 
-    def usage(self, indent, parsed):
+    def execution(self, parsed, indent):
+
+        if (
+            "parameters" not in parsed and
+            "return" not in parsed and
+            "raises" not in parsed
+        ):
+            return
+
+        self.line()
+        self.parameters(parsed, indent)
+        self.returns(parsed, indent)
+        self.raises(parsed, indent)
+
+    def usage(self, parsed, indent):
 
         if "usage" not in parsed:
             return
 
-        self.line(0,"")
-        self.line(indent,"**Usage**", True)
-        self.lines(indent, parsed["usage"], True)
+        self.line("**Usage**", indent, before=True, after=True)
+        self.lines(parsed["usage"].rstrip(), indent)
 
-    def function(self, indent, parsed):
+    def function(self, parsed, indent=0):
 
-        self.line(indent, f".. function:: {parsed['name']}{parsed['signature']}", True)
+        self.line(f".. function:: {parsed['name']}{parsed['signature']}", indent, before=True)
 
-        self.description(indent+1, parsed)
-        self.parameters(indent+1, parsed)
-        self.returns(indent+1, parsed)
-        self.raises(indent+1, parsed)
-        self.usage(indent+1, parsed)
+        self.description(parsed, indent+1)
+        self.execution(parsed, indent+1)
+        self.usage(parsed, indent+1)
 
-    def attribute(self, indent, parsed):
+    def attribute(self, parsed, indent):
 
-        self.line(indent, f".. attribute:: {parsed['name']}")
+        self.line(f".. attribute:: {parsed['name']}", indent, before=True)
 
         if "type" in parsed:
-            self.line(indent+1, f":type: {self.types(parsed['type'])}")
+            self.line(f":type: {self.types(parsed['type'])}", indent+1)
 
-        self.line(0,"")
+        self.description(parsed, indent+1)
 
-        self.description(indent+1, parsed)
+    def attributes(self, parsed, indent):
 
-    def attributes(self, indent, parsed):
-
-        if not parsed["attributes"]:
+        if "attributes" not in parsed:
             return
 
         for attribute in parsed["attributes"]:
-            self.attribute(indent, attribute)
+            self.attribute(attribute, indent)
 
-        self.line(0,"")
+    def method(self, parsed, indent):
 
-    def method(self, indent, parsed):
+        self.line()
+        self.line(f".. {parsed['method']}method:: {parsed['name']}{parsed['signature']}", indent)
 
-        self.line(indent, f".. {parsed['method']}method:: {parsed['name']}{parsed['signature']}")
+        self.description(parsed, indent+1)
+        self.execution(parsed, indent+1)
+        self.usage(parsed, indent+1)
 
-        self.line(0,"")
-
-        self.description(indent+1, parsed)
-        self.parameters(indent+1, parsed)
-        self.returns(indent+1, parsed)
-        self.raises(indent+1, parsed)
-        self.usage(indent+1, parsed)
-
-    def definition(self, indent, parsed):
+    def definition(self, parsed, indent):
 
         if "definition" not in parsed:
             return
 
-        self.line(0,"")
-        self.line(indent,"**Definition**", True)
-        self.lines(indent, parsed["definition"], True)
+        self.line("**Definition**", indent, before=True, after=True)
+        self.lines(parsed["definition"].rstrip(), indent)
 
-    def cls(self, indent, parsed):
+    def cls(self, parsed, indent=0):
 
-        self.line(indent, f".. class:: {parsed['name']}{parsed['signature']}", True)
+        self.line(f".. class:: {parsed['name']}{parsed.get('signature', '')}", indent, before=True)
 
-        self.description(indent+1, parsed)
-        self.definition(indent+1, parsed)
-        self.parameters(indent+1, parsed)
-        self.raises(indent+1, parsed)
-        self.usage(indent+1, parsed)
-        self.attributes(indent+1, parsed)
+        self.description(parsed, indent+1)
+        self.definition(parsed, indent+1)
+        self.execution(parsed, indent+1)
+        self.usage(parsed, indent+1)
+        self.attributes(parsed, indent+1)
 
         for method in parsed["methods"]:
-            self.method(indent+1, method)
+            self.method(method, indent+1)
 
-    def module(self, indent, parsed):
+    def module(self, parsed, indent=0):
 
-        self.line(indent, f".. module:: {parsed['name']}", True)
+        self.line(f".. module:: {parsed['name']}", indent, before=True, after=True)
 
-        self.line(indent, parsed['name'])
-        self.line(indent, '=' * len(parsed['name']), True)
+        self.line(parsed['name'], indent)
+        self.line('=' * len(parsed['name']), indent)
 
-        self.description(indent, parsed)
-        self.attributes(indent, parsed)
+        self.description(parsed, indent)
+        self.attributes(parsed, indent)
 
     def dump(self):
 
-        self.line(0, ".. created by sphinxter")
-        self.line(0, ".. default-domain:: py", True)
+        self.line(".. created by sphinxter")
+        self.line(".. default-domain:: py")
 
         module = None
 
-        for index in sorted(self.doc.contents.keys()):
-            for content in self.doc.contents[index]:
+        for index in sorted(self.document.contents.keys()):
+            for content in self.document.contents[index]:
 
                 if content.kind == "module":
-                    self.module(0, content.parsed)
-                    module = content.parsed['name']
-                elif module != content.module['name']:
-                    module = content.module['name']
-                    self.line(0, f".. currentmodule:: {module}", True)
+                    self.module(content.parsed)
+                    module = content.module
+                elif module != content.module:
+                    module = content.module
+                    self.line(f".. currentmodule:: {module}", before=True)
 
                 if content.kind == "function":
-                    self.function(0, content.parsed)
+                    self.function(content.parsed)
 
                 if content.kind == "class":
-                    self.cls(0, content.parsed)
+                    self.cls(content.parsed)
 
 
 class Sphinxter:
@@ -511,7 +526,7 @@ class Sphinxter:
     modules = None
     base = None
     indent = None
-    docs = None # list of documents
+    documents = None # list of documents
 
     def __init__(
         self,
@@ -526,24 +541,24 @@ class Sphinxter:
         self.modules = modules
         self.base = base
         self.indent = indent
-        self.docs = {}
+        self.documents = {}
 
-    def doc(self, module, kind, parsed, current='index.rst'):
+    def document(self, module, kind, parsed, current='index.rst'):
 
         sphinx = parsed.get("sphinx", {})
 
         if isinstance(sphinx, bool) and not sphinx:
             return
 
-        location = sphinx.get("location", current)
+        path = sphinx.get("path", current)
         order = sphinx.get("order", 0)
 
-        if location not in self.docs:
-            self.docs[location] = Doc(f"{self.base}/{location}", indent=self.indent)
+        if path not in self.documents:
+            self.documents[path] = Document(f"{self.base}/{path}", indent=self.indent)
 
-        self.docs[location].add(module, kind, parsed, order)
+        self.documents[path].add(module, kind, parsed, order)
 
-        return location
+        return path
 
     def read(self):
 
@@ -551,23 +566,23 @@ class Sphinxter:
 
             parsed = Reader.module(module)
 
-            location = self.doc(parsed, "module", parsed)
+            path = self.document(parsed['name'], "module", parsed)
 
             for function in parsed["functions"]:
-                self.doc(parsed, "function", function, location)
+                self.document(parsed['name'], "function", function, path)
 
             for cls in parsed["classes"]:
-                self.doc(parsed, "class", cls, location)
+                self.document(parsed['name'], "class", cls, path)
 
     def write(self):
 
-        for doc in self.docs.values():
-            with open(doc.path, "w") as file:
-                Writer(doc, file).dump()
+        for document in self.documents.values():
+            with open(document.path, "w") as file:
+                Writer(document, file).dump()
 
     def process(self):
         """
-        Crawls modules and generates docs
+        Reads modules and writes documents
         """
 
         self.read()
