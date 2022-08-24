@@ -1,6 +1,8 @@
 """
-Converts YAML docstrings to sphinx documentation
+Converts YAML docstrings and code comments to sphinx documentation
 """
+
+# pylint: disable=too-many-branches, too-many-locals, too-few-public-methods
 
 import io
 import ast
@@ -59,7 +61,8 @@ class Reader:
 
             if name in skip:
                 continue
-            elif name == "description" and "description" in primary:
+
+            if name == "description" and "description" in primary:
                 primary[name] += "\n\n" + value
             else:
                 primary[name] = value
@@ -100,8 +103,8 @@ class Reader:
                     else:
                         comments[param] = f"{comments[param]}\n{comment}"
 
-        for param in comments:
-            parseds[param].update(cls.parse(comments[param]))
+        for param, comment in comments.items():
+            parseds[param].update(cls.parse(comment))
 
         return parseds
 
@@ -548,7 +551,7 @@ class Sphinxter:
         sphinx = parsed.get("sphinx", {})
 
         if isinstance(sphinx, bool) and not sphinx:
-            return
+            return current
 
         path = sphinx.get("path", current)
         order = sphinx.get("order", 0)
@@ -577,7 +580,7 @@ class Sphinxter:
     def write(self):
 
         for document in self.documents.values():
-            with open(document.path, "w") as file:
+            with open(document.path, "w", encoding="utf-8") as file:
                 Writer(document, file).dump()
 
     def process(self):

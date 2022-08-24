@@ -1195,7 +1195,7 @@ class TestSphinxter(unittest.TestCase):
         instance.read()
         instance.write()
 
-        mock_open.assert_called_once_with("docs/source/index.rst", "w")
+        mock_open.assert_called_once_with("docs/source/index.rst", "w", encoding="utf-8")
 
         self.assertEqual("\n" + "".join([call.args[0] for call in mock_open.return_value.write.mock_calls]), TestWriter.EXAMPLE)
 
