@@ -11,6 +11,9 @@ copyright = '2022, George A. Fitch III (gaf3)'
 author = 'George A. Fitch III (gaf3)'
 release = '0.1.0'
 
+# The master toctree document.
+master_doc = 'index'
+
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
@@ -26,3 +29,9 @@ language = 'en'
 
 html_theme = 'nature'
 html_static_path = ['_static']
+html_sidebars = {
+    '**': [
+        'globaltoc.html',
+        'searchbox.html'
+    ]
+}

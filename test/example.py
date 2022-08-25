@@ -16,8 +16,8 @@ b: 2
 """
 
 def func(
-    a, # The a
-    b, # The b
+    a:int, # The a
+    b:'str', # The b
     *args,   #
     **kwargs # a: 1
              # b: 2
@@ -103,7 +103,7 @@ class Complex:
         *args,   #
         **kwargs # a: 1
                  # b: 2
-    ):
+    )->list:
         """
         description: Some static stat
         parameters:

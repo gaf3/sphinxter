@@ -1,129 +1,49 @@
 .. created by sphinxter
 .. default-domain:: py
 
-.. module:: test.example
+sphinxter
+=========
 
-test.example
-============
+.. toctree::
+    :maxdepth: 1
+    :glob:
+    :hidden:
 
-mod me
+    *
 
-.. attribute:: a
+.. module:: sphinxter
 
-    The a team
+Converts YAML docstrings and code comments to sphinx documentation
 
-.. attribute:: b
+.. class:: Sphinxter(modules, base='docs/source', indent='    ')
 
-    The b team
+    Class for crawling code and generating documentation files
 
-    Not as good as the a team
+    :param modules: module or modules to crawl
+    :param base: where to store generated documents
+    :param indent:
 
-.. attribute:: big
+    .. attribute:: base
 
-    Bunch a
+    .. attribute:: documents
 
-.. function:: func(a, b, *args, **kwargs)
+        list of documents
 
-    Some basic func
+    .. attribute:: indent
 
-    :param a: The a More stuff
-    :param b: The b
-    :param args:
-    :param kwargs:
-    :return: things
-    :rtype: str or None
-    :raises Exception: if oh noes
+    .. attribute:: modules
 
-    **Usage**
+    .. method:: document(module, kind, parsed, current='index.rst')
 
-    Do some cool stuff::
+        :param module:
+        :param kind:
+        :param parsed:
+        :param current:
 
-        like this
+    .. method:: process()
 
-    It's great
+        Reads modules and writes documents
 
-.. class:: Basic
+    .. method:: read()
 
-    Basic class
-
-.. class:: Complex(a, b, *args, **kwargs)
-
-    Complex class
-
-    call me
-
-    **Definition**
-
-    make sure you do this::
-
-        wowsa
-
-    Ya sweet
-
-    :param a: The a More stuff
-    :param b: The b
-    :param args:
-    :param kwargs:
-
-    **Usage**
-
-    Do some cool stuff::
-
-        like this
-
-    It's great
-
-    .. attribute:: a
-
-        The a team
-
-    .. attribute:: b
-
-        The b team
-
-        Not as good as the a team
-
-    .. attribute:: big
-
-        Bunch a
-
-    .. classmethod:: classy(a, b, *args, **kwargs)
-
-        Some class meth
-
-        :param a: The a More stuff
-        :param b: The b
-        :param args:
-        :param kwargs:
-        :return: things
-        :rtype: str
-
-    .. method:: meth(a, b, *args, **kwargs)
-
-        Some basic meth
-
-        :param a: The a More stuff
-        :param b: The b
-        :param args:
-        :param kwargs:
-        :return: things
-        :rtype: str or None
-        :raises Exception: if oh noes
-
-        **Usage**
-
-        Do some cool stuff::
-
-            like this
-
-        It's great
-
-    .. staticmethod:: stat(a, b, *args, **kwargs)
-
-        Some static stat
-
-        :param a: The a More stuff
-        :param b: The b
-        :param args:
-        :param kwargs:
-        :return: things
+    .. method:: write()
