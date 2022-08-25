@@ -7,7 +7,7 @@ from sphinxter.writer import Writer
 
 class Content:
     """
-    sphinx: document.rst
+    sphinx: document
     """
 
     module = None
@@ -23,7 +23,7 @@ class Content:
 
 class Document:
     """
-    sphinx: document.rst
+    sphinx: document
     """
 
     path = None
@@ -55,10 +55,14 @@ class Sphinxter:
     base = None
     indent = None
     documents = None # list of documents
+    titles = None
+    toctree = None
 
     def __init__(
         self,
         modules,           # module or modules to crawl
+        titles=None,
+        toctree=None,
         base="docs/source", # where to store generated documents
         indent='    '
     ):
@@ -68,10 +72,12 @@ class Sphinxter:
 
         self.modules = modules
         self.base = base
+        self.titles = titles if titles is not None else {}
+        self.toctree = toctree if toctree is not None else ['self', '*']
         self.indent = indent
         self.documents = {}
 
-    def document(self, module, kind, parsed, current='index.rst'):
+    def document(self, module, kind, parsed, current='index'):
 
         sphinx = parsed.get("sphinx", {})
 
@@ -89,13 +95,14 @@ class Sphinxter:
 
         if path not in self.documents:
 
-            title = [module]
-            toctree = True
-            if path != 'index.rst':
-                title.append(path.split('.')[0].title())
+            if path != 'index':
+                title = self.titles.get(path, path)
                 toctree = False
+            else:
+                title = self.titles.get(path, module)
+                toctree = self.toctree
 
-            self.documents[path] = Document(f"{self.base}/{path}", ".".join(title), toctree, self.indent)
+            self.documents[path] = Document(f"{self.base}/{path}.rst", title, toctree, self.indent)
 
         self.documents[path].add(module, kind, parsed, order)
 

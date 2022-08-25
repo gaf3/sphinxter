@@ -2,4 +2,18 @@
 
 import sphinxter
 
-sphinxter.Sphinxter(sphinxter).process()
+sphinxter.Sphinxter(
+    sphinxter,
+    {
+        'index': "sphinxter.Sphinxter",
+        'reader': "sphinxter.Reader",
+        'writer': "sphinxter.Writer",
+        'document': "sphinxter.Document"
+    },
+    [
+        'self',
+        'reader',
+        'writer',
+        'document'
+    ]
+).process()

@@ -1,25 +1,30 @@
 .. created by sphinxter
 .. default-domain:: py
 
-sphinxter
-=========
+sphinxter.Sphinxter
+===================
 
 .. toctree::
     :maxdepth: 1
     :glob:
     :hidden:
 
-    *
+    self
+    reader
+    writer
+    document
 
 .. module:: sphinxter
 
 Converts YAML docstrings and code comments to sphinx documentation
 
-.. class:: Sphinxter(modules, base='docs/source', indent='    ')
+.. class:: Sphinxter(modules, titles=None, toctree=None, base='docs/source', indent='    ')
 
     Class for crawling code and generating documentation files
 
     :param modules: module or modules to crawl
+    :param titles:
+    :param toctree:
     :param base: where to store generated documents
     :param indent:
 
@@ -33,7 +38,11 @@ Converts YAML docstrings and code comments to sphinx documentation
 
     .. attribute:: modules
 
-    .. method:: document(module, kind, parsed, current='index.rst')
+    .. attribute:: titles
+
+    .. attribute:: toctree
+
+    .. method:: document(module, kind, parsed, current='index')
 
         :param module:
         :param kind:

@@ -14,7 +14,7 @@ import yaml
 class Reader:
     """
     description: Static class for reading doc strings and comments into dict's
-    sphinx: reader.rst
+    sphinx: reader
     """
 
     @staticmethod

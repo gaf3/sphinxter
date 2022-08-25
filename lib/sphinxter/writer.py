@@ -5,7 +5,7 @@ Module for writing out documents
 class Writer:
     """
     description: Class for writing out documents
-    sphinx: writer.rst
+    sphinx: writer
     """
 
     document = None
@@ -175,13 +175,15 @@ class Writer:
         self.description(parsed, indent)
         self.attributes(parsed, indent)
 
-    def toctree(self, indent=0):
+    def toctree(self, paths, indent=0):
 
         self.line(".. toctree::", indent, before=True)
         self.line(":maxdepth: 1", indent+1)
         self.line(":glob:", indent+1)
-        self.line(":hidden:", indent+1)
-        self.line("*", indent+1, before=True)
+        self.line(":hidden:", indent+1, after=True)
+
+        for path in paths:
+            self.line(path, indent+1)
 
     def dump(self):
 
@@ -192,7 +194,7 @@ class Writer:
         self.line('=' * len(self.document.title))
 
         if self.document.toctree:
-            self.toctree()
+            self.toctree(self.document.toctree)
 
         module = None
 

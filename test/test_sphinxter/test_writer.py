@@ -458,7 +458,7 @@ a
 
     def test_toctree(self):
 
-        self.writer.toctree(1)
+        self.writer.toctree(['*'], 1)
 
         self.assertEqual(self.file.getvalue(), """
 
@@ -482,6 +482,7 @@ test.example
     :glob:
     :hidden:
 
+    self
     *
 
 .. module:: test.example
@@ -616,7 +617,7 @@ mod me
 
         # actual
 
-        self.writer.document = sphinxter.Document(None, "test.example", True, '    ')
+        self.writer.document = sphinxter.Document(None, "test.example", ['self', '*'], '    ')
 
         self.writer.document.add("test.example", "module", TestReader.MODULE, 0)
 

@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>sphinxter &#8212; sphinxter 0.1.0 documentation</title>
+    <title>sphinxter.Sphinxter &#8212; sphinxter 0.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/nature.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -16,7 +16,7 @@
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="sphinxter.Document" href="document.html" /> 
+    <link rel="next" title="sphinxter.Reader" href="reader.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -28,10 +28,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="document.html" title="sphinxter.Document"
+          <a href="reader.html" title="sphinxter.Reader"
              accesskey="N">next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">sphinxter 0.1.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">sphinxter</a></li> 
+        <li class="nav-item nav-item-this"><a href="">sphinxter.Sphinxter</a></li> 
       </ul>
     </div>  
 
@@ -40,19 +40,21 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="sphinxter">
-<h1>sphinxter<a class="headerlink" href="#sphinxter" title="Permalink to this heading">¶</a></h1>
+  <section id="sphinxter-sphinxter">
+<h1>sphinxter.Sphinxter<a class="headerlink" href="#sphinxter-sphinxter" title="Permalink to this heading">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
 <span class="target" id="module-sphinxter"></span><p>Converts YAML docstrings and code comments to sphinx documentation</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="sphinxter.Sphinxter">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sphinxter.</span></span><span class="sig-name descname"><span class="pre">Sphinxter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modules</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'docs/source'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span>&#160;&#160;&#160; <span class="pre">'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sphinxter.Sphinxter" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sphinxter.</span></span><span class="sig-name descname"><span class="pre">Sphinxter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modules</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">toctree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'docs/source'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span>&#160;&#160;&#160; <span class="pre">'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sphinxter.Sphinxter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class for crawling code and generating documentation files</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>modules</strong> – module or modules to crawl</p></li>
+<li><p><strong>titles</strong> – </p></li>
+<li><p><strong>toctree</strong> – </p></li>
 <li><p><strong>base</strong> – where to store generated documents</p></li>
 <li><p><strong>indent</strong> – </p></li>
 </ul>
@@ -79,9 +81,19 @@
 <span class="sig-name descname"><span class="pre">modules</span></span><a class="headerlink" href="#sphinxter.Sphinxter.modules" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sphinxter.Sphinxter.titles">
+<span class="sig-name descname"><span class="pre">titles</span></span><a class="headerlink" href="#sphinxter.Sphinxter.titles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sphinxter.Sphinxter.toctree">
+<span class="sig-name descname"><span class="pre">toctree</span></span><a class="headerlink" href="#sphinxter.Sphinxter.toctree" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="sphinxter.Sphinxter.document">
-<span class="sig-name descname"><span class="pre">document</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parsed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'index.rst'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sphinxter.Sphinxter.document" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">document</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parsed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'index'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sphinxter.Sphinxter.document" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -122,10 +134,11 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <h3><a href="#">Table of Contents</a></h3>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="document.html">sphinxter.Document</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">sphinxter.Sphinxter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reader.html">sphinxter.Reader</a></li>
 <li class="toctree-l1"><a class="reference internal" href="writer.html">sphinxter.Writer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="document.html">sphinxter.Document</a></li>
 </ul>
 
 <div id="searchbox" style="display: none" role="search">
@@ -152,10 +165,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="document.html" title="sphinxter.Document"
+          <a href="reader.html" title="sphinxter.Reader"
              >next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">sphinxter 0.1.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">sphinxter</a></li> 
+        <li class="nav-item nav-item-this"><a href="">sphinxter.Sphinxter</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
