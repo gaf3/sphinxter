@@ -98,6 +98,21 @@ class TestReader(unittest.TestCase):
             }
         })
 
+        def func(
+            a,              # The a
+            b:bool=False    # The b
+        ):
+            pass
+
+        self.assertEqual(sphinxter.Reader.comments(func), {
+            "a": {
+                "description": "The a"
+            },
+            "b": {
+                "description": "The b"
+            }
+        })
+
     def test_annotations(self):
 
         self.assertEqual(sphinxter.Reader.annotations(example.func), {
@@ -266,7 +281,7 @@ class TestReader(unittest.TestCase):
 
     def test_attributes(self):
 
-        self.assertEqual(sphinxter.Reader.attributes(example.Complex, body=True), {
+        self.assertEqual(sphinxter.Reader.attributes(example.Complex), {
             "a": {
                 "description": "The a team"
             },

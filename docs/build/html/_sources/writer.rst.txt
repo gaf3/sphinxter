@@ -98,9 +98,9 @@ sphinxter.Writer
         :param parsed:
         :param indent:
 
-    .. method:: toctree(parsed, indent=0)
+    .. method:: toctree(paths, indent=0)
 
-        :param parsed:
+        :param paths:
         :param indent:
 
     .. staticmethod:: types(types)

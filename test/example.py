@@ -16,7 +16,7 @@ b: 2
 """
 
 def func(
-    a:int, # The a
+    a:int,   # The a
     b:'str', # The b
     *args,   #
     **kwargs # a: 1
@@ -115,6 +115,7 @@ class Complex:
 
     @classmethod
     def classy(
+        cls,
         a,       # The a
         b,       # The b
         *args,   #
