@@ -6,38 +6,71 @@ sphinxter.Document
 
 .. currentmodule:: sphinxter
 
-.. class:: Content(module, kind, parsed)
+.. class:: Content(module: str, kind: str, parsed: dict)
 
-    :param module:
-    :param kind:
-    :param parsed:
+    Content for a document
+
+    :param module: Name of module this content is for
+    :type module: str
+    :param kind: Kind of resource
+    :type kind: str
+    :param parsed: The parsed documentation
+    :type parsed: dict
 
     .. attribute:: kind
 
+        Kind of resource
+
     .. attribute:: module
+
+        Name of module this content is for
 
     .. attribute:: parsed
 
-.. class:: Document(path, title, toctree, indent)
+        The parsed documentation
 
-    :param path:
-    :param title:
-    :param toctree:
-    :param indent:
+.. class:: Document(path: str, title: str, toctree, indent: str)
+
+    Document (rst) to write out
+
+    :param path: where to store the
+    :type path: str
+    :param title: title of the document
+    :type title: str
+    :param toctree: list of documents for toctree or False if none
+    :type toctree: bool or list
+    :param indent: string to use for indenting
+    :type indent: str
 
     .. attribute:: contents
 
+        document contents, keyed by order to list of contents
+
     .. attribute:: indent
+
+        string to use for indenting
 
     .. attribute:: path
 
+        where to store the document
+
     .. attribute:: title
+
+        title of the document
 
     .. attribute:: toctree
 
-    .. method:: add(module, kind, parsed, order)
+        list of documents for toctree or False if none
 
-        :param module:
-        :param kind:
-        :param parsed:
-        :param order:
+    .. method:: add(module: str, kind: str, parsed: dict, order: int)
+
+        Adds content to a document
+
+        :param module: Name of module this content is for
+        :type module: str
+        :param kind: Kind of resource
+        :type kind: str
+        :param parsed: The parsed documentation
+        :type parsed: dict
+        :param order: Where to place this content
+        :type order: int

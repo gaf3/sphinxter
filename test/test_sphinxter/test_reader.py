@@ -269,15 +269,15 @@ class TestReader(unittest.TestCase):
         "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n"
     }
 
-    def test_function(self):
+    def test_routine(self):
 
-        self.assertEqual(sphinxter.Reader.function(inspect.getattr_static(example, 'func')), self.FUNCTION)
+        self.assertEqual(sphinxter.Reader.routine(inspect.getattr_static(example, 'func')), self.FUNCTION)
 
-        self.assertEqual(sphinxter.Reader.function(inspect.getattr_static(example.Complex, 'stat'), method=True), self.STATICMETHOD)
+        self.assertEqual(sphinxter.Reader.routine(inspect.getattr_static(example.Complex, 'stat'), method=True), self.STATICMETHOD)
 
-        self.assertEqual(sphinxter.Reader.function(inspect.getattr_static(example.Complex, 'classy'), method=True), self.CLASSMETHOD)
+        self.assertEqual(sphinxter.Reader.routine(inspect.getattr_static(example.Complex, 'classy'), method=True), self.CLASSMETHOD)
 
-        self.assertEqual(sphinxter.Reader.function(inspect.getattr_static(example.Complex, 'meth'), method=True), self.METHOD)
+        self.assertEqual(sphinxter.Reader.routine(inspect.getattr_static(example.Complex, 'meth'), method=True), self.METHOD)
 
     def test_attributes(self):
 

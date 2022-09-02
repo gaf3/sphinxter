@@ -7,14 +7,19 @@ from sphinxter.writer import Writer
 
 class Content:
     """
+    description: Content for a document
     sphinx: document
     """
 
-    module = None
-    kind = None
-    parsed = None
+    module = None   # Name of module this content is for
+    kind = None     # Kind of resource
+    parsed = None   # The parsed documentation
 
-    def __init__(self, module, kind, parsed):
+    def __init__(self,
+        module:str, # Name of module this content is for
+        kind:str,   # Kind of resource
+        parsed:dict # The parsed documentation
+    ):
 
         self.module = module
         self.kind = kind
@@ -23,16 +28,29 @@ class Content:
 
 class Document:
     """
+    description: Document (rst) to write out
     sphinx: document
     """
 
-    path = None
-    title = None
-    indent = None
-    toctree = None
-    contents = None
+    path = None     # where to store the document
+    title = None    # title of the document
+    indent = None   # string to use for indenting
+    toctree = None  # list of documents for toctree or False if none
+    contents = None # document contents, keyed by order to list of contents
 
-    def __init__(self, path, title, toctree, indent):
+    def __init__(self,
+        path:str,   # where to store the
+        title:str,  # title of the document
+        toctree,    # list of documents for toctree or False if none
+        indent:str  # string to use for indenting
+    ):
+        """
+        parameters:
+            toctree:
+                type:
+                - bool
+                - list
+        """
 
         self.path = path
         self.title = title
@@ -40,7 +58,15 @@ class Document:
         self.indent = indent
         self.contents = {}
 
-    def add(self, module, kind, parsed, order):
+    def add(self,
+        module:str,     # Name of module this content is for
+        kind:str,       # Kind of resource
+        parsed:dict,    # The parsed documentation
+        order:int       # Where to place this content
+    ):
+        """
+        Adds content to a document
+        """
 
         self.contents.setdefault(order, [])
         self.contents[order].append(Content(module, kind, parsed))

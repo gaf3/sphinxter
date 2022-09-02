@@ -53,13 +53,16 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="sphinxter.Reader.annotations">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">annotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#sphinxter.Reader.annotations" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extract annotations in a format better for updating</p>
+<dd><p>Read annotations in a format better for updating</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>resource</strong> (<em>function</em><em> or </em><em>method</em>) – what to extract annotations from</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>dict</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict of annotations, with parameters and return keys</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
 <p><strong>Usage</strong></p>
@@ -93,7 +96,7 @@ themelves:</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="sphinxter.Reader.attributes">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attributes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#sphinxter.Reader.attributes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extract attributes from a module or class, including their comments and docstrings</p>
+<dd><p>Read attributes from a module or class, including their comments and docstrings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>resource</strong> (<em>function</em><em> or </em><em>method</em>) – what to extract attributes from</p>
@@ -176,7 +179,7 @@ themelves:</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="sphinxter.Reader.cls">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#sphinxter.Reader.cls" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads all the documentation from a class</p>
+<dd><p>Reads all the documentation from a class for <a class="reference internal" href="writer.html#sphinxter.Writer.cls" title="sphinxter.Writer.cls"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Writer.cls</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>resource</strong> (<em>class</em>) – what to extract documentation from</p>
@@ -186,7 +189,7 @@ themelves:</p>
 </dd>
 </dl>
 <p><strong>Usage</strong></p>
-<p>Givin this class is part of the example module:</p>
+<p>Given this class is part of the example module:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Complex</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    description: Complex class</span>
@@ -248,6 +251,55 @@ themelves:</p>
 <span class="sd">        b:</span>
 <span class="sd">            more: stuff</span>
 <span class="sd">        return: things</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">classy</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">a</span><span class="p">,</span>       <span class="c1"># The a</span>
+        <span class="n">b</span><span class="p">,</span>       <span class="c1"># The b</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">,</span>   <span class="c1">#</span>
+        <span class="o">**</span><span class="n">kwargs</span> <span class="c1"># a: 1</span>
+                <span class="c1"># b: 2</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        description: Some class meth</span>
+<span class="sd">        parameters:</span>
+<span class="sd">        a: More stuff</span>
+<span class="sd">        b:</span>
+<span class="sd">            more: stuff</span>
+<span class="sd">        return:</span>
+<span class="sd">            description: things</span>
+<span class="sd">            type: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">meth</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">a</span><span class="p">,</span>       <span class="c1"># The a</span>
+        <span class="n">b</span><span class="p">,</span>       <span class="c1"># The b</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">,</span>   <span class="c1">#</span>
+        <span class="o">**</span><span class="n">kwargs</span> <span class="c1"># a: 1</span>
+                <span class="c1"># b: 2</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        description: Some basic meth</span>
+<span class="sd">        parameters:</span>
+<span class="sd">        a: More stuff</span>
+<span class="sd">        b:</span>
+<span class="sd">            more: stuff</span>
+<span class="sd">        return:</span>
+<span class="sd">            description: things</span>
+<span class="sd">            type:</span>
+<span class="sd">            - str</span>
+<span class="sd">            - None</span>
+<span class="sd">        raises:</span>
+<span class="sd">            Exception: if oh noes</span>
+<span class="sd">        usage: |</span>
+<span class="sd">            Do some cool stuff::</span>
+
+<span class="sd">                like this</span>
+
+<span class="sd">            It&#39;s great</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
     <span class="k">class</span> <span class="nc">Subber</span><span class="p">:</span>
@@ -329,6 +381,71 @@ themelves:</p>
 <span class="c1">#                 &quot;description&quot;: &quot;things&quot;,</span>
 <span class="c1">#                 &quot;type&quot;: &quot;list&quot;</span>
 <span class="c1">#             }</span>
+<span class="c1">#         },</span>
+<span class="c1">#         {</span>
+<span class="c1">#             &quot;name&quot;: &quot;classy&quot;,</span>
+<span class="c1">#             &quot;method&quot;: &quot;class&quot;,</span>
+<span class="c1">#             &quot;description&quot;: &quot;Some class meth&quot;,</span>
+<span class="c1">#             &quot;signature&quot;: &quot;(a, b, *args, **kwargs)&quot;,</span>
+<span class="c1">#             &quot;parameters&quot;: [</span>
+<span class="c1">#                 {</span>
+<span class="c1">#                     &quot;name&quot;: &quot;a&quot;,</span>
+<span class="c1">#                     &quot;description&quot;: &quot;The a More stuff&quot;</span>
+<span class="c1">#                 },</span>
+<span class="c1">#                 {</span>
+<span class="c1">#                     &quot;name&quot;: &quot;b&quot;,</span>
+<span class="c1">#                     &quot;description&quot;: &quot;The b&quot;,</span>
+<span class="c1">#                     &quot;more&quot;: &quot;stuff&quot;</span>
+<span class="c1">#                 },</span>
+<span class="c1">#                 {</span>
+<span class="c1">#                     &quot;name&quot;: &quot;args&quot;</span>
+<span class="c1">#                 },</span>
+<span class="c1">#                 {</span>
+<span class="c1">#                     &quot;name&quot;: &quot;kwargs&quot;,</span>
+<span class="c1">#                     &quot;a&quot;: 1,</span>
+<span class="c1">#                     &quot;b&quot;: 2</span>
+<span class="c1">#                 }</span>
+<span class="c1">#             ],</span>
+<span class="c1">#             &quot;return&quot;: {</span>
+<span class="c1">#                 &quot;description&quot;: &quot;things&quot;,</span>
+<span class="c1">#                 &quot;type&quot;: &#39;str&#39;</span>
+<span class="c1">#             }</span>
+<span class="c1">#         },</span>
+<span class="c1">#         {</span>
+<span class="c1">#             &quot;name&quot;: &quot;meth&quot;,</span>
+<span class="c1">#             &quot;method&quot;: &quot;&quot;,</span>
+<span class="c1">#             &quot;description&quot;: &quot;Some basic meth&quot;,</span>
+<span class="c1">#             &quot;signature&quot;: &quot;(a, b, *args, **kwargs)&quot;,</span>
+<span class="c1">#             &quot;parameters&quot;: [</span>
+<span class="c1">#                 {</span>
+<span class="c1">#                     &quot;name&quot;: &quot;a&quot;,</span>
+<span class="c1">#                     &quot;description&quot;: &quot;The a More stuff&quot;</span>
+<span class="c1">#                 },</span>
+<span class="c1">#                 {</span>
+<span class="c1">#                     &quot;name&quot;: &quot;b&quot;,</span>
+<span class="c1">#                     &quot;description&quot;: &quot;The b&quot;,</span>
+<span class="c1">#                     &quot;more&quot;: &quot;stuff&quot;</span>
+<span class="c1">#                 },</span>
+<span class="c1">#                 {</span>
+<span class="c1">#                     &quot;name&quot;: &quot;args&quot;</span>
+<span class="c1">#                 },</span>
+<span class="c1">#                 {</span>
+<span class="c1">#                     &quot;name&quot;: &quot;kwargs&quot;,</span>
+<span class="c1">#                     &quot;a&quot;: 1,</span>
+<span class="c1">#                     &quot;b&quot;: 2</span>
+<span class="c1">#                 }</span>
+<span class="c1">#             ],</span>
+<span class="c1">#             &quot;return&quot;: {</span>
+<span class="c1">#                 &quot;description&quot;: &quot;things&quot;,</span>
+<span class="c1">#                 &quot;type&quot;: [</span>
+<span class="c1">#                     &#39;str&#39;,</span>
+<span class="c1">#                     &#39;None&#39;</span>
+<span class="c1">#                 ]</span>
+<span class="c1">#             },</span>
+<span class="c1">#             &quot;raises&quot;: {</span>
+<span class="c1">#                 &quot;Exception&quot;: &quot;if oh noes&quot;</span>
+<span class="c1">#             },</span>
+<span class="c1">#             &quot;usage&quot;: &quot;Do some cool stuff::\n\n    like this\n\nIt&#39;s great\n&quot;</span>
 <span class="c1">#         }</span>
 <span class="c1">#     ],</span>
 <span class="c1">#     &quot;classes&quot;: [</span>
@@ -349,13 +466,16 @@ themelves:</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="sphinxter.Reader.comments">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">comments</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#sphinxter.Reader.comments" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extracts parameters comments from a function or method</p>
+<dd><p>Reads parameters comments from a function or method</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>resource</strong> (<em>function</em><em> or </em><em>method</em>) – what to extract the parameter arguments from</p>
+<dd class="field-odd"><p><strong>resource</strong> (<em>function</em><em> or </em><em>method</em>) – what to read the parameter comments from</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>dict</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict of parsed comments, keyed by parameter</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
 <p><strong>Usage</strong></p>
@@ -383,105 +503,9 @@ can be parsed as YAML, just like a docstring):</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="sphinxter.Reader.function">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#sphinxter.Reader.function" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads all the documentation from a function or method</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>resource</strong> (<em>function</em><em> or </em><em>method</em>) – what to read from</p></li>
-<li><p><strong>method</strong> (<em>bool</em>) – whether this is a method</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>dict</p>
-</dd>
-</dl>
-<p><strong>Usage</strong></p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This expects resources from inspect.getattr_static(), not getattr() and
-not directly off modules or classes or instances.</p>
-</div>
-<p>Extracting all the documentation for a function or method is as easy as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Assume this is part of a module named example</span>
-
-<span class="k">def</span> <span class="nf">func</span><span class="p">(</span>
-    <span class="n">a</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>   <span class="c1"># The a</span>
-    <span class="n">b</span><span class="p">:</span><span class="s1">&#39;str&#39;</span><span class="p">,</span> <span class="c1"># The b</span>
-    <span class="o">*</span><span class="n">args</span><span class="p">,</span>   <span class="c1">#</span>
-    <span class="o">**</span><span class="n">kwargs</span> <span class="c1"># a: 1</span>
-             <span class="c1"># b: 2</span>
-<span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    description: Some basic func</span>
-<span class="sd">    parameters:</span>
-<span class="sd">        a: More stuff</span>
-<span class="sd">        b:</span>
-<span class="sd">            more: stuff</span>
-<span class="sd">    return:</span>
-<span class="sd">        description: things</span>
-<span class="sd">        type:</span>
-<span class="sd">        - str</span>
-<span class="sd">        - None</span>
-<span class="sd">    raises:</span>
-<span class="sd">        Exception: if oh noes</span>
-<span class="sd">    usage: |</span>
-<span class="sd">        Do some cool stuff::</span>
-
-<span class="sd">            like this</span>
-
-<span class="sd">        It&#39;s great</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">pass</span>
-
-<span class="n">sphinxter</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">function</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getattr_static</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="s1">&#39;func&#39;</span><span class="p">))</span>
-<span class="c1"># {</span>
-<span class="c1">#     &quot;name&quot;: &quot;func&quot;,</span>
-<span class="c1">#     &quot;description&quot;: &quot;Some basic func&quot;,</span>
-<span class="c1">#     &quot;signature&quot;: &quot;(a: int, b: &#39;str&#39;, *args, **kwargs)&quot;,</span>
-<span class="c1">#     &quot;parameters&quot;: [</span>
-<span class="c1">#         {</span>
-<span class="c1">#             &quot;name&quot;: &quot;a&quot;,</span>
-<span class="c1">#             &quot;description&quot;: &quot;The a More stuff&quot;,</span>
-<span class="c1">#             &quot;type&quot;: &quot;int&quot;</span>
-<span class="c1">#         },</span>
-<span class="c1">#         {</span>
-<span class="c1">#             &quot;name&quot;: &quot;b&quot;,</span>
-<span class="c1">#             &quot;description&quot;: &quot;The b&quot;,</span>
-<span class="c1">#             &quot;more&quot;: &quot;stuff&quot;,</span>
-<span class="c1">#             &quot;type&quot;: &quot;str&quot;</span>
-<span class="c1">#         },</span>
-<span class="c1">#         {</span>
-<span class="c1">#             &quot;name&quot;: &quot;args&quot;</span>
-<span class="c1">#         },</span>
-<span class="c1">#         {</span>
-<span class="c1">#             &quot;name&quot;: &quot;kwargs&quot;,</span>
-<span class="c1">#             &quot;a&quot;: 1,</span>
-<span class="c1">#             &quot;b&quot;: 2</span>
-<span class="c1">#         }</span>
-<span class="c1">#     ],</span>
-<span class="c1">#     &quot;return&quot;: {</span>
-<span class="c1">#         &quot;description&quot;: &quot;things&quot;,</span>
-<span class="c1">#         &quot;type&quot;: [</span>
-<span class="c1">#             &#39;str&#39;,</span>
-<span class="c1">#             &#39;None&#39;</span>
-<span class="c1">#         ]</span>
-<span class="c1">#     },</span>
-<span class="c1">#     &quot;raises&quot;: {</span>
-<span class="c1">#         &quot;Exception&quot;: &quot;if oh noes&quot;</span>
-<span class="c1">#     },</span>
-<span class="c1">#     &quot;usage&quot;: &quot;Do some cool stuff::\n\n    like this\n\nIt&#39;s great\n&quot;</span>
-<span class="c1"># }</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="sphinxter.Reader.module">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#sphinxter.Reader.module" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads all the documentation from a module</p>
+<dd><p>Reads all the documentation from a module for <a class="reference internal" href="writer.html#sphinxter.Writer.module" title="sphinxter.Writer.module"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Writer.module</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>resource</strong> (<em>module</em>) – what to extract documentation from</p>
@@ -537,6 +561,10 @@ not directly off modules or classes or instances.</p>
 <span class="sd">        It&#39;s great</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+<span class="k">class</span> <span class="nc">Basic</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Basic class</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
 <span class="k">class</span> <span class="nc">Complex</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -611,7 +639,7 @@ not directly off modules or classes or instances.</p>
 <p>Reading all the documentation is as easy as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sphinxter</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">cls</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
 <span class="c1"># {</span>
-<span class="c1">#     &quot;name&quot;: &quot;test.example&quot;,</span>
+<span class="c1">#     &quot;name&quot;: &quot;example&quot;,</span>
 <span class="c1">#     &quot;description&quot;: &quot;mod me&quot;,</span>
 <span class="c1">#     &quot;attributes&quot;: [</span>
 <span class="c1">#         {</span>
@@ -894,9 +922,302 @@ with that docstring as the description:</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="sphinxter.Reader.routine">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">routine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#sphinxter.Reader.routine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads all the documentation from a function or method for <a class="reference internal" href="writer.html#sphinxter.Writer.function" title="sphinxter.Writer.function"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Writer.function</span></code></a> or <a class="reference internal" href="writer.html#sphinxter.Writer.method" title="sphinxter.Writer.method"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Writer.method</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>resource</strong> (<em>function</em><em> or </em><em>method</em>) – what to read from</p></li>
+<li><p><strong>method</strong> (<em>bool</em>) – whether this is a method</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict of routine documentation</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+<p><strong>Usage</strong></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This expects resources from inspect.getattr_static(), not getattr() and
+not directly off modules or classes or instances.</p>
+</div>
+<p>Reading all the documentation for a function is as easy as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Assume this is part of a module named example</span>
+
+<span class="k">def</span> <span class="nf">func</span><span class="p">(</span>
+    <span class="n">a</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>   <span class="c1"># The a</span>
+    <span class="n">b</span><span class="p">:</span><span class="s1">&#39;str&#39;</span><span class="p">,</span> <span class="c1"># The b</span>
+    <span class="o">*</span><span class="n">args</span><span class="p">,</span>   <span class="c1">#</span>
+    <span class="o">**</span><span class="n">kwargs</span> <span class="c1"># a: 1</span>
+             <span class="c1"># b: 2</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    description: Some basic func</span>
+<span class="sd">    parameters:</span>
+<span class="sd">        a: More stuff</span>
+<span class="sd">        b:</span>
+<span class="sd">            more: stuff</span>
+<span class="sd">    return:</span>
+<span class="sd">        description: things</span>
+<span class="sd">        type:</span>
+<span class="sd">        - str</span>
+<span class="sd">        - None</span>
+<span class="sd">    raises:</span>
+<span class="sd">        Exception: if oh noes</span>
+<span class="sd">    usage: |</span>
+<span class="sd">        Do some cool stuff::</span>
+
+<span class="sd">            like this</span>
+
+<span class="sd">        It&#39;s great</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">pass</span>
+
+<span class="n">sphinxter</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">routine</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getattr_static</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="s1">&#39;func&#39;</span><span class="p">))</span>
+<span class="c1"># {</span>
+<span class="c1">#     &quot;name&quot;: &quot;func&quot;,</span>
+<span class="c1">#     &quot;description&quot;: &quot;Some basic func&quot;,</span>
+<span class="c1">#     &quot;signature&quot;: &quot;(a: int, b: &#39;str&#39;, *args, **kwargs)&quot;,</span>
+<span class="c1">#     &quot;parameters&quot;: [</span>
+<span class="c1">#         {</span>
+<span class="c1">#             &quot;name&quot;: &quot;a&quot;,</span>
+<span class="c1">#             &quot;description&quot;: &quot;The a More stuff&quot;,</span>
+<span class="c1">#             &quot;type&quot;: &quot;int&quot;</span>
+<span class="c1">#         },</span>
+<span class="c1">#         {</span>
+<span class="c1">#             &quot;name&quot;: &quot;b&quot;,</span>
+<span class="c1">#             &quot;description&quot;: &quot;The b&quot;,</span>
+<span class="c1">#             &quot;more&quot;: &quot;stuff&quot;,</span>
+<span class="c1">#             &quot;type&quot;: &quot;str&quot;</span>
+<span class="c1">#         },</span>
+<span class="c1">#         {</span>
+<span class="c1">#             &quot;name&quot;: &quot;args&quot;</span>
+<span class="c1">#         },</span>
+<span class="c1">#         {</span>
+<span class="c1">#             &quot;name&quot;: &quot;kwargs&quot;,</span>
+<span class="c1">#             &quot;a&quot;: 1,</span>
+<span class="c1">#             &quot;b&quot;: 2</span>
+<span class="c1">#         }</span>
+<span class="c1">#     ],</span>
+<span class="c1">#     &quot;return&quot;: {</span>
+<span class="c1">#         &quot;description&quot;: &quot;things&quot;,</span>
+<span class="c1">#         &quot;type&quot;: [</span>
+<span class="c1">#             &#39;str&#39;,</span>
+<span class="c1">#             &#39;None&#39;</span>
+<span class="c1">#         ]</span>
+<span class="c1">#     },</span>
+<span class="c1">#     &quot;raises&quot;: {</span>
+<span class="c1">#         &quot;Exception&quot;: &quot;if oh noes&quot;</span>
+<span class="c1">#     },</span>
+<span class="c1">#     &quot;usage&quot;: &quot;Do some cool stuff::\n\n    like this\n\nIt&#39;s great\n&quot;</span>
+<span class="c1"># }</span>
+
+<span class="n">Methods</span> <span class="n">aren</span><span class="s1">&#39;t much differen, and include a method key, that&#39;</span><span class="n">s</span> <span class="n">either</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="ow">or</span> <span class="s1">&#39;static&#39;</span><span class="p">::</span>
+
+    <span class="c1"># Assume we&#39;re still in the example module</span>
+
+    <span class="k">class</span> <span class="nc">Complex</span><span class="p">:</span>
+
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">a</span><span class="p">,</span>       <span class="c1"># The a</span>
+            <span class="n">b</span><span class="p">,</span>       <span class="c1"># The b</span>
+            <span class="o">*</span><span class="n">args</span><span class="p">,</span>   <span class="c1">#</span>
+            <span class="o">**</span><span class="n">kwargs</span> <span class="c1"># a: 1</span>
+                    <span class="c1"># b: 2</span>
+        <span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            description: call me</span>
+<span class="sd">            parameters:</span>
+<span class="sd">            a: More stuff</span>
+<span class="sd">            b:</span>
+<span class="sd">                more: stuff</span>
+<span class="sd">            usage: |</span>
+<span class="sd">                Do some cool stuff::</span>
+
+<span class="sd">                    like this</span>
+
+<span class="sd">                It&#39;s great</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+        <span class="nd">@staticmethod</span>
+        <span class="k">def</span> <span class="nf">stat</span><span class="p">(</span>
+            <span class="n">a</span><span class="p">,</span>       <span class="c1"># The a</span>
+            <span class="n">b</span><span class="p">,</span>       <span class="c1"># The b</span>
+            <span class="o">*</span><span class="n">args</span><span class="p">,</span>   <span class="c1">#</span>
+            <span class="o">**</span><span class="n">kwargs</span> <span class="c1"># a: 1</span>
+                    <span class="c1"># b: 2</span>
+        <span class="p">)</span><span class="o">-&gt;</span><span class="nb">list</span><span class="p">:</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            description: Some static stat</span>
+<span class="sd">            parameters:</span>
+<span class="sd">            a: More stuff</span>
+<span class="sd">            b:</span>
+<span class="sd">                more: stuff</span>
+<span class="sd">            return: things</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+        <span class="nd">@classmethod</span>
+        <span class="k">def</span> <span class="nf">classy</span><span class="p">(</span>
+            <span class="bp">cls</span><span class="p">,</span>
+            <span class="n">a</span><span class="p">,</span>       <span class="c1"># The a</span>
+            <span class="n">b</span><span class="p">,</span>       <span class="c1"># The b</span>
+            <span class="o">*</span><span class="n">args</span><span class="p">,</span>   <span class="c1">#</span>
+            <span class="o">**</span><span class="n">kwargs</span> <span class="c1"># a: 1</span>
+                    <span class="c1"># b: 2</span>
+        <span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            description: Some class meth</span>
+<span class="sd">            parameters:</span>
+<span class="sd">            a: More stuff</span>
+<span class="sd">            b:</span>
+<span class="sd">                more: stuff</span>
+<span class="sd">            return:</span>
+<span class="sd">                description: things</span>
+<span class="sd">                type: str</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">meth</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">a</span><span class="p">,</span>       <span class="c1"># The a</span>
+            <span class="n">b</span><span class="p">,</span>       <span class="c1"># The b</span>
+            <span class="o">*</span><span class="n">args</span><span class="p">,</span>   <span class="c1">#</span>
+            <span class="o">**</span><span class="n">kwargs</span> <span class="c1"># a: 1</span>
+                    <span class="c1"># b: 2</span>
+        <span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            description: Some basic meth</span>
+<span class="sd">            parameters:</span>
+<span class="sd">            a: More stuff</span>
+<span class="sd">            b:</span>
+<span class="sd">                more: stuff</span>
+<span class="sd">            return:</span>
+<span class="sd">                description: things</span>
+<span class="sd">                type:</span>
+<span class="sd">                - str</span>
+<span class="sd">                - None</span>
+<span class="sd">            raises:</span>
+<span class="sd">                Exception: if oh noes</span>
+<span class="sd">            usage: |</span>
+<span class="sd">                Do some cool stuff::</span>
+
+<span class="sd">                    like this</span>
+
+<span class="sd">                It&#39;s great</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+<span class="n">sphinxter</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">routine</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getattr_static</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">Complex</span><span class="p">,</span> <span class="s1">&#39;stat&#39;</span><span class="p">))</span>
+<span class="c1"># {</span>
+<span class="c1">#     &quot;name&quot;: &quot;stat&quot;,</span>
+<span class="c1">#     &quot;method&quot;: &quot;static&quot;,</span>
+<span class="c1">#     &quot;description&quot;: &quot;Some static stat&quot;,</span>
+<span class="c1">#     &quot;signature&quot;: &quot;(a, b, *args, **kwargs) -&gt; list&quot;,</span>
+<span class="c1">#     &quot;parameters&quot;: [</span>
+<span class="c1">#         {</span>
+<span class="c1">#             &quot;name&quot;: &quot;a&quot;,</span>
+<span class="c1">#             &quot;description&quot;: &quot;The a More stuff&quot;</span>
+<span class="c1">#         },</span>
+<span class="c1">#         {</span>
+<span class="c1">#             &quot;name&quot;: &quot;b&quot;,</span>
+<span class="c1">#             &quot;description&quot;: &quot;The b&quot;,</span>
+<span class="c1">#             &quot;more&quot;: &quot;stuff&quot;</span>
+<span class="c1">#         },</span>
+<span class="c1">#         {</span>
+<span class="c1">#             &quot;name&quot;: &quot;args&quot;</span>
+<span class="c1">#         },</span>
+<span class="c1">#         {</span>
+<span class="c1">#             &quot;name&quot;: &quot;kwargs&quot;,</span>
+<span class="c1">#             &quot;a&quot;: 1,</span>
+<span class="c1">#             &quot;b&quot;: 2</span>
+<span class="c1">#         }</span>
+<span class="c1">#     ],</span>
+<span class="c1">#     &quot;return&quot;: {</span>
+<span class="c1">#         &quot;description&quot;: &quot;things&quot;,</span>
+<span class="c1">#         &quot;type&quot;: &quot;list&quot;</span>
+<span class="c1">#     }</span>
+<span class="c1"># }</span>
+
+<span class="n">sphinxter</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">routine</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getattr_static</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">Complex</span><span class="p">,</span> <span class="s1">&#39;classy&#39;</span><span class="p">))</span>
+<span class="c1"># {</span>
+<span class="c1">#     &quot;name&quot;: &quot;classy&quot;,</span>
+<span class="c1">#     &quot;method&quot;: &quot;class&quot;,</span>
+<span class="c1">#     &quot;description&quot;: &quot;Some class meth&quot;,</span>
+<span class="c1">#     &quot;signature&quot;: &quot;(a, b, *args, **kwargs)&quot;,</span>
+<span class="c1">#     &quot;parameters&quot;: [</span>
+<span class="c1">#         {</span>
+<span class="c1">#             &quot;name&quot;: &quot;a&quot;,</span>
+<span class="c1">#             &quot;description&quot;: &quot;The a More stuff&quot;</span>
+<span class="c1">#         },</span>
+<span class="c1">#         {</span>
+<span class="c1">#             &quot;name&quot;: &quot;b&quot;,</span>
+<span class="c1">#             &quot;description&quot;: &quot;The b&quot;,</span>
+<span class="c1">#             &quot;more&quot;: &quot;stuff&quot;</span>
+<span class="c1">#         },</span>
+<span class="c1">#         {</span>
+<span class="c1">#             &quot;name&quot;: &quot;args&quot;</span>
+<span class="c1">#         },</span>
+<span class="c1">#         {</span>
+<span class="c1">#             &quot;name&quot;: &quot;kwargs&quot;,</span>
+<span class="c1">#             &quot;a&quot;: 1,</span>
+<span class="c1">#             &quot;b&quot;: 2</span>
+<span class="c1">#         }</span>
+<span class="c1">#     ],</span>
+<span class="c1">#     &quot;return&quot;: {</span>
+<span class="c1">#         &quot;description&quot;: &quot;things&quot;,</span>
+<span class="c1">#         &quot;type&quot;: &#39;str&#39;</span>
+<span class="c1">#     }</span>
+<span class="c1"># }</span>
+
+<span class="n">sphinxter</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">routine</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getattr_static</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">Complex</span><span class="p">,</span> <span class="s1">&#39;meth&#39;</span><span class="p">))</span>
+<span class="c1"># {</span>
+<span class="c1">#     &quot;name&quot;: &quot;meth&quot;,</span>
+<span class="c1">#     &quot;method&quot;: &quot;&quot;,</span>
+<span class="c1">#     &quot;description&quot;: &quot;Some basic meth&quot;,</span>
+<span class="c1">#     &quot;signature&quot;: &quot;(a, b, *args, **kwargs)&quot;,</span>
+<span class="c1">#     &quot;parameters&quot;: [</span>
+<span class="c1">#         {</span>
+<span class="c1">#             &quot;name&quot;: &quot;a&quot;,</span>
+<span class="c1">#             &quot;description&quot;: &quot;The a More stuff&quot;</span>
+<span class="c1">#         },</span>
+<span class="c1">#         {</span>
+<span class="c1">#             &quot;name&quot;: &quot;b&quot;,</span>
+<span class="c1">#             &quot;description&quot;: &quot;The b&quot;,</span>
+<span class="c1">#             &quot;more&quot;: &quot;stuff&quot;</span>
+<span class="c1">#         },</span>
+<span class="c1">#         {</span>
+<span class="c1">#             &quot;name&quot;: &quot;args&quot;</span>
+<span class="c1">#         },</span>
+<span class="c1">#         {</span>
+<span class="c1">#             &quot;name&quot;: &quot;kwargs&quot;,</span>
+<span class="c1">#             &quot;a&quot;: 1,</span>
+<span class="c1">#             &quot;b&quot;: 2</span>
+<span class="c1">#         }</span>
+<span class="c1">#     ],</span>
+<span class="c1">#     &quot;return&quot;: {</span>
+<span class="c1">#         &quot;description&quot;: &quot;things&quot;,</span>
+<span class="c1">#         &quot;type&quot;: [</span>
+<span class="c1">#             &#39;str&#39;,</span>
+<span class="c1">#             &#39;None&#39;</span>
+<span class="c1">#         ]</span>
+<span class="c1">#     },</span>
+<span class="c1">#     &quot;raises&quot;: {</span>
+<span class="c1">#         &quot;Exception&quot;: &quot;if oh noes&quot;</span>
+<span class="c1">#     },</span>
+<span class="c1">#     &quot;usage&quot;: &quot;Do some cool stuff::\n\n    like this\n\nIt&#39;s great\n&quot;</span>
+<span class="c1"># }</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="sphinxter.Reader.source">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sphinxter.Reader.source" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extracts the source, removing any overall indent</p>
+<dd><p>Reads the source, removing any overall indent</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>resource</strong> (<em>module</em><em> or </em><em>function</em><em> or </em><em>class</em><em> or </em><em>method</em>) – what to extract the source from</p>

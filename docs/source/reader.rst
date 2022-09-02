@@ -12,10 +12,11 @@ sphinxter.Reader
 
     .. staticmethod:: annotations(resource) -> dict
 
-        Extract annotations in a format better for updating
+        Read annotations in a format better for updating
 
         :param resource: what to extract annotations from
         :type resource: function or method
+        :return: dict of annotations, with parameters and return keys
         :rtype: dict
 
         **Usage**
@@ -47,7 +48,7 @@ sphinxter.Reader
 
     .. classmethod:: attributes(resource) -> dict
 
-        Extract attributes from a module or class, including their comments and docstrings
+        Read attributes from a module or class, including their comments and docstrings
 
         :param resource: what to extract attributes from
         :type resource: function or method
@@ -125,7 +126,7 @@ sphinxter.Reader
 
     .. classmethod:: cls(resource) -> dict
 
-        Reads all the documentation from a class
+        Reads all the documentation from a class for :any:`Writer.cls`
 
         :param resource: what to extract documentation from
         :type resource: class
@@ -133,8 +134,7 @@ sphinxter.Reader
 
         **Usage**
 
-
-        Givin this class is part of the example module::
+        Given this class is part of the example module::
 
             class Complex:
                 """
@@ -197,6 +197,55 @@ sphinxter.Reader
                     b:
                         more: stuff
                     return: things
+                    """
+
+                @classmethod
+                def classy(
+                    cls,
+                    a,       # The a
+                    b,       # The b
+                    *args,   #
+                    **kwargs # a: 1
+                            # b: 2
+                ):
+                    """
+                    description: Some class meth
+                    parameters:
+                    a: More stuff
+                    b:
+                        more: stuff
+                    return:
+                        description: things
+                        type: str
+                    """
+
+                def meth(
+                    self,
+                    a,       # The a
+                    b,       # The b
+                    *args,   #
+                    **kwargs # a: 1
+                            # b: 2
+                ):
+                    """
+                    description: Some basic meth
+                    parameters:
+                    a: More stuff
+                    b:
+                        more: stuff
+                    return:
+                        description: things
+                        type:
+                        - str
+                        - None
+                    raises:
+                        Exception: if oh noes
+                    usage: |
+                        Do some cool stuff::
+
+                            like this
+
+                        It's great
                     """
 
                 class Subber:
@@ -278,6 +327,71 @@ sphinxter.Reader
             #                 "description": "things",
             #                 "type": "list"
             #             }
+            #         },
+            #         {
+            #             "name": "classy",
+            #             "method": "class",
+            #             "description": "Some class meth",
+            #             "signature": "(a, b, *args, **kwargs)",
+            #             "parameters": [
+            #                 {
+            #                     "name": "a",
+            #                     "description": "The a More stuff"
+            #                 },
+            #                 {
+            #                     "name": "b",
+            #                     "description": "The b",
+            #                     "more": "stuff"
+            #                 },
+            #                 {
+            #                     "name": "args"
+            #                 },
+            #                 {
+            #                     "name": "kwargs",
+            #                     "a": 1,
+            #                     "b": 2
+            #                 }
+            #             ],
+            #             "return": {
+            #                 "description": "things",
+            #                 "type": 'str'
+            #             }
+            #         },
+            #         {
+            #             "name": "meth",
+            #             "method": "",
+            #             "description": "Some basic meth",
+            #             "signature": "(a, b, *args, **kwargs)",
+            #             "parameters": [
+            #                 {
+            #                     "name": "a",
+            #                     "description": "The a More stuff"
+            #                 },
+            #                 {
+            #                     "name": "b",
+            #                     "description": "The b",
+            #                     "more": "stuff"
+            #                 },
+            #                 {
+            #                     "name": "args"
+            #                 },
+            #                 {
+            #                     "name": "kwargs",
+            #                     "a": 1,
+            #                     "b": 2
+            #                 }
+            #             ],
+            #             "return": {
+            #                 "description": "things",
+            #                 "type": [
+            #                     'str',
+            #                     'None'
+            #                 ]
+            #             },
+            #             "raises": {
+            #                 "Exception": "if oh noes"
+            #             },
+            #             "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n"
             #         }
             #     ],
             #     "classes": [
@@ -295,10 +409,11 @@ sphinxter.Reader
 
     .. classmethod:: comments(resource) -> dict
 
-        Extracts parameters comments from a function or method
+        Reads parameters comments from a function or method
 
-        :param resource: what to extract the parameter arguments from
+        :param resource: what to read the parameter comments from
         :type resource: function or method
+        :return: dict of parsed comments, keyed by parameter
         :rtype: dict
 
         **Usage**
@@ -324,106 +439,15 @@ sphinxter.Reader
             #     }
             # }
 
-    .. classmethod:: function(resource, method: bool = False) -> dict
-
-        Reads all the documentation from a function or method
-
-        :param resource: what to read from
-        :type resource: function or method
-        :param method: whether this is a method
-        :type method: bool
-        :rtype: dict
-
-        **Usage**
-
-        .. note::
-
-            This expects resources from inspect.getattr_static(), not getattr() and
-            not directly off modules or classes or instances.
-
-        Extracting all the documentation for a function or method is as easy as::
-
-            # Assume this is part of a module named example
-
-            def func(
-                a:int,   # The a
-                b:'str', # The b
-                *args,   #
-                **kwargs # a: 1
-                         # b: 2
-            ):
-                """
-                description: Some basic func
-                parameters:
-                    a: More stuff
-                    b:
-                        more: stuff
-                return:
-                    description: things
-                    type:
-                    - str
-                    - None
-                raises:
-                    Exception: if oh noes
-                usage: |
-                    Do some cool stuff::
-
-                        like this
-
-                    It's great
-                """
-
-                pass
-
-            sphinxter.Reader.function(inspect.getattr_static(example, 'func'))
-            # {
-            #     "name": "func",
-            #     "description": "Some basic func",
-            #     "signature": "(a: int, b: 'str', *args, **kwargs)",
-            #     "parameters": [
-            #         {
-            #             "name": "a",
-            #             "description": "The a More stuff",
-            #             "type": "int"
-            #         },
-            #         {
-            #             "name": "b",
-            #             "description": "The b",
-            #             "more": "stuff",
-            #             "type": "str"
-            #         },
-            #         {
-            #             "name": "args"
-            #         },
-            #         {
-            #             "name": "kwargs",
-            #             "a": 1,
-            #             "b": 2
-            #         }
-            #     ],
-            #     "return": {
-            #         "description": "things",
-            #         "type": [
-            #             'str',
-            #             'None'
-            #         ]
-            #     },
-            #     "raises": {
-            #         "Exception": "if oh noes"
-            #     },
-            #     "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n"
-            # }
-
     .. classmethod:: module(resource) -> dict
 
-        Reads all the documentation from a module
+        Reads all the documentation from a module for :any:`Writer.module`
 
         :param resource: what to extract documentation from
         :type resource: module
         :rtype: dict
 
         **Usage**
-
 
         Say the following is the example module::
 
@@ -472,6 +496,10 @@ sphinxter.Reader
                     It's great
                 """
 
+            class Basic:
+                """
+                Basic class
+                """
 
             class Complex:
                 """
@@ -546,7 +574,7 @@ sphinxter.Reader
 
             sphinxter.Reader.cls(example)
             # {
-            #     "name": "test.example",
+            #     "name": "example",
             #     "description": "mod me",
             #     "attributes": [
             #         {
@@ -818,9 +846,294 @@ sphinxter.Reader
             sphinxter.Reader.parse("")
             # {}
 
+    .. classmethod:: routine(resource, method: bool = False) -> dict
+
+        Reads all the documentation from a function or method for :any:`Writer.function` or :any:`Writer.method`
+
+        :param resource: what to read from
+        :type resource: function or method
+        :param method: whether this is a method
+        :type method: bool
+        :return: dict of routine documentation
+        :rtype: dict
+
+        **Usage**
+
+        .. note::
+
+            This expects resources from inspect.getattr_static(), not getattr() and
+            not directly off modules or classes or instances.
+
+        Reading all the documentation for a function is as easy as::
+
+            # Assume this is part of a module named example
+
+            def func(
+                a:int,   # The a
+                b:'str', # The b
+                *args,   #
+                **kwargs # a: 1
+                         # b: 2
+            ):
+                """
+                description: Some basic func
+                parameters:
+                    a: More stuff
+                    b:
+                        more: stuff
+                return:
+                    description: things
+                    type:
+                    - str
+                    - None
+                raises:
+                    Exception: if oh noes
+                usage: |
+                    Do some cool stuff::
+
+                        like this
+
+                    It's great
+                """
+
+                pass
+
+            sphinxter.Reader.routine(inspect.getattr_static(example, 'func'))
+            # {
+            #     "name": "func",
+            #     "description": "Some basic func",
+            #     "signature": "(a: int, b: 'str', *args, **kwargs)",
+            #     "parameters": [
+            #         {
+            #             "name": "a",
+            #             "description": "The a More stuff",
+            #             "type": "int"
+            #         },
+            #         {
+            #             "name": "b",
+            #             "description": "The b",
+            #             "more": "stuff",
+            #             "type": "str"
+            #         },
+            #         {
+            #             "name": "args"
+            #         },
+            #         {
+            #             "name": "kwargs",
+            #             "a": 1,
+            #             "b": 2
+            #         }
+            #     ],
+            #     "return": {
+            #         "description": "things",
+            #         "type": [
+            #             'str',
+            #             'None'
+            #         ]
+            #     },
+            #     "raises": {
+            #         "Exception": "if oh noes"
+            #     },
+            #     "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n"
+            # }
+
+            Methods aren't much differen, and include a method key, that's either '', 'class', or 'static'::
+
+                # Assume we're still in the example module
+
+                class Complex:
+
+                    def __init__(
+                        self,
+                        a,       # The a
+                        b,       # The b
+                        *args,   #
+                        **kwargs # a: 1
+                                # b: 2
+                    ):
+                        """
+                        description: call me
+                        parameters:
+                        a: More stuff
+                        b:
+                            more: stuff
+                        usage: |
+                            Do some cool stuff::
+
+                                like this
+
+                            It's great
+                        """
+
+                    @staticmethod
+                    def stat(
+                        a,       # The a
+                        b,       # The b
+                        *args,   #
+                        **kwargs # a: 1
+                                # b: 2
+                    )->list:
+                        """
+                        description: Some static stat
+                        parameters:
+                        a: More stuff
+                        b:
+                            more: stuff
+                        return: things
+                        """
+
+                    @classmethod
+                    def classy(
+                        cls,
+                        a,       # The a
+                        b,       # The b
+                        *args,   #
+                        **kwargs # a: 1
+                                # b: 2
+                    ):
+                        """
+                        description: Some class meth
+                        parameters:
+                        a: More stuff
+                        b:
+                            more: stuff
+                        return:
+                            description: things
+                            type: str
+                        """
+
+                    def meth(
+                        self,
+                        a,       # The a
+                        b,       # The b
+                        *args,   #
+                        **kwargs # a: 1
+                                # b: 2
+                    ):
+                        """
+                        description: Some basic meth
+                        parameters:
+                        a: More stuff
+                        b:
+                            more: stuff
+                        return:
+                            description: things
+                            type:
+                            - str
+                            - None
+                        raises:
+                            Exception: if oh noes
+                        usage: |
+                            Do some cool stuff::
+
+                                like this
+
+                            It's great
+                        """
+
+            sphinxter.Reader.routine(inspect.getattr_static(example.Complex, 'stat'))
+            # {
+            #     "name": "stat",
+            #     "method": "static",
+            #     "description": "Some static stat",
+            #     "signature": "(a, b, *args, **kwargs) -> list",
+            #     "parameters": [
+            #         {
+            #             "name": "a",
+            #             "description": "The a More stuff"
+            #         },
+            #         {
+            #             "name": "b",
+            #             "description": "The b",
+            #             "more": "stuff"
+            #         },
+            #         {
+            #             "name": "args"
+            #         },
+            #         {
+            #             "name": "kwargs",
+            #             "a": 1,
+            #             "b": 2
+            #         }
+            #     ],
+            #     "return": {
+            #         "description": "things",
+            #         "type": "list"
+            #     }
+            # }
+
+            sphinxter.Reader.routine(inspect.getattr_static(example.Complex, 'classy'))
+            # {
+            #     "name": "classy",
+            #     "method": "class",
+            #     "description": "Some class meth",
+            #     "signature": "(a, b, *args, **kwargs)",
+            #     "parameters": [
+            #         {
+            #             "name": "a",
+            #             "description": "The a More stuff"
+            #         },
+            #         {
+            #             "name": "b",
+            #             "description": "The b",
+            #             "more": "stuff"
+            #         },
+            #         {
+            #             "name": "args"
+            #         },
+            #         {
+            #             "name": "kwargs",
+            #             "a": 1,
+            #             "b": 2
+            #         }
+            #     ],
+            #     "return": {
+            #         "description": "things",
+            #         "type": 'str'
+            #     }
+            # }
+
+            sphinxter.Reader.routine(inspect.getattr_static(example.Complex, 'meth'))
+            # {
+            #     "name": "meth",
+            #     "method": "",
+            #     "description": "Some basic meth",
+            #     "signature": "(a, b, *args, **kwargs)",
+            #     "parameters": [
+            #         {
+            #             "name": "a",
+            #             "description": "The a More stuff"
+            #         },
+            #         {
+            #             "name": "b",
+            #             "description": "The b",
+            #             "more": "stuff"
+            #         },
+            #         {
+            #             "name": "args"
+            #         },
+            #         {
+            #             "name": "kwargs",
+            #             "a": 1,
+            #             "b": 2
+            #         }
+            #     ],
+            #     "return": {
+            #         "description": "things",
+            #         "type": [
+            #             'str',
+            #             'None'
+            #         ]
+            #     },
+            #     "raises": {
+            #         "Exception": "if oh noes"
+            #     },
+            #     "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n"
+            # }
+
     .. staticmethod:: source(resource)
 
-        Extracts the source, removing any overall indent
+        Reads the source, removing any overall indent
 
         :param resource: what to extract the source from
         :type resource: module or function or class or method

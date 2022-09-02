@@ -155,9 +155,9 @@ a
     :raises Exception: oh no
 """)
 
-    def test_execution(self):
+    def test_routine(self):
 
-        self.writer.execution({}, 1)
+        self.writer.routine({}, 1)
         self.assertEqual(self.file.getvalue(), """
 """)
 
@@ -181,7 +181,7 @@ a
             }
         }
 
-        self.writer.execution(parsed, 1)
+        self.writer.routine(parsed, 1)
         self.assertEqual(self.file.getvalue(), """
 
     :param small:
