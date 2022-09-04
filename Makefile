@@ -68,4 +68,6 @@ docs:
 
 html:
 	docker run $(TTY) $(VOLUMES) $(ENVIRONMENT) $(ACCOUNT)/$(IMAGE):$(VERSION) sh -c "sphinx-build -b html docs/source/ docs/build/html"
+
+rtd: docs html
 	open -a Firefox "file://$(PWD)/docs/build/html/index.html"

@@ -1916,12 +1916,12 @@ sphinxter.Writer
 
             writer.routine(parsed, 1)
 
-    .. method:: toctree(paths: list[str], indent: int = 0)
+    .. method:: toctree(paths: 'list[str]', indent: int = 0)
 
         Writes a toctree to the index document, hiding it so it'll appear to the left.
 
         :param paths: paths for the toc
-        :type paths: list
+        :type paths: list[str]
         :param indent: amount to indent by
         :type indent: int
 
