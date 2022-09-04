@@ -17,7 +17,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="sphinxter.Writer" href="writer.html" />
-    <link rel="prev" title="sphinxter.Sphinxter" href="index.html" /> 
+    <link rel="prev" title="sphinxter.Sphinxter" href="sphinxter.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -32,7 +32,7 @@
           <a href="writer.html" title="sphinxter.Writer"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="sphinxter.Sphinxter"
+          <a href="sphinxter.html" title="sphinxter.Sphinxter"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">sphinxter 0.1.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">sphinxter.Reader</a></li> 
@@ -517,7 +517,13 @@ can be parsed as YAML, just like a docstring):</p>
 <p><strong>Usage</strong></p>
 <p>Say the following is the example module:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">mod me</span>
+<span class="sd">description: mod me</span>
+<span class="sd">usage: |</span>
+<span class="sd">    Do some cool stuff::</span>
+
+<span class="sd">        like this</span>
+
+<span class="sd">    It&#39;s great</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="n">a</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># The a team</span>
@@ -867,7 +873,8 @@ can be parsed as YAML, just like a docstring):</p>
 <span class="c1">#             &quot;b&quot;: 2,</span>
 <span class="c1">#             &quot;description&quot;: &quot;Bunch a&quot;</span>
 <span class="c1">#         }</span>
-<span class="c1">#     ]</span>
+<span class="c1">#     ],</span>
+<span class="c1">#     &quot;usage&quot;: &quot;Do some cool stuff::\n\n    like this\n\nIt&#39;s great\n&quot;</span>
 <span class="c1"># }</span>
 </pre></div>
 </div>
@@ -925,6 +932,9 @@ with that docstring as the description:</p>
 <dt class="sig sig-object py" id="sphinxter.Reader.routine">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">routine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#sphinxter.Reader.routine" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads all the documentation from a function or method for <a class="reference internal" href="writer.html#sphinxter.Writer.function" title="sphinxter.Writer.function"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Writer.function</span></code></a> or <a class="reference internal" href="writer.html#sphinxter.Writer.method" title="sphinxter.Writer.method"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Writer.method</span></code></a></p>
+<p>Of special note is parameters. What’s returned at the key of “parameters” is a list of dictionaries. But
+when specifiying parameter in the YAML, use a dict keyed by parameter name. The signature information
+is updated from the parameter comments and then from the dict in the YAML.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1016,100 +1026,100 @@ not directly off modules or classes or instances.</p>
 <span class="c1">#     },</span>
 <span class="c1">#     &quot;usage&quot;: &quot;Do some cool stuff::\n\n    like this\n\nIt&#39;s great\n&quot;</span>
 <span class="c1"># }</span>
+</pre></div>
+</div>
+<p>Methods aren’t much different, and include a method key, that’s either ‘’, ‘class’, or ‘static’:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Assume we&#39;re still in the example module</span>
 
-<span class="n">Methods</span> <span class="n">aren</span><span class="s1">&#39;t much differen, and include a method key, that&#39;</span><span class="n">s</span> <span class="n">either</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="ow">or</span> <span class="s1">&#39;static&#39;</span><span class="p">::</span>
+<span class="k">class</span> <span class="nc">Complex</span><span class="p">:</span>
 
-    <span class="c1"># Assume we&#39;re still in the example module</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">a</span><span class="p">,</span>       <span class="c1"># The a</span>
+        <span class="n">b</span><span class="p">,</span>       <span class="c1"># The b</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">,</span>   <span class="c1">#</span>
+        <span class="o">**</span><span class="n">kwargs</span> <span class="c1"># a: 1</span>
+                <span class="c1"># b: 2</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        description: call me</span>
+<span class="sd">        parameters:</span>
+<span class="sd">        a: More stuff</span>
+<span class="sd">        b:</span>
+<span class="sd">            more: stuff</span>
+<span class="sd">        usage: |</span>
+<span class="sd">            Do some cool stuff::</span>
 
-    <span class="k">class</span> <span class="nc">Complex</span><span class="p">:</span>
+<span class="sd">                like this</span>
 
-        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span>
-            <span class="n">a</span><span class="p">,</span>       <span class="c1"># The a</span>
-            <span class="n">b</span><span class="p">,</span>       <span class="c1"># The b</span>
-            <span class="o">*</span><span class="n">args</span><span class="p">,</span>   <span class="c1">#</span>
-            <span class="o">**</span><span class="n">kwargs</span> <span class="c1"># a: 1</span>
-                    <span class="c1"># b: 2</span>
-        <span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            description: call me</span>
-<span class="sd">            parameters:</span>
-<span class="sd">            a: More stuff</span>
-<span class="sd">            b:</span>
-<span class="sd">                more: stuff</span>
-<span class="sd">            usage: |</span>
-<span class="sd">                Do some cool stuff::</span>
+<span class="sd">            It&#39;s great</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
-<span class="sd">                    like this</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">stat</span><span class="p">(</span>
+        <span class="n">a</span><span class="p">,</span>       <span class="c1"># The a</span>
+        <span class="n">b</span><span class="p">,</span>       <span class="c1"># The b</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">,</span>   <span class="c1">#</span>
+        <span class="o">**</span><span class="n">kwargs</span> <span class="c1"># a: 1</span>
+                <span class="c1"># b: 2</span>
+    <span class="p">)</span><span class="o">-&gt;</span><span class="nb">list</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        description: Some static stat</span>
+<span class="sd">        parameters:</span>
+<span class="sd">        a: More stuff</span>
+<span class="sd">        b:</span>
+<span class="sd">            more: stuff</span>
+<span class="sd">        return: things</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
-<span class="sd">                It&#39;s great</span>
-<span class="sd">            &quot;&quot;&quot;</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">classy</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">a</span><span class="p">,</span>       <span class="c1"># The a</span>
+        <span class="n">b</span><span class="p">,</span>       <span class="c1"># The b</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">,</span>   <span class="c1">#</span>
+        <span class="o">**</span><span class="n">kwargs</span> <span class="c1"># a: 1</span>
+                <span class="c1"># b: 2</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        description: Some class meth</span>
+<span class="sd">        parameters:</span>
+<span class="sd">        a: More stuff</span>
+<span class="sd">        b:</span>
+<span class="sd">            more: stuff</span>
+<span class="sd">        return:</span>
+<span class="sd">            description: things</span>
+<span class="sd">            type: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="nd">@staticmethod</span>
-        <span class="k">def</span> <span class="nf">stat</span><span class="p">(</span>
-            <span class="n">a</span><span class="p">,</span>       <span class="c1"># The a</span>
-            <span class="n">b</span><span class="p">,</span>       <span class="c1"># The b</span>
-            <span class="o">*</span><span class="n">args</span><span class="p">,</span>   <span class="c1">#</span>
-            <span class="o">**</span><span class="n">kwargs</span> <span class="c1"># a: 1</span>
-                    <span class="c1"># b: 2</span>
-        <span class="p">)</span><span class="o">-&gt;</span><span class="nb">list</span><span class="p">:</span>
-            <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            description: Some static stat</span>
-<span class="sd">            parameters:</span>
-<span class="sd">            a: More stuff</span>
-<span class="sd">            b:</span>
-<span class="sd">                more: stuff</span>
-<span class="sd">            return: things</span>
-<span class="sd">            &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">meth</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">a</span><span class="p">,</span>       <span class="c1"># The a</span>
+        <span class="n">b</span><span class="p">,</span>       <span class="c1"># The b</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">,</span>   <span class="c1">#</span>
+        <span class="o">**</span><span class="n">kwargs</span> <span class="c1"># a: 1</span>
+                <span class="c1"># b: 2</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        description: Some basic meth</span>
+<span class="sd">        parameters:</span>
+<span class="sd">        a: More stuff</span>
+<span class="sd">        b:</span>
+<span class="sd">            more: stuff</span>
+<span class="sd">        return:</span>
+<span class="sd">            description: things</span>
+<span class="sd">            type:</span>
+<span class="sd">            - str</span>
+<span class="sd">            - None</span>
+<span class="sd">        raises:</span>
+<span class="sd">            Exception: if oh noes</span>
+<span class="sd">        usage: |</span>
+<span class="sd">            Do some cool stuff::</span>
 
-        <span class="nd">@classmethod</span>
-        <span class="k">def</span> <span class="nf">classy</span><span class="p">(</span>
-            <span class="bp">cls</span><span class="p">,</span>
-            <span class="n">a</span><span class="p">,</span>       <span class="c1"># The a</span>
-            <span class="n">b</span><span class="p">,</span>       <span class="c1"># The b</span>
-            <span class="o">*</span><span class="n">args</span><span class="p">,</span>   <span class="c1">#</span>
-            <span class="o">**</span><span class="n">kwargs</span> <span class="c1"># a: 1</span>
-                    <span class="c1"># b: 2</span>
-        <span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            description: Some class meth</span>
-<span class="sd">            parameters:</span>
-<span class="sd">            a: More stuff</span>
-<span class="sd">            b:</span>
-<span class="sd">                more: stuff</span>
-<span class="sd">            return:</span>
-<span class="sd">                description: things</span>
-<span class="sd">                type: str</span>
-<span class="sd">            &quot;&quot;&quot;</span>
+<span class="sd">                like this</span>
 
-        <span class="k">def</span> <span class="nf">meth</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span>
-            <span class="n">a</span><span class="p">,</span>       <span class="c1"># The a</span>
-            <span class="n">b</span><span class="p">,</span>       <span class="c1"># The b</span>
-            <span class="o">*</span><span class="n">args</span><span class="p">,</span>   <span class="c1">#</span>
-            <span class="o">**</span><span class="n">kwargs</span> <span class="c1"># a: 1</span>
-                    <span class="c1"># b: 2</span>
-        <span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            description: Some basic meth</span>
-<span class="sd">            parameters:</span>
-<span class="sd">            a: More stuff</span>
-<span class="sd">            b:</span>
-<span class="sd">                more: stuff</span>
-<span class="sd">            return:</span>
-<span class="sd">                description: things</span>
-<span class="sd">                type:</span>
-<span class="sd">                - str</span>
-<span class="sd">                - None</span>
-<span class="sd">            raises:</span>
-<span class="sd">                Exception: if oh noes</span>
-<span class="sd">            usage: |</span>
-<span class="sd">                Do some cool stuff::</span>
-
-<span class="sd">                    like this</span>
-
-<span class="sd">                It&#39;s great</span>
-<span class="sd">            &quot;&quot;&quot;</span>
+<span class="sd">            It&#39;s great</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
 <span class="n">sphinxter</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">routine</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getattr_static</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">Complex</span><span class="p">,</span> <span class="s1">&#39;stat&#39;</span><span class="p">))</span>
 <span class="c1"># {</span>
@@ -1355,7 +1365,8 @@ which can’t be parsed properly because of the initial indent:</p>
         <div class="sphinxsidebarwrapper">
 <h3><a href="index.html">Table of Contents</a></h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="index.html">sphinxter.Sphinxter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">sphinxter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sphinxter.html">sphinxter.Sphinxter</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">sphinxter.Reader</a></li>
 <li class="toctree-l1"><a class="reference internal" href="writer.html">sphinxter.Writer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="document.html">sphinxter.Document</a></li>
@@ -1388,7 +1399,7 @@ which can’t be parsed properly because of the initial indent:</p>
           <a href="writer.html" title="sphinxter.Writer"
              >next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="sphinxter.Sphinxter"
+          <a href="sphinxter.html" title="sphinxter.Sphinxter"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">sphinxter 0.1.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">sphinxter.Reader</a></li> 

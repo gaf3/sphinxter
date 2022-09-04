@@ -1,5 +1,11 @@
 """
-mod me
+description: mod me
+usage: |
+    Do some cool stuff::
+
+        like this
+
+    It's great
 """
 
 a = None # The a team

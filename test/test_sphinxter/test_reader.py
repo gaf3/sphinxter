@@ -421,7 +421,8 @@ class TestReader(unittest.TestCase):
                     "b": 2,
                     "description": "Bunch a"
                 }
-            ]
+            ],
+            "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n"
         }
 
     def test_module(self):

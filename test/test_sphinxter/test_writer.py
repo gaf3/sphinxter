@@ -430,6 +430,10 @@ a
             :param kwargs:
             :return: things
             :rtype: list
+
+        .. class:: Subber
+
+            Sub class
 """)
 
     def test_module(self):
@@ -440,6 +444,14 @@ a
     .. module:: test.example
 
     mod me
+
+    **Usage**
+
+    Do some cool stuff::
+
+        like this
+
+    It's great
 
     .. attribute:: a
 
@@ -488,6 +500,14 @@ test.example
 .. module:: test.example
 
 mod me
+
+**Usage**
+
+Do some cool stuff::
+
+    like this
+
+It's great
 
 .. attribute:: a
 
@@ -611,6 +631,10 @@ mod me
         :param kwargs:
         :return: things
         :rtype: list
+
+    .. class:: Subber
+
+        Sub class
 """
 
     def test_dump(self):
@@ -657,6 +681,14 @@ test.example
 .. module:: test.example
 
 mod me
+
+**Usage**
+
+Do some cool stuff::
+
+    like this
+
+It's great
 
 .. attribute:: a
 

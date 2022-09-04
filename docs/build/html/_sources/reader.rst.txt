@@ -452,7 +452,13 @@ sphinxter.Reader
         Say the following is the example module::
 
             """
-            mod me
+            description: mod me
+            usage: |
+                Do some cool stuff::
+
+                    like this
+
+                It's great
             """
 
             a = None # The a team
@@ -802,7 +808,8 @@ sphinxter.Reader
             #             "b": 2,
             #             "description": "Bunch a"
             #         }
-            #     ]
+            #     ],
+            #     "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n"
             # }
 
     .. staticmethod:: parse(docstring: str) -> dict
@@ -849,6 +856,10 @@ sphinxter.Reader
     .. classmethod:: routine(resource, method: bool = False) -> dict
 
         Reads all the documentation from a function or method for :any:`Writer.function` or :any:`Writer.method`
+
+        Of special note is parameters. What's returned at the key of "parameters" is a list of dictionaries. But
+        when specifiying parameter in the YAML, use a dict keyed by parameter name. The signature information
+        is updated from the parameter comments and then from the dict in the YAML.
 
         :param resource: what to read from
         :type resource: function or method
@@ -937,99 +948,99 @@ sphinxter.Reader
             #     "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n"
             # }
 
-            Methods aren't much differen, and include a method key, that's either '', 'class', or 'static'::
+        Methods aren't much different, and include a method key, that's either '', 'class', or 'static'::
 
-                # Assume we're still in the example module
+            # Assume we're still in the example module
 
-                class Complex:
+            class Complex:
 
-                    def __init__(
-                        self,
-                        a,       # The a
-                        b,       # The b
-                        *args,   #
-                        **kwargs # a: 1
-                                # b: 2
-                    ):
-                        """
-                        description: call me
-                        parameters:
-                        a: More stuff
-                        b:
-                            more: stuff
-                        usage: |
-                            Do some cool stuff::
+                def __init__(
+                    self,
+                    a,       # The a
+                    b,       # The b
+                    *args,   #
+                    **kwargs # a: 1
+                            # b: 2
+                ):
+                    """
+                    description: call me
+                    parameters:
+                    a: More stuff
+                    b:
+                        more: stuff
+                    usage: |
+                        Do some cool stuff::
 
-                                like this
+                            like this
 
-                            It's great
-                        """
+                        It's great
+                    """
 
-                    @staticmethod
-                    def stat(
-                        a,       # The a
-                        b,       # The b
-                        *args,   #
-                        **kwargs # a: 1
-                                # b: 2
-                    )->list:
-                        """
-                        description: Some static stat
-                        parameters:
-                        a: More stuff
-                        b:
-                            more: stuff
-                        return: things
-                        """
+                @staticmethod
+                def stat(
+                    a,       # The a
+                    b,       # The b
+                    *args,   #
+                    **kwargs # a: 1
+                            # b: 2
+                )->list:
+                    """
+                    description: Some static stat
+                    parameters:
+                    a: More stuff
+                    b:
+                        more: stuff
+                    return: things
+                    """
 
-                    @classmethod
-                    def classy(
-                        cls,
-                        a,       # The a
-                        b,       # The b
-                        *args,   #
-                        **kwargs # a: 1
-                                # b: 2
-                    ):
-                        """
-                        description: Some class meth
-                        parameters:
-                        a: More stuff
-                        b:
-                            more: stuff
-                        return:
-                            description: things
-                            type: str
-                        """
+                @classmethod
+                def classy(
+                    cls,
+                    a,       # The a
+                    b,       # The b
+                    *args,   #
+                    **kwargs # a: 1
+                            # b: 2
+                ):
+                    """
+                    description: Some class meth
+                    parameters:
+                    a: More stuff
+                    b:
+                        more: stuff
+                    return:
+                        description: things
+                        type: str
+                    """
 
-                    def meth(
-                        self,
-                        a,       # The a
-                        b,       # The b
-                        *args,   #
-                        **kwargs # a: 1
-                                # b: 2
-                    ):
-                        """
-                        description: Some basic meth
-                        parameters:
-                        a: More stuff
-                        b:
-                            more: stuff
-                        return:
-                            description: things
-                            type:
-                            - str
-                            - None
-                        raises:
-                            Exception: if oh noes
-                        usage: |
-                            Do some cool stuff::
+                def meth(
+                    self,
+                    a,       # The a
+                    b,       # The b
+                    *args,   #
+                    **kwargs # a: 1
+                            # b: 2
+                ):
+                    """
+                    description: Some basic meth
+                    parameters:
+                    a: More stuff
+                    b:
+                        more: stuff
+                    return:
+                        description: things
+                        type:
+                        - str
+                        - None
+                    raises:
+                        Exception: if oh noes
+                    usage: |
+                        Do some cool stuff::
 
-                                like this
+                            like this
 
-                            It's great
-                        """
+                        It's great
+                    """
 
             sphinxter.Reader.routine(inspect.getattr_static(example.Complex, 'stat'))
             # {

@@ -6,29 +6,6 @@ sphinxter.Document
 
 .. currentmodule:: sphinxter
 
-.. class:: Content(module: str, kind: str, parsed: dict)
-
-    Content for a document
-
-    :param module: Name of module this content is for
-    :type module: str
-    :param kind: Kind of resource
-    :type kind: str
-    :param parsed: The parsed documentation
-    :type parsed: dict
-
-    .. attribute:: kind
-
-        Kind of resource
-
-    .. attribute:: module
-
-        Name of module this content is for
-
-    .. attribute:: parsed
-
-        The parsed documentation
-
 .. class:: Document(path: str, title: str, toctree, indent: str)
 
     Document (rst) to write out
@@ -43,8 +20,16 @@ sphinxter.Document
     :type indent: str
 
     .. attribute:: contents
+        :type: dict
 
-        document contents, keyed by order to list of contents
+        document contents
+
+        If a resource's document block has an order (default zero) that
+        order is used as the key in the contents dict, to a list of contents
+        for that order. That way, if nothing is specified, everything is added
+        alphabetically. However, if you want a more obscure resource to go last,
+        you just need to set the order greater that zero. Two resources at the
+        same order are displayed the order in which they were added.
 
     .. attribute:: indent
 
@@ -74,3 +59,24 @@ sphinxter.Document
         :type parsed: dict
         :param order: Where to place this content
         :type order: int
+
+    .. class:: Content(module: str, kind: str, parsed: dict)
+
+        Content for a Document
+
+        :param module: Name of module this content is for
+        :type module: str
+        :param kind: Kind of resource
+        :type kind: str
+        :param parsed: The parsed documentation
+        :type parsed: dict
+
+        .. attribute:: kind
+
+            Name of module this content is for
+
+        .. attribute:: module
+
+        .. attribute:: parsed
+
+            Kind of resource

@@ -607,7 +607,13 @@
 <p><strong>Usage</strong></p>
 <p>Give the entire example module:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">mod me</span>
+<span class="sd">description: mod me</span>
+<span class="sd">usage: |</span>
+<span class="sd">    Do some cool stuff::</span>
+
+<span class="sd">        like this</span>
+
+<span class="sd">    It&#39;s great</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="n">a</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># The a team</span>
@@ -1006,7 +1012,8 @@
 <span class="c1">#             &quot;b&quot;: 2,</span>
 <span class="c1">#             &quot;description&quot;: &quot;Bunch a&quot;</span>
 <span class="c1">#         }</span>
-<span class="c1">#     ]</span>
+<span class="c1">#     ],</span>
+<span class="c1">#     &quot;usage&quot;: &quot;Do some cool stuff::\n\n    like this\n\nIt&#39;s great\n&quot;</span>
 <span class="c1"># }</span>
 
 <span class="n">document</span> <span class="o">=</span> <span class="n">Document</span><span class="p">(</span><span class="s2">&quot;docs/source/index.rst&quot;</span><span class="p">,</span> <span class="s2">&quot;example&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;self&#39;</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">],</span> <span class="s1">&#39;    &#39;</span><span class="p">)</span>
@@ -1039,6 +1046,14 @@
 <span class="c1"># .. module:: example</span>
 <span class="c1">#</span>
 <span class="c1"># mod me</span>
+<span class="c1">#</span>
+<span class="c1"># **Usage**</span>
+<span class="c1">#</span>
+<span class="c1"># Do some cool stuff::</span>
+<span class="c1">#</span>
+<span class="c1">#     like this</span>
+<span class="c1">#</span>
+<span class="c1"># It&#39;s great</span>
 <span class="c1">#</span>
 <span class="c1"># .. attribute:: a</span>
 <span class="c1">#</span>
@@ -1598,7 +1613,13 @@ be part of the same document as their parent module.</p>
 <p><strong>Usage</strong></p>
 <p>Say the following is the example module:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">mod me</span>
+<span class="sd">description: mod me</span>
+<span class="sd">usage: |</span>
+<span class="sd">    Do some cool stuff::</span>
+
+<span class="sd">        like this</span>
+
+<span class="sd">    It&#39;s great</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="n">a</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># The a team</span>
@@ -1730,14 +1751,21 @@ be part of the same document as their parent module.</p>
 <span class="c1">#             &quot;b&quot;: 2,</span>
 <span class="c1">#             &quot;description&quot;: &quot;Bunch a&quot;</span>
 <span class="c1">#         }</span>
-<span class="c1">#     ]</span>
+<span class="c1">#     ],</span>
+<span class="c1">#     &quot;usage&quot;: &quot;Do some cool stuff::\n\n    like this\n\nIt&#39;s great\n&quot;</span>
 <span class="c1"># }</span>
 
 <span class="n">writer</span><span class="o">.</span><span class="n">module</span><span class="p">(</span><span class="n">parsed</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="c1">#</span>
 <span class="c1">#     .. module:: example</span>
 <span class="c1">#</span>
-<span class="c1">#     mod me</span>
+<span class="c1">#     **Usage**</span>
+<span class="c1">#</span>
+<span class="c1">#     Do some cool stuff::</span>
+<span class="c1">#</span>
+<span class="c1">#         like this</span>
+<span class="c1">#</span>
+<span class="c1">#     It&#39;s great</span>
 <span class="c1">#</span>
 <span class="c1">#     .. attribute:: a</span>
 <span class="c1">#</span>
@@ -2093,7 +2121,8 @@ writer.usage(parsed, 1)
         <div class="sphinxsidebarwrapper">
 <h3><a href="index.html">Table of Contents</a></h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="index.html">sphinxter.Sphinxter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">sphinxter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sphinxter.html">sphinxter.Sphinxter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reader.html">sphinxter.Reader</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">sphinxter.Writer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="document.html">sphinxter.Document</a></li>

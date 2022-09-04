@@ -543,7 +543,13 @@ sphinxter.Writer
         Give the entire example module::
 
             """
-            mod me
+            description: mod me
+            usage: |
+                Do some cool stuff::
+
+                    like this
+
+                It's great
             """
 
             a = None # The a team
@@ -942,7 +948,8 @@ sphinxter.Writer
             #             "b": 2,
             #             "description": "Bunch a"
             #         }
-            #     ]
+            #     ],
+            #     "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n"
             # }
 
             document = Document("docs/source/index.rst", "example", ['self', '*'], '    ')
@@ -975,6 +982,14 @@ sphinxter.Writer
             # .. module:: example
             #
             # mod me
+            #
+            # **Usage**
+            #
+            # Do some cool stuff::
+            #
+            #     like this
+            #
+            # It's great
             #
             # .. attribute:: a
             #
@@ -1519,7 +1534,13 @@ sphinxter.Writer
         Say the following is the example module::
 
             """
-            mod me
+            description: mod me
+            usage: |
+                Do some cool stuff::
+
+                    like this
+
+                It's great
             """
 
             a = None # The a team
@@ -1651,14 +1672,21 @@ sphinxter.Writer
             #             "b": 2,
             #             "description": "Bunch a"
             #         }
-            #     ]
+            #     ],
+            #     "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n"
             # }
 
             writer.module(parsed, indent=1)
             #
             #     .. module:: example
             #
-            #     mod me
+            #     **Usage**
+            #
+            #     Do some cool stuff::
+            #
+            #         like this
+            #
+            #     It's great
             #
             #     .. attribute:: a
             #

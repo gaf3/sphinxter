@@ -1,8 +1,8 @@
 .. created by sphinxter
 .. default-domain:: py
 
-sphinxter.Sphinxter
-===================
+sphinxter
+=========
 
 .. toctree::
     :maxdepth: 1
@@ -10,49 +10,174 @@ sphinxter.Sphinxter
     :hidden:
 
     self
+    sphinxter
     reader
     writer
     document
 
 .. module:: sphinxter
 
-Converts YAML docstrings and code comments to sphinx documentation
+Autodoc converting YAML docstrings and code comments to sphinx documentation
 
-.. class:: Sphinxter(modules, titles=None, toctree=None, base='docs/source', indent='    ')
+Setup
+-----
 
-    Class for crawling code and generating documentation files
+To setup a package to use sphinxter:
 
-    :param modules: module or modules to crawl
-    :param titles:
-    :param toctree:
-    :param base: where to store generated documents
-    :param indent:
+#. Install sphinxter (which includes sphinx)::
 
-    .. attribute:: base
+    pip install sphinxter
 
-    .. attribute:: documents
+#. Setup documentation area as `docs/source`::
 
-        list of documents
+    sphinx-quickstart docs --sep -p yourmodule -a 'Your Name' -r yourversion -l en
 
-    .. attribute:: indent
+#. Create a script `docs.py` like so::
 
-    .. attribute:: modules
+    #!/usr/bin/env python
 
-    .. attribute:: titles
+    import sphinxter
+    import yourmodule
 
-    .. attribute:: toctree
+    sphinxter.Sphinxter(yourmodule).process()
 
-    .. method:: document(module, kind, parsed, current='index')
+#. Run that script to auto generate docs from your docstrings (they'll end up in `docs/source`)::
 
-        :param module:
-        :param kind:
-        :param parsed:
-        :param current:
+    chmod a+x docs.py
+    ./docs.py
 
-    .. method:: process()
+#. Create HTML from those documents (they'll end up in `docs/build/html`)::
 
-        Reads modules and writes documents
+    sphinx-build -b html docs/source/ docs/build/html
 
-    .. method:: read()
+* To change settings, like docs location, indenting by, check out :any:`sphinxter.Sphinxter`
 
-    .. method:: write()
+Formatting
+----------
+
+I wanted something that generated readable HTML documentation from readable Code documentation.
+
+Even if you've done nothing to your code to use sphinxter, it'll generate decent documentation assuming non YAML
+docstrings are descriptions for their resources.
+
+Say this is yourmodule::
+
+    """
+    The module description
+    """
+
+    foo = None # The foo description
+
+    def func(
+        bar:int # The bar description
+    )->bool:
+        """
+        The function description
+        """
+
+This would be the result in `docs/source/index.rst`::
+
+    .. created by sphinxter
+    .. default-domain:: py
+
+    yourmodule
+    ==========
+
+    .. module:: yourmodule
+
+    The module description
+
+    .. attribute:: foo
+
+        The foo description
+
+    .. function:: func(bar: int)
+
+        The function description
+
+        :param bar: The bar description
+        :type bar: int
+        :rtype: bool
+
+Not only is this decent documentation, sphinxter picked up the comments next to both attributes and function parameters,
+which is a very common, readable pattern in code.
+
+Another useful couple of features is that sphinxter can read dosctrings as YAML and it can read attributes docstrings
+(which yes, don't really exist, but it works anyway) allowing for some complex but still readable behavior.
+
+Say this is yourmodule now::
+
+    """
+    The module description
+    """
+
+    foo = None # The foo description
+    """
+    usage: |
+        Do it this way::
+
+            yourmodule.foo = 7
+    """
+
+    def func(
+        bar:int # The bar description
+    )->bool:
+        """
+        description: The function description
+        return: Whether the function worked or not
+        """
+
+This would now be the result in `docs/source/index.rst`::
+
+    .. created by sphinxter
+    .. default-domain:: py
+
+    yourmodule
+    ==========
+
+    .. module:: yourmodule
+
+    The module description
+
+    .. attribute:: foo
+
+        The foo description
+
+        **Usage**
+
+        Do it this way::
+
+            yourmodule.foo = 7
+
+    .. function:: func(bar: int)
+
+        The function description
+
+        :param bar: The bar description
+        :type bar: int
+        :return: Whether the function worked or not
+        :rtype: bool
+
+Taking advantage of attribute docstrings and YAML docstrings added more documentation, but didn't really lessen
+the readability of the code.
+
+That's the goal of sphinxter.
+
+* To see how modules are read and written, check out :any:`Reader.module()` and :any:`Writer.module()` respectively
+
+* To see how functions are read and written, check out :any:`Reader.routine()` and :any:`Writer.function()` respectively
+
+* To see how classes are read and written, check out :any:`Reader.cls()` and :any:`Writer.cls()` respectively
+
+* To see how methods are read and written, check out :any:`Reader.routine()` and :any:`Writer.method()` respectively
+
+Organization
+------------
+
+By default, everything ends up in the `index.rst` document. With modules, classes, and functions you can a different
+document and even the order in which they'll appear in the document. If the parent modules don't match, sphinxter will
+add a currentmodule directive so everything will be organized properly.
+
+* To see how and where to place resource content, check out :any:`Sphinxter.document()`
+
+* To see how documents store resource content, check out :any:`Document.contents`

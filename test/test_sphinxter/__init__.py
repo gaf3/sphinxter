@@ -6,43 +6,6 @@ from test import example
 from test.test_sphinxter.test_reader import TestReader
 from test.test_sphinxter.test_writer import TestWriter
 
-class TestContent(unittest.TestCase):
-
-    maxDiff = None
-
-    def test___init__(self):
-
-        content = sphinxter.Content("people", "stuff", "things")
-
-        self.assertEqual(content.module, "people")
-        self.assertEqual(content.kind, "stuff")
-        self.assertEqual(content.parsed, "things")
-
-
-class TestDocument(unittest.TestCase):
-
-    maxDiff = None
-
-    def test___init__(self):
-
-        document = sphinxter.Document("people", "stuff", "things", "thingies")
-
-        self.assertEqual(document.path, "people")
-        self.assertEqual(document.title, "stuff")
-        self.assertEqual(document.toctree, "things")
-        self.assertEqual(document.indent, "thingies")
-        self.assertEqual(document.contents, {})
-
-    def test_add(self):
-
-        document = sphinxter.Document("people", "stuff", "things", "thingies")
-
-        document.add("people", "stuff", "things", 7)
-
-        self.assertEqual(document.contents[7][0].module, "people")
-        self.assertEqual(document.contents[7][0].kind, "stuff")
-        self.assertEqual(document.contents[7][0].parsed, "things")
-
 
 class TestSphinxter(unittest.TestCase):
 
@@ -90,7 +53,7 @@ class TestSphinxter(unittest.TestCase):
         # skip
 
         parsed = {
-            "sphinx": False
+            "document": False
         }
 
         instance.document("stuff", "things", parsed)
@@ -100,7 +63,7 @@ class TestSphinxter(unittest.TestCase):
         # str
 
         parsed = {
-            "sphinx":  "str",
+            "document":  "str",
         }
 
         instance.document("stuffins", "thingies", parsed)
@@ -115,7 +78,7 @@ class TestSphinxter(unittest.TestCase):
         # int
 
         parsed = {
-            "sphinx":  5,
+            "document":  5,
         }
 
         instance.document("stuffies", "thingins", parsed)
@@ -127,7 +90,7 @@ class TestSphinxter(unittest.TestCase):
         # full
 
         parsed = {
-            "sphinx": {
+            "document": {
                 "path": "full",
                 "order": 10
             }

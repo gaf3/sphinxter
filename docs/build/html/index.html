@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>sphinxter.Sphinxter &#8212; sphinxter 0.1.0 documentation</title>
+    <title>sphinxter &#8212; sphinxter 0.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/nature.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -16,7 +16,7 @@
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="sphinxter.Reader" href="reader.html" /> 
+    <link rel="next" title="sphinxter.Sphinxter" href="sphinxter.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -28,10 +28,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="reader.html" title="sphinxter.Reader"
+          <a href="sphinxter.html" title="sphinxter.Sphinxter"
              accesskey="N">next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">sphinxter 0.1.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">sphinxter.Sphinxter</a></li> 
+        <li class="nav-item nav-item-this"><a href="">sphinxter</a></li> 
       </ul>
     </div>  
 
@@ -40,90 +40,172 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="sphinxter-sphinxter">
-<h1>sphinxter.Sphinxter<a class="headerlink" href="#sphinxter-sphinxter" title="Permalink to this heading">¶</a></h1>
+  <section id="sphinxter">
+<h1>sphinxter<a class="headerlink" href="#sphinxter" title="Permalink to this heading">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
-<span class="target" id="module-sphinxter"></span><p>Converts YAML docstrings and code comments to sphinx documentation</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="sphinxter.Sphinxter">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sphinxter.</span></span><span class="sig-name descname"><span class="pre">Sphinxter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modules</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">toctree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'docs/source'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span>&#160;&#160;&#160; <span class="pre">'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sphinxter.Sphinxter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class for crawling code and generating documentation files</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>modules</strong> – module or modules to crawl</p></li>
-<li><p><strong>titles</strong> – </p></li>
-<li><p><strong>toctree</strong> – </p></li>
-<li><p><strong>base</strong> – where to store generated documents</p></li>
-<li><p><strong>indent</strong> – </p></li>
+<span class="target" id="module-sphinxter"></span><p>Autodoc converting YAML docstrings and code comments to sphinx documentation</p>
+<section id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">¶</a></h2>
+<p>To setup a package to use sphinxter:</p>
+<ol class="arabic">
+<li><p>Install sphinxter (which includes sphinx):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">sphinxter</span>
+</pre></div>
+</div>
+</li>
+<li><p>Setup documentation area as <cite>docs/source</cite>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sphinx</span><span class="o">-</span><span class="n">quickstart</span> <span class="n">docs</span> <span class="o">--</span><span class="n">sep</span> <span class="o">-</span><span class="n">p</span> <span class="n">yourmodule</span> <span class="o">-</span><span class="n">a</span> <span class="s1">&#39;Your Name&#39;</span> <span class="o">-</span><span class="n">r</span> <span class="n">yourversion</span> <span class="o">-</span><span class="n">l</span> <span class="n">en</span>
+</pre></div>
+</div>
+</li>
+<li><p>Create a script <cite>docs.py</cite> like so:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="kn">import</span> <span class="nn">sphinxter</span>
+<span class="kn">import</span> <span class="nn">yourmodule</span>
+
+<span class="n">sphinxter</span><span class="o">.</span><span class="n">Sphinxter</span><span class="p">(</span><span class="n">yourmodule</span><span class="p">)</span><span class="o">.</span><span class="n">process</span><span class="p">()</span>
+</pre></div>
+</div>
+</li>
+<li><p>Run that script to auto generate docs from your docstrings (they’ll end up in <cite>docs/source</cite>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">chmod</span> <span class="n">a</span><span class="o">+</span><span class="n">x</span> <span class="n">docs</span><span class="o">.</span><span class="n">py</span>
+<span class="o">./</span><span class="n">docs</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</li>
+<li><p>Create HTML from those documents (they’ll end up in <cite>docs/build/html</cite>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sphinx</span><span class="o">-</span><span class="n">build</span> <span class="o">-</span><span class="n">b</span> <span class="n">html</span> <span class="n">docs</span><span class="o">/</span><span class="n">source</span><span class="o">/</span> <span class="n">docs</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">html</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<ul class="simple">
+<li><p>To change settings, like docs location, indenting by, check out <a class="reference internal" href="sphinxter.html#sphinxter.Sphinxter" title="sphinxter.Sphinxter"><code class="xref any py py-class docutils literal notranslate"><span class="pre">sphinxter.Sphinxter</span></code></a></p></li>
 </ul>
-</dd>
-</dl>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="sphinxter.Sphinxter.base">
-<span class="sig-name descname"><span class="pre">base</span></span><a class="headerlink" href="#sphinxter.Sphinxter.base" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+</section>
+<section id="formatting">
+<h2>Formatting<a class="headerlink" href="#formatting" title="Permalink to this heading">¶</a></h2>
+<p>I wanted something that generated readable HTML documentation from readable Code documentation.</p>
+<p>Even if you’ve done nothing to your code to use sphinxter, it’ll generate decent documentation assuming non YAML
+docstrings are descriptions for their resources.</p>
+<p>Say this is yourmodule:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The module description</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="sphinxter.Sphinxter.documents">
-<span class="sig-name descname"><span class="pre">documents</span></span><a class="headerlink" href="#sphinxter.Sphinxter.documents" title="Permalink to this definition">¶</a></dt>
-<dd><p>list of documents</p>
-</dd></dl>
+<span class="n">foo</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># The foo description</span>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="sphinxter.Sphinxter.indent">
-<span class="sig-name descname"><span class="pre">indent</span></span><a class="headerlink" href="#sphinxter.Sphinxter.indent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="k">def</span> <span class="nf">func</span><span class="p">(</span>
+    <span class="n">bar</span><span class="p">:</span><span class="nb">int</span> <span class="c1"># The bar description</span>
+<span class="p">)</span><span class="o">-&gt;</span><span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The function description</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>This would be the result in <cite>docs/source/index.rst</cite>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">..</span> <span class="n">created</span> <span class="n">by</span> <span class="n">sphinxter</span>
+<span class="o">..</span> <span class="n">default</span><span class="o">-</span><span class="n">domain</span><span class="p">::</span> <span class="n">py</span>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="sphinxter.Sphinxter.modules">
-<span class="sig-name descname"><span class="pre">modules</span></span><a class="headerlink" href="#sphinxter.Sphinxter.modules" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="n">yourmodule</span>
+<span class="o">==========</span>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="sphinxter.Sphinxter.titles">
-<span class="sig-name descname"><span class="pre">titles</span></span><a class="headerlink" href="#sphinxter.Sphinxter.titles" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="o">..</span> <span class="n">module</span><span class="p">::</span> <span class="n">yourmodule</span>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="sphinxter.Sphinxter.toctree">
-<span class="sig-name descname"><span class="pre">toctree</span></span><a class="headerlink" href="#sphinxter.Sphinxter.toctree" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="n">The</span> <span class="n">module</span> <span class="n">description</span>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="sphinxter.Sphinxter.document">
-<span class="sig-name descname"><span class="pre">document</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parsed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'index'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sphinxter.Sphinxter.document" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>module</strong> – </p></li>
-<li><p><strong>kind</strong> – </p></li>
-<li><p><strong>parsed</strong> – </p></li>
-<li><p><strong>current</strong> – </p></li>
+<span class="o">..</span> <span class="n">attribute</span><span class="p">::</span> <span class="n">foo</span>
+
+    <span class="n">The</span> <span class="n">foo</span> <span class="n">description</span>
+
+<span class="o">..</span> <span class="n">function</span><span class="p">::</span> <span class="n">func</span><span class="p">(</span><span class="n">bar</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span>
+
+    <span class="n">The</span> <span class="n">function</span> <span class="n">description</span>
+
+    <span class="p">:</span><span class="n">param</span> <span class="n">bar</span><span class="p">:</span> <span class="n">The</span> <span class="n">bar</span> <span class="n">description</span>
+    <span class="p">:</span><span class="nb">type</span> <span class="n">bar</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">:</span><span class="n">rtype</span><span class="p">:</span> <span class="nb">bool</span>
+</pre></div>
+</div>
+<p>Not only is this decent documentation, sphinxter picked up the comments next to both attributes and function parameters,
+which is a very common, readable pattern in code.</p>
+<p>Another useful couple of features is that sphinxter can read dosctrings as YAML and it can read attributes docstrings
+(which yes, don’t really exist, but it works anyway) allowing for some complex but still readable behavior.</p>
+<p>Say this is yourmodule now:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The module description</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">foo</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># The foo description</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">usage: |</span>
+<span class="sd">    Do it this way::</span>
+
+<span class="sd">        yourmodule.foo = 7</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="k">def</span> <span class="nf">func</span><span class="p">(</span>
+    <span class="n">bar</span><span class="p">:</span><span class="nb">int</span> <span class="c1"># The bar description</span>
+<span class="p">)</span><span class="o">-&gt;</span><span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    description: The function description</span>
+<span class="sd">    return: Whether the function worked or not</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>This would now be the result in <cite>docs/source/index.rst</cite>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">..</span> <span class="n">created</span> <span class="n">by</span> <span class="n">sphinxter</span>
+<span class="o">..</span> <span class="n">default</span><span class="o">-</span><span class="n">domain</span><span class="p">::</span> <span class="n">py</span>
+
+<span class="n">yourmodule</span>
+<span class="o">==========</span>
+
+<span class="o">..</span> <span class="n">module</span><span class="p">::</span> <span class="n">yourmodule</span>
+
+<span class="n">The</span> <span class="n">module</span> <span class="n">description</span>
+
+<span class="o">..</span> <span class="n">attribute</span><span class="p">::</span> <span class="n">foo</span>
+
+    <span class="n">The</span> <span class="n">foo</span> <span class="n">description</span>
+
+    <span class="o">**</span><span class="n">Usage</span><span class="o">**</span>
+
+    <span class="n">Do</span> <span class="n">it</span> <span class="n">this</span> <span class="n">way</span><span class="p">::</span>
+
+        <span class="n">yourmodule</span><span class="o">.</span><span class="n">foo</span> <span class="o">=</span> <span class="mi">7</span>
+
+<span class="o">..</span> <span class="n">function</span><span class="p">::</span> <span class="n">func</span><span class="p">(</span><span class="n">bar</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span>
+
+    <span class="n">The</span> <span class="n">function</span> <span class="n">description</span>
+
+    <span class="p">:</span><span class="n">param</span> <span class="n">bar</span><span class="p">:</span> <span class="n">The</span> <span class="n">bar</span> <span class="n">description</span>
+    <span class="p">:</span><span class="nb">type</span> <span class="n">bar</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">:</span><span class="k">return</span><span class="p">:</span> <span class="n">Whether</span> <span class="n">the</span> <span class="n">function</span> <span class="n">worked</span> <span class="ow">or</span> <span class="ow">not</span>
+    <span class="p">:</span><span class="n">rtype</span><span class="p">:</span> <span class="nb">bool</span>
+</pre></div>
+</div>
+<p>Taking advantage of attribute docstrings and YAML docstrings added more documentation, but didn’t really lessen
+the readability of the code.</p>
+<p>That’s the goal of sphinxter.</p>
+<ul class="simple">
+<li><p>To see how modules are read and written, check out <a class="reference internal" href="reader.html#sphinxter.Reader.module" title="sphinxter.Reader.module"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Reader.module()</span></code></a> and <a class="reference internal" href="writer.html#sphinxter.Writer.module" title="sphinxter.Writer.module"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Writer.module()</span></code></a> respectively</p></li>
+<li><p>To see how functions are read and written, check out <a class="reference internal" href="reader.html#sphinxter.Reader.routine" title="sphinxter.Reader.routine"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Reader.routine()</span></code></a> and <a class="reference internal" href="writer.html#sphinxter.Writer.function" title="sphinxter.Writer.function"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Writer.function()</span></code></a> respectively</p></li>
+<li><p>To see how classes are read and written, check out <a class="reference internal" href="reader.html#sphinxter.Reader.cls" title="sphinxter.Reader.cls"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Reader.cls()</span></code></a> and <a class="reference internal" href="writer.html#sphinxter.Writer.cls" title="sphinxter.Writer.cls"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Writer.cls()</span></code></a> respectively</p></li>
+<li><p>To see how methods are read and written, check out <a class="reference internal" href="reader.html#sphinxter.Reader.routine" title="sphinxter.Reader.routine"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Reader.routine()</span></code></a> and <a class="reference internal" href="writer.html#sphinxter.Writer.method" title="sphinxter.Writer.method"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Writer.method()</span></code></a> respectively</p></li>
 </ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="sphinxter.Sphinxter.process">
-<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sphinxter.Sphinxter.process" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads modules and writes documents</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="sphinxter.Sphinxter.read">
-<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sphinxter.Sphinxter.read" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="sphinxter.Sphinxter.write">
-<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sphinxter.Sphinxter.write" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+</section>
+<section id="organization">
+<h2>Organization<a class="headerlink" href="#organization" title="Permalink to this heading">¶</a></h2>
+<p>By default, everything ends up in the <cite>index.rst</cite> document. With modules, classes, and functions you can a different
+document and even the order in which they’ll appear in the document. If the parent modules don’t match, sphinxter will
+add a currentmodule directive so everything will be organized properly.</p>
+<ul class="simple">
+<li><p>To see how and where to place resource content, check out <a class="reference internal" href="sphinxter.html#sphinxter.Sphinxter.document" title="sphinxter.Sphinxter.document"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Sphinxter.document()</span></code></a></p></li>
+<li><p>To see how documents store resource content, check out <a class="reference internal" href="document.html#sphinxter.Document.contents" title="sphinxter.Document.contents"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">Document.contents</span></code></a></p></li>
+</ul>
+</section>
 </section>
 
 
@@ -135,12 +217,25 @@
         <div class="sphinxsidebarwrapper">
 <h3><a href="#">Table of Contents</a></h3>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">sphinxter.Sphinxter</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">sphinxter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sphinxter.html">sphinxter.Sphinxter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reader.html">sphinxter.Reader</a></li>
 <li class="toctree-l1"><a class="reference internal" href="writer.html">sphinxter.Writer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="document.html">sphinxter.Document</a></li>
 </ul>
 
+  <div>
+    <h3><a href="#">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">sphinxter</a><ul>
+<li><a class="reference internal" href="#setup">Setup</a></li>
+<li><a class="reference internal" href="#formatting">Formatting</a></li>
+<li><a class="reference internal" href="#organization">Organization</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
@@ -165,10 +260,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="reader.html" title="sphinxter.Reader"
+          <a href="sphinxter.html" title="sphinxter.Sphinxter"
              >next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">sphinxter 0.1.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">sphinxter.Sphinxter</a></li> 
+        <li class="nav-item nav-item-this"><a href="">sphinxter</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

@@ -43,39 +43,6 @@
   <section id="sphinxter-document">
 <h1>sphinxter.Document<a class="headerlink" href="#sphinxter-document" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="sphinxter.Content">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sphinxter.</span></span><span class="sig-name descname"><span class="pre">Content</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parsed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sphinxter.Content" title="Permalink to this definition">¶</a></dt>
-<dd><p>Content for a document</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>module</strong> (<em>str</em>) – Name of module this content is for</p></li>
-<li><p><strong>kind</strong> (<em>str</em>) – Kind of resource</p></li>
-<li><p><strong>parsed</strong> (<em>dict</em>) – The parsed documentation</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="sphinxter.Content.kind">
-<span class="sig-name descname"><span class="pre">kind</span></span><a class="headerlink" href="#sphinxter.Content.kind" title="Permalink to this definition">¶</a></dt>
-<dd><p>Kind of resource</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="sphinxter.Content.module">
-<span class="sig-name descname"><span class="pre">module</span></span><a class="headerlink" href="#sphinxter.Content.module" title="Permalink to this definition">¶</a></dt>
-<dd><p>Name of module this content is for</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="sphinxter.Content.parsed">
-<span class="sig-name descname"><span class="pre">parsed</span></span><a class="headerlink" href="#sphinxter.Content.parsed" title="Permalink to this definition">¶</a></dt>
-<dd><p>The parsed documentation</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt class="sig sig-object py" id="sphinxter.Document">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sphinxter.</span></span><span class="sig-name descname"><span class="pre">Document</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">toctree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sphinxter.Document" title="Permalink to this definition">¶</a></dt>
 <dd><p>Document (rst) to write out</p>
@@ -91,8 +58,14 @@
 </dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sphinxter.Document.contents">
-<span class="sig-name descname"><span class="pre">contents</span></span><a class="headerlink" href="#sphinxter.Document.contents" title="Permalink to this definition">¶</a></dt>
-<dd><p>document contents, keyed by order to list of contents</p>
+<span class="sig-name descname"><span class="pre">contents</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#sphinxter.Document.contents" title="Permalink to this definition">¶</a></dt>
+<dd><p>document contents</p>
+<p>If a resource’s document block has an order (default zero) that
+order is used as the key in the contents dict, to a list of contents
+for that order. That way, if nothing is specified, everything is added
+alphabetically. However, if you want a more obscure resource to go last,
+you just need to set the order greater that zero. Two resources at the
+same order are displayed the order in which they were added.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -135,6 +108,38 @@
 </dl>
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="sphinxter.Document.Content">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Content</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parsed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sphinxter.Document.Content" title="Permalink to this definition">¶</a></dt>
+<dd><p>Content for a Document</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>module</strong> (<em>str</em>) – Name of module this content is for</p></li>
+<li><p><strong>kind</strong> (<em>str</em>) – Kind of resource</p></li>
+<li><p><strong>parsed</strong> (<em>dict</em>) – The parsed documentation</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sphinxter.Document.Content.kind">
+<span class="sig-name descname"><span class="pre">kind</span></span><a class="headerlink" href="#sphinxter.Document.Content.kind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of module this content is for</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sphinxter.Document.Content.module">
+<span class="sig-name descname"><span class="pre">module</span></span><a class="headerlink" href="#sphinxter.Document.Content.module" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sphinxter.Document.Content.parsed">
+<span class="sig-name descname"><span class="pre">parsed</span></span><a class="headerlink" href="#sphinxter.Document.Content.parsed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kind of resource</p>
+</dd></dl>
+
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -148,7 +153,8 @@
         <div class="sphinxsidebarwrapper">
 <h3><a href="index.html">Table of Contents</a></h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="index.html">sphinxter.Sphinxter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">sphinxter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sphinxter.html">sphinxter.Sphinxter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reader.html">sphinxter.Reader</a></li>
 <li class="toctree-l1"><a class="reference internal" href="writer.html">sphinxter.Writer</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">sphinxter.Document</a></li>

@@ -2,10 +2,12 @@
 Module for writing out documents
 """
 
+# pylint: disable=too-many-lines
+
 class Writer:
     """
     description: Class for writing out documents (rst)
-    sphinx: writer
+    document: writer
     """
 
     document = None # document object to write out
@@ -1275,6 +1277,9 @@ class Writer:
         for method in parsed["methods"]:
             self.method(method, indent+1)
 
+        for cls in parsed["classes"]:
+            self.cls(cls, indent+1)
+
     def module(self,
         parsed:dict,    # entire parsed documentation for a class
         indent:int=0    # amount to indent by
@@ -1290,7 +1295,13 @@ class Writer:
             Say the following is the example module::
 
                 \"""
-                mod me
+                description: mod me
+                usage: |
+                    Do some cool stuff::
+
+                        like this
+
+                    It's great
                 \"""
 
                 a = None # The a team
@@ -1422,14 +1433,21 @@ class Writer:
                 #             "b": 2,
                 #             "description": "Bunch a"
                 #         }
-                #     ]
+                #     ],
+                #     "usage": "Do some cool stuff::\\n\\n    like this\\n\\nIt's great\\n"
                 # }
 
                 writer.module(parsed, indent=1)
                 #
                 #     .. module:: example
                 #
-                #     mod me
+                #     **Usage**
+                #
+                #     Do some cool stuff::
+                #
+                #         like this
+                #
+                #     It's great
                 #
                 #     .. attribute:: a
                 #
@@ -1451,6 +1469,7 @@ class Writer:
         self.line(f".. module:: {parsed['name']}", indent, before=True)
 
         self.description(parsed, indent)
+        self.usage(parsed, indent)
         self.attributes(parsed, indent)
 
     def toctree(self,
@@ -1484,7 +1503,13 @@ class Writer:
             Give the entire example module::
 
                 \"""
-                mod me
+                description: mod me
+                usage: |
+                    Do some cool stuff::
+
+                        like this
+
+                    It's great
                 \"""
 
                 a = None # The a team
@@ -1883,7 +1908,8 @@ class Writer:
                 #             "b": 2,
                 #             "description": "Bunch a"
                 #         }
-                #     ]
+                #     ],
+                #     "usage": "Do some cool stuff::\\n\\n    like this\\n\\nIt's great\\n"
                 # }
 
                 document = Document("docs/source/index.rst", "example", ['self', '*'], '    ')
@@ -1916,6 +1942,14 @@ class Writer:
                 # .. module:: example
                 #
                 # mod me
+                #
+                # **Usage**
+                #
+                # Do some cool stuff::
+                #
+                #     like this
+                #
+                # It's great
                 #
                 # .. attribute:: a
                 #
