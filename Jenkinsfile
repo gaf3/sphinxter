@@ -22,5 +22,15 @@ pipeline {
                 sh 'make setup'
             }
         }
+        stage('docs') {
+            steps {
+                sh 'make docs'
+            }
+        }
+        stage('html') {
+            steps {
+                sh 'make html'
+            }
+        }
     }
 }

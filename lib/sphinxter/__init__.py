@@ -158,8 +158,8 @@ description: |
     ------------
 
     By default, everything ends up in the `index.rst` document. With modules, classes, and functions you can a different
-    document and even the order in which they'll appear in the document. If the parent modules don't match, sphinxter will
-    add a currentmodule directive so everything will be organized properly.
+    document and even the order in which they'll appear in the document. Sphinxter will add a currentmodule directive as
+    resources are written and the paretn changes so everything will be organized properly.
 
     * To see how and where to place resource content, check out :any:`Sphinxter.document()`
 
