@@ -9,7 +9,12 @@ setup(
     name="sphinxter",
     version="0.1.0",
     package_dir = {'': 'lib'},
-    py_modules = ['sphinxter'],
+    py_modules = [
+        'sphinxter',
+        'sphinxter.reader',
+        'sphinxter.document',
+        'sphinxter.writer'
+    ],
     install_requires=[
         'Sphinx==5.1.1',
         'PyYAML==6.0'

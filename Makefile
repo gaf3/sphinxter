@@ -38,7 +38,9 @@ lint:
 setup:
 	docker run $(TTY) $(VOLUMES) $(PYPI) $(INSTALL) sh -c "cp -r /opt/service /opt/install && cd /opt/install/ && \
 	python setup.py install && \
-	python -m sphinxter"
+	python -m sphinxter.reader && \
+	python -m sphinxter.document && \
+	python -m sphinxter.writer"
 
 tag:
 	-git tag -a $(VERSION) -m "Version $(VERSION)"

@@ -1473,7 +1473,7 @@ class Writer:
         self.attributes(parsed, indent)
 
     def toctree(self,
-        paths:list[str],    # paths for the toc
+        paths:'list[str]',  # paths for the toc
         indent:int=0        # amount to indent by
     ):
         """
