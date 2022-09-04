@@ -859,7 +859,8 @@ sphinxter.Reader
 
         Of special note is parameters. What's returned at the key of "parameters" is a list of dictionaries. But
         when specifiying parameter in the YAML, use a dict keyed by parameter name. The signature information
-        is updated from the parameter comments and then from the dict in the YAML.
+        is updated from the parameter comments and then from the dict in the YAML. If descriptions are specified
+        in both areas, they'll be joined witha space, the signature comment going first.
 
         :param resource: what to read from
         :type resource: function or method

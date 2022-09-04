@@ -8,19 +8,19 @@ Setup
 
 To setup a package to use sphinxter:
 
-# Install sphinxter (which includes sphinx)
+1. Install sphinxter (which includes sphinx)
 
 ```
     pip install sphinxter
 ```
 
-# Setup documentation area as `docs/source`:
+2. Setup documentation area as `docs/source`:
 
 ```
     sphinx-quickstart docs --sep -p yourmodule -a 'Your Name' -r yourversion -l en
 ```
 
-# Create a script `docs.py` like so:
+3. Create a script `docs.py` like so:
 
 ```
     #!/usr/bin/env python
@@ -31,14 +31,14 @@ To setup a package to use sphinxter:
     sphinxter.Sphinxter(yourmodule).process()
 ```
 
-# Run that script to auto generate docs from your docstrings (they'll end up in `docs/source`):
+4. Run that script to auto generate docs from your docstrings (they'll end up in `docs/source`):
 
 ```
     chmod a+x docs.py
     ./docs.py
 ```
 
-# Create HTML from those documents (they'll end up in `docs/build/html`):
+5. Create HTML from those documents (they'll end up in `docs/build/html`):
 
 ```
     sphinx-build -b html docs/source/ docs/build/html

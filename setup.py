@@ -17,7 +17,7 @@ setup(
     url="https://github.com/gaf3/sphinxter",
     author="Gaffer Fitch",
     author_email="sphinxter@gaf3.com",
-    description="Converts YAML docstrings and code comments to sphinx documentation",
+    description="Autodoc converting YAML docstrings and code comments to sphinx documentation",
     long_description=long_description,
     long_description_content_type="text/markdown",
     license_files=('LICENSE.txt',),

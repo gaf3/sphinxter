@@ -163,20 +163,20 @@ the readability of the code.
 
 That's the goal of sphinxter.
 
-* To see how modules are read and written, check out :any:`Reader.module()` and :any:`Writer.module()` respectively
-
 * To see how functions are read and written, check out :any:`Reader.routine()` and :any:`Writer.function()` respectively
 
 * To see how classes are read and written, check out :any:`Reader.cls()` and :any:`Writer.cls()` respectively
 
 * To see how methods are read and written, check out :any:`Reader.routine()` and :any:`Writer.method()` respectively
 
+* To see how modules are read and written, check out :any:`Reader.module()` and :any:`Writer.module()` respectively
+
 Organization
 ------------
 
 By default, everything ends up in the `index.rst` document. With modules, classes, and functions you can a different
-document and even the order in which they'll appear in the document. If the parent modules don't match, sphinxter will
-add a currentmodule directive so everything will be organized properly.
+document and even the order in which they'll appear in the document. Sphinxter will add a currentmodule directive as
+resources are written and the paretn changes so everything will be organized properly.
 
 * To see how and where to place resource content, check out :any:`Sphinxter.document()`
 

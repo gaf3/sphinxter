@@ -934,7 +934,8 @@ with that docstring as the description:</p>
 <dd><p>Reads all the documentation from a function or method for <a class="reference internal" href="writer.html#sphinxter.Writer.function" title="sphinxter.Writer.function"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Writer.function</span></code></a> or <a class="reference internal" href="writer.html#sphinxter.Writer.method" title="sphinxter.Writer.method"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Writer.method</span></code></a></p>
 <p>Of special note is parameters. What’s returned at the key of “parameters” is a list of dictionaries. But
 when specifiying parameter in the YAML, use a dict keyed by parameter name. The signature information
-is updated from the parameter comments and then from the dict in the YAML.</p>
+is updated from the parameter comments and then from the dict in the YAML. If descriptions are specified
+in both areas, they’ll be joined witha space, the signature comment going first.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">

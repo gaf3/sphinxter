@@ -190,17 +190,17 @@ which is a very common, readable pattern in code.</p>
 the readability of the code.</p>
 <p>That’s the goal of sphinxter.</p>
 <ul class="simple">
-<li><p>To see how modules are read and written, check out <a class="reference internal" href="reader.html#sphinxter.Reader.module" title="sphinxter.Reader.module"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Reader.module()</span></code></a> and <a class="reference internal" href="writer.html#sphinxter.Writer.module" title="sphinxter.Writer.module"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Writer.module()</span></code></a> respectively</p></li>
 <li><p>To see how functions are read and written, check out <a class="reference internal" href="reader.html#sphinxter.Reader.routine" title="sphinxter.Reader.routine"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Reader.routine()</span></code></a> and <a class="reference internal" href="writer.html#sphinxter.Writer.function" title="sphinxter.Writer.function"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Writer.function()</span></code></a> respectively</p></li>
 <li><p>To see how classes are read and written, check out <a class="reference internal" href="reader.html#sphinxter.Reader.cls" title="sphinxter.Reader.cls"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Reader.cls()</span></code></a> and <a class="reference internal" href="writer.html#sphinxter.Writer.cls" title="sphinxter.Writer.cls"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Writer.cls()</span></code></a> respectively</p></li>
 <li><p>To see how methods are read and written, check out <a class="reference internal" href="reader.html#sphinxter.Reader.routine" title="sphinxter.Reader.routine"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Reader.routine()</span></code></a> and <a class="reference internal" href="writer.html#sphinxter.Writer.method" title="sphinxter.Writer.method"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Writer.method()</span></code></a> respectively</p></li>
+<li><p>To see how modules are read and written, check out <a class="reference internal" href="reader.html#sphinxter.Reader.module" title="sphinxter.Reader.module"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Reader.module()</span></code></a> and <a class="reference internal" href="writer.html#sphinxter.Writer.module" title="sphinxter.Writer.module"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Writer.module()</span></code></a> respectively</p></li>
 </ul>
 </section>
 <section id="organization">
 <h2>Organization<a class="headerlink" href="#organization" title="Permalink to this heading">¶</a></h2>
 <p>By default, everything ends up in the <cite>index.rst</cite> document. With modules, classes, and functions you can a different
-document and even the order in which they’ll appear in the document. If the parent modules don’t match, sphinxter will
-add a currentmodule directive so everything will be organized properly.</p>
+document and even the order in which they’ll appear in the document. Sphinxter will add a currentmodule directive as
+resources are written and the paretn changes so everything will be organized properly.</p>
 <ul class="simple">
 <li><p>To see how and where to place resource content, check out <a class="reference internal" href="sphinxter.html#sphinxter.Sphinxter.document" title="sphinxter.Sphinxter.document"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Sphinxter.document()</span></code></a></p></li>
 <li><p>To see how documents store resource content, check out <a class="reference internal" href="document.html#sphinxter.Document.contents" title="sphinxter.Document.contents"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">Document.contents</span></code></a></p></li>
