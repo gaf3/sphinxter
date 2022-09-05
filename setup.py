@@ -7,7 +7,7 @@ with open("/opt/service/README.md", "r") as readme_file:
 
 setup(
     name="sphinxter",
-    version="0.1.0",
+    version="0.1.1",
     package_dir = {'': 'lib'},
     py_modules = [
         'sphinxter',
@@ -19,7 +19,7 @@ setup(
         'Sphinx==5.1.1',
         'PyYAML==6.0'
     ],
-    url="https://sphinxter.readthedocs.io/en/0.1.0/",
+    url="https://sphinxter.readthedocs.io/en/0.1.1/",
     download_url="https://github.com/gaf3/sphinxter",
     author="Gaffer Fitch",
     author_email="sphinxter@gaf3.com",

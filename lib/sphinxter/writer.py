@@ -1035,6 +1035,7 @@ class Writer:
                 # {
                 #     "name": "Complex",
                 #     "description": "Complex class\\n\\ncall me",
+                #     "exception": False,
                 #     "signature": "(a, b, *args, **kwargs)",
                 #     "definition": "make sure you do this::\\n\\n    wowsa\\n\\nYa sweet\\n",
                 #     "parameters": [
@@ -1173,6 +1174,7 @@ class Writer:
                 #         {
                 #             "name": "Subber",
                 #             "description": "Sub class",
+                #             "exception": False,
                 #             "methods": [],
                 #             "attributes": [],
                 #             "classes": []
@@ -1180,7 +1182,7 @@ class Writer:
                 #     ]
                 # }
 
-                writer.module(parsed, indent=1)
+                writer.cls(parsed, indent=1)
                 #
                 #     .. class:: Complex(a, b, *args, **kwargs)
                 #
@@ -1264,9 +1266,37 @@ class Writer:
                 #             :param kwargs:
                 #             :return: things
                 #             :rtype: list
+                #
+                #         .. class:: Subber
+                #
+                #             Sub class
+
+            Exceptions are indicatd as such::
+
+                class Basic(Exception):
+                    \"""
+                    Basic Exception
+                    \"""
+
+                parsed = sphinxter.Reader.cls(example.Basic)
+                # {
+                #     "name": "Basic",
+                #     "description": "Basic Exception",
+                #     "exception": True,
+                #     "methods": [],
+                #     "attributes": [],
+                #     "classes": []
+                # }
+
+                writer.cls(parsed, indent=1)
+                #
+                #     .. exception:: Basic
+                #
+                #         Basic Exception
         """
 
-        self.line(f".. class:: {parsed['name']}{parsed.get('signature', '')}", indent, before=True)
+        directive = "exception" if parsed["exception"] else "class"
+        self.line(f".. {directive}:: {parsed['name']}{parsed.get('signature', '')}", indent, before=True)
 
         self.description(parsed, indent+1)
         self.definition(parsed, indent+1)
@@ -1345,9 +1375,9 @@ class Writer:
                         It's great
                     \"""
 
-                class Basic:
+                class Basic(Exception):
                     \"""
-                    Basic class
+                    Basic Exception
                     \"""
 
                 parsed = sphinxter.Reader.module(example)
@@ -1412,7 +1442,8 @@ class Writer:
                 #     "classes": [
                 #         {
                 #             "name": "Basic",
-                #             "description": "Basic class",
+                #             "description": "Basic Exception",
+                #             "exception": True,
                 #             "methods": [],
                 #             "attributes": [],
                 #             "classes": []
@@ -1554,9 +1585,9 @@ class Writer:
                     \"""
 
 
-                class Basic:
+                class Basic(Exception):
                     \"""
-                    Basic class
+                    Basic Exception
                     \"""
 
 
@@ -1740,7 +1771,8 @@ class Writer:
                 #     "classes": [
                 #         {
                 #             "name": "Basic",
-                #             "description": "Basic class",
+                #             "description": "Basic Exception",
+                #             "exception": True,
                 #             "methods": [],
                 #             "attributes": [],
                 #             "classes": []
@@ -1748,6 +1780,7 @@ class Writer:
                 #         {
                 #             "name": "Complex",
                 #             "description": "Complex class\\n\\ncall me",
+                #             "exception": False,
                 #             "signature": "(a, b, *args, **kwargs)",
                 #             "definition": "make sure you do this::\\n\\n    wowsa\\n\\nYa sweet\\n",
                 #             "parameters": [
@@ -1886,6 +1919,7 @@ class Writer:
                 #                 {
                 #                     "name": "Subber",
                 #                     "description": "Sub class",
+                #                     "exception": True,
                 #                     "methods": [],
                 #                     "attributes": [],
                 #                     "classes": []
@@ -1987,9 +2021,9 @@ class Writer:
                 #
                 #     It's great
                 #
-                # .. class:: Basic
+                # .. exception:: Basic
                 #
-                #     Basic class
+                #     Basic Exception
                 #
                 # .. class:: Complex(a, b, *args, **kwargs)
                 #
@@ -2073,6 +2107,10 @@ class Writer:
                 #         :param kwargs:
                 #         :return: things
                 #         :rtype: list
+                #
+                #     .. class:: Subber
+                #
+                #         Sub class
         """
 
         self.line(".. created by sphinxter")

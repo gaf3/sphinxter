@@ -345,8 +345,20 @@ a
 
     def test_cls(self):
 
+        self.writer.cls(TestReader.BASIC_CLASS, 1)
+        self.assertEqual(self.file.getvalue(), """
+
+    .. exception:: Basic
+
+        Basic Exception
+""")
+
         self.writer.cls(TestReader.COMPLEX_CLASS, 1)
         self.assertEqual(self.file.getvalue(), """
+
+    .. exception:: Basic
+
+        Basic Exception
 
     .. class:: Complex(a, b, *args, **kwargs)
 
@@ -435,6 +447,8 @@ a
 
             Sub class
 """)
+
+
 
     def test_module(self):
 
@@ -545,9 +559,9 @@ It's great
 
     It's great
 
-.. class:: Basic
+.. exception:: Basic
 
-    Basic class
+    Basic Exception
 
 .. class:: Complex(a, b, *args, **kwargs)
 
@@ -706,9 +720,9 @@ It's great
 
 .. currentmodule:: things
 
-.. class:: Basic
+.. exception:: Basic
 
-    Basic class
+    Basic Exception
 
 .. currentmodule:: stuff
 

@@ -311,7 +311,8 @@ class TestReader(unittest.TestCase):
 
     BASIC_CLASS = {
         "name": "Basic",
-        "description": "Basic class",
+        "description": "Basic Exception",
+        "exception": True,
         "methods": [],
         "attributes": [],
         "classes": []
@@ -320,6 +321,7 @@ class TestReader(unittest.TestCase):
     COMPLEX_CLASS = {
         "name": "Complex",
         "description": "Complex class\n\ncall me",
+        "exception": False,
         "signature": "(a, b, *args, **kwargs)",
         "definition": "make sure you do this::\n\n    wowsa\n\nYa sweet\n",
         "parameters": [
@@ -367,6 +369,7 @@ class TestReader(unittest.TestCase):
             {
                 "name": "Subber",
                 "description": "Sub class",
+                "exception": False,
                 "methods": [],
                 "attributes": [],
                 "classes": []

@@ -290,6 +290,7 @@
 <span class="c1"># {</span>
 <span class="c1">#     &quot;name&quot;: &quot;Complex&quot;,</span>
 <span class="c1">#     &quot;description&quot;: &quot;Complex class\n\ncall me&quot;,</span>
+<span class="c1">#     &quot;exception&quot;: False,</span>
 <span class="c1">#     &quot;signature&quot;: &quot;(a, b, *args, **kwargs)&quot;,</span>
 <span class="c1">#     &quot;definition&quot;: &quot;make sure you do this::\n\n    wowsa\n\nYa sweet\n&quot;,</span>
 <span class="c1">#     &quot;parameters&quot;: [</span>
@@ -428,6 +429,7 @@
 <span class="c1">#         {</span>
 <span class="c1">#             &quot;name&quot;: &quot;Subber&quot;,</span>
 <span class="c1">#             &quot;description&quot;: &quot;Sub class&quot;,</span>
+<span class="c1">#             &quot;exception&quot;: False,</span>
 <span class="c1">#             &quot;methods&quot;: [],</span>
 <span class="c1">#             &quot;attributes&quot;: [],</span>
 <span class="c1">#             &quot;classes&quot;: []</span>
@@ -435,7 +437,7 @@
 <span class="c1">#     ]</span>
 <span class="c1"># }</span>
 
-<span class="n">writer</span><span class="o">.</span><span class="n">module</span><span class="p">(</span><span class="n">parsed</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">writer</span><span class="o">.</span><span class="n">cls</span><span class="p">(</span><span class="n">parsed</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="c1">#</span>
 <span class="c1">#     .. class:: Complex(a, b, *args, **kwargs)</span>
 <span class="c1">#</span>
@@ -519,6 +521,33 @@
 <span class="c1">#             :param kwargs:</span>
 <span class="c1">#             :return: things</span>
 <span class="c1">#             :rtype: list</span>
+<span class="c1">#</span>
+<span class="c1">#         .. class:: Subber</span>
+<span class="c1">#</span>
+<span class="c1">#             Sub class</span>
+</pre></div>
+</div>
+<p>Exceptions are indicatd as such:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Basic</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Basic Exception</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<span class="n">parsed</span> <span class="o">=</span> <span class="n">sphinxter</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">cls</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">Basic</span><span class="p">)</span>
+<span class="c1"># {</span>
+<span class="c1">#     &quot;name&quot;: &quot;Basic&quot;,</span>
+<span class="c1">#     &quot;description&quot;: &quot;Basic Exception&quot;,</span>
+<span class="c1">#     &quot;exception&quot;: True,</span>
+<span class="c1">#     &quot;methods&quot;: [],</span>
+<span class="c1">#     &quot;attributes&quot;: [],</span>
+<span class="c1">#     &quot;classes&quot;: []</span>
+<span class="c1"># }</span>
+
+<span class="n">writer</span><span class="o">.</span><span class="n">cls</span><span class="p">(</span><span class="n">parsed</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1">#     .. exception:: Basic</span>
+<span class="c1">#</span>
+<span class="c1">#         Basic Exception</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -658,9 +687,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
-<span class="k">class</span> <span class="nc">Basic</span><span class="p">:</span>
+<span class="k">class</span> <span class="nc">Basic</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Basic class</span>
+<span class="sd">    Basic Exception</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
@@ -844,7 +873,8 @@
 <span class="c1">#     &quot;classes&quot;: [</span>
 <span class="c1">#         {</span>
 <span class="c1">#             &quot;name&quot;: &quot;Basic&quot;,</span>
-<span class="c1">#             &quot;description&quot;: &quot;Basic class&quot;,</span>
+<span class="c1">#             &quot;description&quot;: &quot;Basic Exception&quot;,</span>
+<span class="c1">#             &quot;exception&quot;: True,</span>
 <span class="c1">#             &quot;methods&quot;: [],</span>
 <span class="c1">#             &quot;attributes&quot;: [],</span>
 <span class="c1">#             &quot;classes&quot;: []</span>
@@ -852,6 +882,7 @@
 <span class="c1">#         {</span>
 <span class="c1">#             &quot;name&quot;: &quot;Complex&quot;,</span>
 <span class="c1">#             &quot;description&quot;: &quot;Complex class\n\ncall me&quot;,</span>
+<span class="c1">#             &quot;exception&quot;: False,</span>
 <span class="c1">#             &quot;signature&quot;: &quot;(a, b, *args, **kwargs)&quot;,</span>
 <span class="c1">#             &quot;definition&quot;: &quot;make sure you do this::\n\n    wowsa\n\nYa sweet\n&quot;,</span>
 <span class="c1">#             &quot;parameters&quot;: [</span>
@@ -990,6 +1021,7 @@
 <span class="c1">#                 {</span>
 <span class="c1">#                     &quot;name&quot;: &quot;Subber&quot;,</span>
 <span class="c1">#                     &quot;description&quot;: &quot;Sub class&quot;,</span>
+<span class="c1">#                     &quot;exception&quot;: True,</span>
 <span class="c1">#                     &quot;methods&quot;: [],</span>
 <span class="c1">#                     &quot;attributes&quot;: [],</span>
 <span class="c1">#                     &quot;classes&quot;: []</span>
@@ -1091,9 +1123,9 @@
 <span class="c1">#</span>
 <span class="c1">#     It&#39;s great</span>
 <span class="c1">#</span>
-<span class="c1"># .. class:: Basic</span>
+<span class="c1"># .. exception:: Basic</span>
 <span class="c1">#</span>
-<span class="c1">#     Basic class</span>
+<span class="c1">#     Basic Exception</span>
 <span class="c1">#</span>
 <span class="c1"># .. class:: Complex(a, b, *args, **kwargs)</span>
 <span class="c1">#</span>
@@ -1177,6 +1209,10 @@
 <span class="c1">#         :param kwargs:</span>
 <span class="c1">#         :return: things</span>
 <span class="c1">#         :rtype: list</span>
+<span class="c1">#</span>
+<span class="c1">#     .. class:: Subber</span>
+<span class="c1">#</span>
+<span class="c1">#         Sub class</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1663,9 +1699,9 @@ be part of the same document as their parent module.</p>
 <span class="sd">        It&#39;s great</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<span class="k">class</span> <span class="nc">Basic</span><span class="p">:</span>
+<span class="k">class</span> <span class="nc">Basic</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Basic class</span>
+<span class="sd">    Basic Exception</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <span class="n">parsed</span> <span class="o">=</span> <span class="n">sphinxter</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">module</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
@@ -1730,7 +1766,8 @@ be part of the same document as their parent module.</p>
 <span class="c1">#     &quot;classes&quot;: [</span>
 <span class="c1">#         {</span>
 <span class="c1">#             &quot;name&quot;: &quot;Basic&quot;,</span>
-<span class="c1">#             &quot;description&quot;: &quot;Basic class&quot;,</span>
+<span class="c1">#             &quot;description&quot;: &quot;Basic Exception&quot;,</span>
+<span class="c1">#             &quot;exception&quot;: True,</span>
 <span class="c1">#             &quot;methods&quot;: [],</span>
 <span class="c1">#             &quot;attributes&quot;: [],</span>
 <span class="c1">#             &quot;classes&quot;: []</span>

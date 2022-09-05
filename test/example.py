@@ -50,9 +50,9 @@ def func(
     """
 
 
-class Basic:
+class Basic(Exception):
     """
-    Basic class
+    Basic Exception
     """
 
 
