@@ -18,7 +18,7 @@ PYPI=-v ${PWD}/LICENSE.txt:/opt/service/LICENSE.txt \
 	-v ${PWD}/PYPI.md:/opt/service/README.md \
 	-v ${HOME}/.pypirc:/opt/service/.pypirc
 
-.PHONY: build shell debug test lint setup sphinx tag untag testpypi pypi sphinx docs html
+.PHONY: build shell debug test lint setup sphinx tag untag testpypi pypi sphinx docs html rtd
 
 build:
 	docker build . -t $(ACCOUNT)/$(IMAGE):$(VERSION)

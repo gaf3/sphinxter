@@ -19,7 +19,8 @@ setup(
         'Sphinx==5.1.1',
         'PyYAML==6.0'
     ],
-    url="https://github.com/gaf3/sphinxter",
+    url="https://sphinxter.readthedocs.io/en/0.1.0/",
+    download_url="https://github.com/gaf3/sphinxter",
     author="Gaffer Fitch",
     author_email="sphinxter@gaf3.com",
     description="Autodoc converting YAML docstrings and code comments to sphinx documentation",
