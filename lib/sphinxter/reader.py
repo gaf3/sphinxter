@@ -970,6 +970,7 @@ class Reader:
                 # {
                 #     "name": "Complex",
                 #     "description": "Complex class\\n\\ncall me",
+                #     "exception": False,
                 #     "signature": "(a, b, *args, **kwargs)",
                 #     "definition": "make sure you do this::\\n\\n    wowsa\\n\\nYa sweet\\n",
                 #     "parameters": [
@@ -1108,6 +1109,7 @@ class Reader:
                 #         {
                 #             "name": "Subber",
                 #             "description": "Sub class",
+                #             "exception": False,
                 #             "methods": [],
                 #             "attributes": [],
                 #             "classes": []
@@ -1116,10 +1118,28 @@ class Reader:
                 # }
 
             Notfice that the __init__ method documentation has been super imposed over the class documentation.
+
+            If a class is exceptioh, it'll capture that::
+
+                class Basic(Exception):
+                    \"""
+                    Basic Exception
+                    \"""
+
+                sphinxter.Reader.cls(example.Basic)
+                # {
+                #     "name": "Basic",
+                #     "description": "Basic Exception",
+                #     "exception": True,
+                #     "methods": [],
+                #     "attributes": [],
+                #     "classes": []
+                # }
         """
 
         parsed = {
             "name": resource.__name__,
+            "exception": Exception in resource.__bases__,
             "attributes": [],
             "methods": [],
             "classes": []
@@ -1223,10 +1243,12 @@ class Reader:
                         It's great
                     \"""
 
-                class Basic:
+
+                class Basic(Exception):
                     \"""
-                    Basic class
+                    Basic Exception
                     \"""
+
 
                 class Complex:
                     \"""
@@ -1361,7 +1383,8 @@ class Reader:
                 #     "classes": [
                 #         {
                 #             "name": "Basic",
-                #             "description": "Basic class",
+                #             "description": "Basic Exception",
+                #             "exception": True,
                 #             "methods": [],
                 #             "attributes": [],
                 #             "classes": []
@@ -1369,6 +1392,7 @@ class Reader:
                 #         {
                 #             "name": "Complex",
                 #             "description": "Complex class\\n\\ncall me",
+                #             "exception": False,
                 #             "signature": "(a, b, *args, **kwargs)",
                 #             "definition": "make sure you do this::\\n\\n    wowsa\\n\\nYa sweet\\n",
                 #             "parameters": [
@@ -1507,6 +1531,7 @@ class Reader:
                 #                 {
                 #                     "name": "Subber",
                 #                     "description": "Sub class",
+                #                     "exception": False,
                 #                     "methods": [],
                 #                     "attributes": [],
                 #                     "classes": []

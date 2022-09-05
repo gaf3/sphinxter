@@ -314,6 +314,7 @@ themelves:</p>
 <span class="c1"># {</span>
 <span class="c1">#     &quot;name&quot;: &quot;Complex&quot;,</span>
 <span class="c1">#     &quot;description&quot;: &quot;Complex class\n\ncall me&quot;,</span>
+<span class="c1">#     &quot;exception&quot;: False,</span>
 <span class="c1">#     &quot;signature&quot;: &quot;(a, b, *args, **kwargs)&quot;,</span>
 <span class="c1">#     &quot;definition&quot;: &quot;make sure you do this::\n\n    wowsa\n\nYa sweet\n&quot;,</span>
 <span class="c1">#     &quot;parameters&quot;: [</span>
@@ -452,6 +453,7 @@ themelves:</p>
 <span class="c1">#         {</span>
 <span class="c1">#             &quot;name&quot;: &quot;Subber&quot;,</span>
 <span class="c1">#             &quot;description&quot;: &quot;Sub class&quot;,</span>
+<span class="c1">#             &quot;exception&quot;: False,</span>
 <span class="c1">#             &quot;methods&quot;: [],</span>
 <span class="c1">#             &quot;attributes&quot;: [],</span>
 <span class="c1">#             &quot;classes&quot;: []</span>
@@ -461,6 +463,23 @@ themelves:</p>
 </pre></div>
 </div>
 <p>Notfice that the __init__ method documentation has been super imposed over the class documentation.</p>
+<p>If a class is exceptioh, it’ll capture that:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Basic</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Basic Exception</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<span class="n">sphinxter</span><span class="o">.</span><span class="n">Reader</span><span class="o">.</span><span class="n">cls</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">Basic</span><span class="p">)</span>
+<span class="c1"># {</span>
+<span class="c1">#     &quot;name&quot;: &quot;Basic&quot;,</span>
+<span class="c1">#     &quot;description&quot;: &quot;Basic Exception&quot;,</span>
+<span class="c1">#     &quot;exception&quot;: True,</span>
+<span class="c1">#     &quot;methods&quot;: [],</span>
+<span class="c1">#     &quot;attributes&quot;: [],</span>
+<span class="c1">#     &quot;classes&quot;: []</span>
+<span class="c1"># }</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -567,10 +586,12 @@ can be parsed as YAML, just like a docstring):</p>
 <span class="sd">        It&#39;s great</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<span class="k">class</span> <span class="nc">Basic</span><span class="p">:</span>
+
+<span class="k">class</span> <span class="nc">Basic</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Basic class</span>
+<span class="sd">    Basic Exception</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
 
 <span class="k">class</span> <span class="nc">Complex</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -705,7 +726,8 @@ can be parsed as YAML, just like a docstring):</p>
 <span class="c1">#     &quot;classes&quot;: [</span>
 <span class="c1">#         {</span>
 <span class="c1">#             &quot;name&quot;: &quot;Basic&quot;,</span>
-<span class="c1">#             &quot;description&quot;: &quot;Basic class&quot;,</span>
+<span class="c1">#             &quot;description&quot;: &quot;Basic Exception&quot;,</span>
+<span class="c1">#             &quot;exception&quot;: True,</span>
 <span class="c1">#             &quot;methods&quot;: [],</span>
 <span class="c1">#             &quot;attributes&quot;: [],</span>
 <span class="c1">#             &quot;classes&quot;: []</span>
@@ -713,6 +735,7 @@ can be parsed as YAML, just like a docstring):</p>
 <span class="c1">#         {</span>
 <span class="c1">#             &quot;name&quot;: &quot;Complex&quot;,</span>
 <span class="c1">#             &quot;description&quot;: &quot;Complex class\n\ncall me&quot;,</span>
+<span class="c1">#             &quot;exception&quot;: False,</span>
 <span class="c1">#             &quot;signature&quot;: &quot;(a, b, *args, **kwargs)&quot;,</span>
 <span class="c1">#             &quot;definition&quot;: &quot;make sure you do this::\n\n    wowsa\n\nYa sweet\n&quot;,</span>
 <span class="c1">#             &quot;parameters&quot;: [</span>
@@ -851,6 +874,7 @@ can be parsed as YAML, just like a docstring):</p>
 <span class="c1">#                 {</span>
 <span class="c1">#                     &quot;name&quot;: &quot;Subber&quot;,</span>
 <span class="c1">#                     &quot;description&quot;: &quot;Sub class&quot;,</span>
+<span class="c1">#                     &quot;exception&quot;: False,</span>
 <span class="c1">#                     &quot;methods&quot;: [],</span>
 <span class="c1">#                     &quot;attributes&quot;: [],</span>
 <span class="c1">#                     &quot;classes&quot;: []</span>
