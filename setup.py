@@ -2,12 +2,15 @@
 
 from setuptools import setup
 
-with open("/opt/service/README.md", "r") as readme_file:
+with open("README.md", "r") as readme_file:
     long_description = readme_file.read()
+
+with open("VERSION", "r") as version_file:
+    version = version_file.read().strip()
 
 setup(
     name="sphinxter",
-    version="0.1.1",
+    version=version,
     package_dir = {'': 'lib'},
     py_modules = [
         'sphinxter',

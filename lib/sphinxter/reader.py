@@ -1119,7 +1119,7 @@ class Reader:
 
             Notfice that the __init__ method documentation has been super imposed over the class documentation.
 
-            If a class is exceptioh, it'll capture that::
+            If a class is exception, it'll capture that::
 
                 class Basic(Exception):
                     \"""
