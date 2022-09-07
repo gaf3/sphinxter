@@ -1,2 +1,3 @@
 *.pyc
 lib/sphinxter.egg-info/
+docs/build

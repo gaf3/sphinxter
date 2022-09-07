@@ -5,12 +5,11 @@
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
-
 project = 'sphinxter'
 copyright = '2022, George A. Fitch III (gaf3)'
 author = 'George A. Fitch III (gaf3)'
 
-with open("/opt/service/VERSION", "r") as version_file:
+with open("../../VERSION", "r") as version_file:
     release = version_file.read().strip()
 
 # The master toctree document.
