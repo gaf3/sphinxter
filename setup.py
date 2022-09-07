@@ -22,7 +22,7 @@ setup(
         'Sphinx==5.1.1',
         'PyYAML==6.0'
     ],
-    url="https://sphinxter.readthedocs.io/en/0.1.1/",
+    url=f"https://sphinxter.readthedocs.io/en/{version}/",
     download_url="https://github.com/gaf3/sphinxter",
     author="Gaffer Fitch",
     author_email="sphinxter@gaf3.com",
