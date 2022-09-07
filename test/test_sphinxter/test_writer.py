@@ -345,7 +345,7 @@ a
 
     def test_cls(self):
 
-        self.writer.cls(TestReader.BASIC_CLASS, 1)
+        self.writer.cls(TestReader.BASIC_EXCEPTION, 1)
         self.assertEqual(self.file.getvalue(), """
 
     .. exception:: Basic
@@ -446,9 +446,11 @@ a
         .. class:: Subber
 
             Sub class
+
+        .. exception:: Excepter
+
+            Sub exception
 """)
-
-
 
     def test_module(self):
 
@@ -559,10 +561,6 @@ It's great
 
     It's great
 
-.. exception:: Basic
-
-    Basic Exception
-
 .. class:: Complex(a, b, *args, **kwargs)
 
     Complex class
@@ -649,6 +647,14 @@ It's great
     .. class:: Subber
 
         Sub class
+
+    .. exception:: Excepter
+
+        Sub exception
+
+.. exception:: Basic
+
+    Basic Exception
 """
 
     def test_dump(self):
@@ -661,9 +667,9 @@ It's great
 
         self.writer.document.add("test.example", "function", TestReader.FUNCTION, 0)
 
-        self.writer.document.add("test.example", "class", TestReader.BASIC_CLASS, 0)
-
         self.writer.document.add("test.example", "class", TestReader.COMPLEX_CLASS, 0)
+
+        self.writer.document.add("test.example", "exception", TestReader.BASIC_EXCEPTION, 0)
 
         self.writer.dump()
 
@@ -681,7 +687,7 @@ It's great
 
         writer.document.add("stuff", "function", TestReader.FUNCTION, 20)
 
-        writer.document.add("things", "class", TestReader.BASIC_CLASS, 10)
+        writer.document.add("things", "exception", TestReader.BASIC_EXCEPTION, 10)
 
         writer.dump()
 

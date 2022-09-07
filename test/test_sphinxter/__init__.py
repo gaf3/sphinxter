@@ -119,11 +119,11 @@ class TestSphinxter(unittest.TestCase):
 
         self.assertEqual(instance.documents["index"].contents[0][2].module, "test.example")
         self.assertEqual(instance.documents["index"].contents[0][2].kind, "class")
-        self.assertEqual(instance.documents["index"].contents[0][2].parsed, TestReader.BASIC_CLASS)
+        self.assertEqual(instance.documents["index"].contents[0][2].parsed, TestReader.COMPLEX_CLASS)
 
         self.assertEqual(instance.documents["index"].contents[0][3].module, "test.example")
-        self.assertEqual(instance.documents["index"].contents[0][3].kind, "class")
-        self.assertEqual(instance.documents["index"].contents[0][3].parsed, TestReader.COMPLEX_CLASS)
+        self.assertEqual(instance.documents["index"].contents[0][3].kind, "exception")
+        self.assertEqual(instance.documents["index"].contents[0][3].parsed, TestReader.BASIC_EXCEPTION)
 
         self.assertEqual(len(instance.documents["index"].contents), 1)
         self.assertEqual(len(instance.documents["index"].contents[0]), 4)

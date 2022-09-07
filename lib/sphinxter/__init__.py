@@ -301,6 +301,9 @@ class Sphinxter:
             for cls in parsed["classes"]:
                 self.document(parsed['name'], "class", cls, path)
 
+            for cls in parsed["exceptions"]:
+                self.document(parsed['name'], "exception", cls, path)
+
     def write(self):
         """
         Writes all document(s)

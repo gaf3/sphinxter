@@ -477,6 +477,7 @@ class Writer:
                 parsed = sphinxter.Reader.routine(inspect.getattr_static(example, 'func'))
                 # {
                 #     "name": "func",
+                #     "kind": "function",
                 #     "description": "Some basic func",
                 #     "signature": "(a: int, b: 'str', *args, **kwargs)",
                 #     "parameters": [
@@ -707,7 +708,7 @@ class Writer:
                 parsed = sphinxter.Reader.routine(inspect.getattr_static(example.Complex, 'stat'))
                 # {
                 #     "name": "stat",
-                #     "method": "static",
+                #     "kind": "staticmethod",
                 #     "description": "Some static stat",
                 #     "signature": "(a, b, *args, **kwargs) -> list",
                 #     "parameters": [
@@ -751,7 +752,7 @@ class Writer:
                 parsed = sphinxter.Reader.routine(inspect.getattr_static(example.Complex, 'classy'))
                 # {
                 #     "name": "classy",
-                #     "method": "class",
+                #     "kind": "classmethod",
                 #     "description": "Some class meth",
                 #     "signature": "(a, b, *args, **kwargs)",
                 #     "parameters": [
@@ -795,7 +796,7 @@ class Writer:
                 parsed = sphinxter.Reader.routine(inspect.getattr_static(example.Complex, 'meth'))
                 # {
                 #     "name": "meth",
-                #     "method": "",
+                #     "kind": "method",
                 #     "description": "Some basic meth",
                 #     "signature": "(a, b, *args, **kwargs)",
                 #     "parameters": [
@@ -854,7 +855,7 @@ class Writer:
         """
 
         self.line()
-        self.line(f".. {parsed['method']}method:: {parsed['name']}{parsed['signature']}", indent)
+        self.line(f".. {parsed['kind']}:: {parsed['name']}{parsed['signature']}", indent)
 
         self.description(parsed, indent+1)
         self.routine(parsed, indent+1)
@@ -1025,17 +1026,17 @@ class Writer:
                             It's great
                         \"""
 
-                    class Subber:
+                    class Excepter(Exception):
                         \"""
-                        Sub class
+                        Sub exception
                         \"""
                         pass
 
                 parsed = sphinxter.Reader.cls(example.Complex)
                 # {
                 #     "name": "Complex",
+                #     "kind": "class",
                 #     "description": "Complex class\\n\\ncall me",
-                #     "exception": False,
                 #     "signature": "(a, b, *args, **kwargs)",
                 #     "definition": "make sure you do this::\\n\\n    wowsa\\n\\nYa sweet\\n",
                 #     "parameters": [
@@ -1076,8 +1077,37 @@ class Writer:
                 #     ],
                 #     "methods": [
                 #         {
+                #             "name": "stat",
+                #             "kind": "staticmethod",
+                #             "description": "Some static stat",
+                #             "signature": "(a, b, *args, **kwargs) -> list",
+                #             "parameters": [
+                #                 {
+                #                     "name": "a",
+                #                     "description": "The a More stuff"
+                #                 },
+                #                 {
+                #                     "name": "b",
+                #                     "description": "The b",
+                #                     "more": "stuff"
+                #                 },
+                #                 {
+                #                     "name": "args"
+                #                 },
+                #                 {
+                #                     "name": "kwargs",
+                #                     "a": 1,
+                #                     "b": 2
+                #                 }
+                #             ],
+                #             "return": {
+                #                 "description": "things",
+                #                 "type": "list"
+                #             }
+                #         },
+                #         {
                 #             "name": "classy",
-                #             "method": "class",
+                #             "kind": "classmethod",
                 #             "description": "Some class meth",
                 #             "signature": "(a, b, *args, **kwargs)",
                 #             "parameters": [
@@ -1106,7 +1136,7 @@ class Writer:
                 #         },
                 #         {
                 #             "name": "meth",
-                #             "method": "",
+                #             "kind": "method",
                 #             "description": "Some basic meth",
                 #             "signature": "(a, b, *args, **kwargs)",
                 #             "parameters": [
@@ -1139,45 +1169,28 @@ class Writer:
                 #                 "Exception": "if oh noes"
                 #             },
                 #             "usage": "Do some cool stuff::\\n\\n    like this\\n\\nIt's great\\n"
-                #         },
-                #         {
-                #             "name": "stat",
-                #             "method": "static",
-                #             "description": "Some static stat",
-                #             "signature": "(a, b, *args, **kwargs) -> list",
-                #             "parameters": [
-                #                 {
-                #                     "name": "a",
-                #                     "description": "The a More stuff"
-                #                 },
-                #                 {
-                #                     "name": "b",
-                #                     "description": "The b",
-                #                     "more": "stuff"
-                #                 },
-                #                 {
-                #                     "name": "args"
-                #                 },
-                #                 {
-                #                     "name": "kwargs",
-                #                     "a": 1,
-                #                     "b": 2
-                #                 }
-                #             ],
-                #             "return": {
-                #                 "description": "things",
-                #                 "type": "list"
-                #             }
                 #         }
                 #     ],
                 #     "classes": [
                 #         {
                 #             "name": "Subber",
+                #             "kind": "class",
                 #             "description": "Sub class",
-                #             "exception": False,
                 #             "methods": [],
                 #             "attributes": [],
-                #             "classes": []
+                #             "classes": [],
+                #             "exceptions": []
+                #         }
+                #     ],
+                #     "exceptions": [
+                #         {
+                #             "name": "Excepter",
+                #             "kind": "exception",
+                #             "description": "Sub exception",
+                #             "methods": [],
+                #             "attributes": [],
+                #             "classes": [],
+                #             "exceptions": []
                 #         }
                 #     ]
                 # }
@@ -1270,6 +1283,10 @@ class Writer:
                 #         .. class:: Subber
                 #
                 #             Sub class
+                #
+                #         .. exception:: Excepter
+                #
+                #             Sub exception
 
             Exceptions are indicatd as such::
 
@@ -1281,6 +1298,7 @@ class Writer:
                 parsed = sphinxter.Reader.cls(example.Basic)
                 # {
                 #     "name": "Basic",
+                #     "kind": "exception",
                 #     "description": "Basic Exception",
                 #     "exception": True,
                 #     "methods": [],
@@ -1295,8 +1313,7 @@ class Writer:
                 #         Basic Exception
         """
 
-        directive = "exception" if parsed["exception"] else "class"
-        self.line(f".. {directive}:: {parsed['name']}{parsed.get('signature', '')}", indent, before=True)
+        self.line(f".. {parsed['kind']}:: {parsed['name']}{parsed.get('signature', '')}", indent, before=True)
 
         self.description(parsed, indent+1)
         self.definition(parsed, indent+1)
@@ -1308,6 +1325,9 @@ class Writer:
             self.method(method, indent+1)
 
         for cls in parsed["classes"]:
+            self.cls(cls, indent+1)
+
+        for cls in parsed["exceptions"]:
             self.cls(cls, indent+1)
 
     def module(self,
@@ -1403,6 +1423,7 @@ class Writer:
                 #     "functions": [
                 #         {
                 #             "name": "func",
+                #             "kind": "function",
                 #             "description": "Some basic func",
                 #             "signature": "(a: int, b: 'str', *args, **kwargs)",
                 #             "parameters": [
@@ -1439,11 +1460,11 @@ class Writer:
                 #             "usage": "Do some cool stuff::\\n\\n    like this\\n\\nIt's great\\n"
                 #         }
                 #     ],
-                #     "classes": [
+                #     "exceptions": [
                 #         {
                 #             "name": "Basic",
+                #             "kind": "exception",
                 #             "description": "Basic Exception",
-                #             "exception": True,
                 #             "methods": [],
                 #             "attributes": [],
                 #             "classes": []
@@ -1709,6 +1730,12 @@ class Writer:
                         \"""
                         pass
 
+                    class Excepter(Exception):
+                        \"""
+                        Sub exception
+                        \"""
+                        pass
+
                 parsed = sphinxter.Reader.module(example)
                 # {
                 #     "name": "example",
@@ -1732,6 +1759,7 @@ class Writer:
                 #     "functions": [
                 #         {
                 #             "name": "func",
+                #             "kind": "function",
                 #             "description": "Some basic func",
                 #             "signature": "(a: int, b: 'str', *args, **kwargs)",
                 #             "parameters": [
@@ -1770,17 +1798,9 @@ class Writer:
                 #     ],
                 #     "classes": [
                 #         {
-                #             "name": "Basic",
-                #             "description": "Basic Exception",
-                #             "exception": True,
-                #             "methods": [],
-                #             "attributes": [],
-                #             "classes": []
-                #         },
-                #         {
                 #             "name": "Complex",
+                #             "kind": "class",
                 #             "description": "Complex class\\n\\ncall me",
-                #             "exception": False,
                 #             "signature": "(a, b, *args, **kwargs)",
                 #             "definition": "make sure you do this::\\n\\n    wowsa\\n\\nYa sweet\\n",
                 #             "parameters": [
@@ -1822,7 +1842,7 @@ class Writer:
                 #             "methods": [
                 #                 {
                 #                     "name": "classy",
-                #                     "method": "class",
+                #                     "kind": "classmethod",
                 #                     "description": "Some class meth",
                 #                     "signature": "(a, b, *args, **kwargs)",
                 #                     "parameters": [
@@ -1851,7 +1871,7 @@ class Writer:
                 #                 },
                 #                 {
                 #                     "name": "meth",
-                #                     "method": "",
+                #                     "kind": "method",
                 #                     "description": "Some basic meth",
                 #                     "signature": "(a, b, *args, **kwargs)",
                 #                     "parameters": [
@@ -1887,7 +1907,7 @@ class Writer:
                 #                 },
                 #                 {
                 #                     "name": "stat",
-                #                     "method": "static",
+                #                     "kind": "staticmethod",
                 #                     "description": "Some static stat",
                 #                     "signature": "(a, b, *args, **kwargs) -> list",
                 #                     "parameters": [
@@ -1919,14 +1939,36 @@ class Writer:
                 #                 {
                 #                     "name": "Subber",
                 #                     "description": "Sub class",
-                #                     "exception": True,
+                #                     "exception": False,
                 #                     "methods": [],
                 #                     "attributes": [],
                 #                     "classes": []
                 #                 }
+                #             ],
+                #             "exceptions": [
+                #                 {
+                #                     "name": "Excepter",
+                #                     "kind": "exception",
+                #                     "description": "Sub exception",
+                #                     "methods": [],
+                #                     "attributes": [],
+                #                     "classes": [],
+                #                     "exceptions": []
+                #                 }
                 #             ]
                 #         }
                 #     ],
+                #     "exceptions": [
+                #         {
+                #             "name": "Basic",
+                #             "kind": "exception",
+                #             "description": "Basic Exception",
+                #             "methods": [],
+                #             "attributes": [],
+                #             "classes": [],
+                #             "exceptions": []
+                #         }
+                #     ]
                 #     "attributes": [
                 #         {
                 #             "name": "a",
@@ -2021,10 +2063,6 @@ class Writer:
                 #
                 #     It's great
                 #
-                # .. exception:: Basic
-                #
-                #     Basic Exception
-                #
                 # .. class:: Complex(a, b, *args, **kwargs)
                 #
                 #     Complex class
@@ -2111,6 +2149,14 @@ class Writer:
                 #     .. class:: Subber
                 #
                 #         Sub class
+                #
+                #     .. exception:: Excepter
+                #
+                #         Sub exception
+                #
+                # .. exception:: Basic
+                #
+                #     Basic Exception
         """
 
         self.line(".. created by sphinxter")
@@ -2137,5 +2183,5 @@ class Writer:
                 if content.kind == "function":
                     self.function(content.parsed)
 
-                if content.kind == "class":
+                if content.kind in ["class", "exception"]:
                     self.cls(content.parsed)
