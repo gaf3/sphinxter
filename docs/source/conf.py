@@ -9,7 +9,9 @@
 project = 'sphinxter'
 copyright = '2022, George A. Fitch III (gaf3)'
 author = 'George A. Fitch III (gaf3)'
-release = '0.1.0'
+
+with open("/opt/service/VERSION", "r") as version_file:
+    release = version_file.read().strip()
 
 # The master toctree document.
 master_doc = 'index'

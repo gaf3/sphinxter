@@ -1,13 +1,14 @@
 ACCOUNT=gaf3
 IMAGE=sphinxter
 INSTALL=python:3.8.5-alpine3.12
-VERSION?=0.1.1
+VERSION?=$(shell cat VERSION)
 DEBUG_PORT=5678
 TTY=$(shell if tty -s; then echo "-it"; fi)
 VOLUMES=-v ${PWD}/lib:/opt/service/lib \
 		-v ${PWD}/test:/opt/service/test \
 		-v ${PWD}/docs:/opt/service/docs \
 		-v ${PWD}/.pylintrc:/opt/service/.pylintrc \
+		-v ${PWD}/VERSION:/opt/service/VERSION \
 		-v ${PWD}/setup.py:/opt/service/setup.py \
 		-v ${PWD}/docs.py:/opt/service/docs.py
 ENVIRONMENT=-e PYTHONDONTWRITEBYTECODE=1 \
