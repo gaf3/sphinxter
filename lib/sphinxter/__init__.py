@@ -2,39 +2,6 @@
 description: |
     Autodoc converting YAML docstrings and code comments to sphinx documentation
 
-    Setup
-    -----
-
-    To setup a package to use sphinxter:
-
-    #. Install sphinxter (which includes sphinx)::
-
-        pip install sphinxter
-
-    #. Setup documentation area as `docs/source`::
-
-        sphinx-quickstart docs --sep -p yourmodule -a 'Your Name' -r yourversion -l en
-
-    #. Create a script `docs.py` like so::
-
-        #!/usr/bin/env python
-
-        import sphinxter
-        import yourmodule
-
-        sphinxter.Sphinxter(yourmodule).process()
-
-    #. Run that script to auto generate docs from your docstrings (they'll end up in `docs/source`)::
-
-        chmod a+x docs.py
-        ./docs.py
-
-    #. Create HTML from those documents (they'll end up in `docs/build/html`)::
-
-        sphinx-build -b html docs/source/ docs/build/html
-
-    * To change settings, like docs location, indenting by, check out :any:`sphinxter.Sphinxter`
-
     Formatting
     ----------
 
@@ -164,6 +131,39 @@ description: |
     * To see how and where to place resource content, check out :any:`Sphinxter.document()`
 
     * To see how documents store resource content, check out :any:`Document.contents`
+
+    Setup
+    -----
+
+    To setup a package to use sphinxter:
+
+    #. Install sphinxter (which includes sphinx)::
+
+        pip install sphinxter
+
+    #. Setup documentation area as `docs/source`::
+
+        sphinx-quickstart docs --sep -p yourmodule -a 'Your Name' -r yourversion -l en
+
+    #. Create a script `docs.py` like so::
+
+        #!/usr/bin/env python
+
+        import sphinxter
+        import yourmodule
+
+        sphinxter.Sphinxter(yourmodule).process()
+
+    #. Run that script to auto generate docs from your docstrings (they'll end up in `docs/source`)::
+
+        chmod a+x docs.py
+        ./docs.py
+
+    #. Create HTML from those documents (they'll end up in `docs/build/html`)::
+
+        sphinx-build -b html docs/source/ docs/build/html
+
+    * To change settings, like docs location, indenting by, check out :any:`sphinxter.Sphinxter`
 """
 
 from sphinxter.reader import Reader
