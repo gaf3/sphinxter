@@ -136,6 +136,7 @@ class TestReader(unittest.TestCase):
 
     FUNCTION = {
             "name": "func",
+            "kind": "function",
             "description": "Some basic func",
             "signature": "(a: int, b: 'str', *args, **kwargs)",
             "parameters": [
@@ -174,7 +175,7 @@ class TestReader(unittest.TestCase):
 
     STATICMETHOD = {
         "name": "stat",
-        "method": "static",
+        "kind": "staticmethod",
         "description": "Some static stat",
         "signature": "(a, b, *args, **kwargs) -> list",
         "parameters": [
@@ -204,7 +205,7 @@ class TestReader(unittest.TestCase):
 
     CLASSMETHOD = {
         "name": "classy",
-        "method": "class",
+        "kind": "classmethod",
         "description": "Some class meth",
         "signature": "(a, b, *args, **kwargs)",
         "parameters": [
@@ -234,7 +235,7 @@ class TestReader(unittest.TestCase):
 
     METHOD = {
         "name": "meth",
-        "method": "",
+        "kind": "method",
         "description": "Some basic meth",
         "signature": "(a, b, *args, **kwargs)",
         "parameters": [
@@ -309,19 +310,20 @@ class TestReader(unittest.TestCase):
             }
         })
 
-    BASIC_CLASS = {
+    BASIC_EXCEPTION = {
         "name": "Basic",
+        "kind": "exception",
         "description": "Basic Exception",
-        "exception": True,
         "methods": [],
         "attributes": [],
-        "classes": []
+        "classes": [],
+        "exceptions": []
     }
 
     COMPLEX_CLASS = {
         "name": "Complex",
+        "kind": "class",
         "description": "Complex class\n\ncall me",
-        "exception": False,
         "signature": "(a, b, *args, **kwargs)",
         "definition": "make sure you do this::\n\n    wowsa\n\nYa sweet\n",
         "parameters": [
@@ -368,18 +370,30 @@ class TestReader(unittest.TestCase):
         "classes": [
             {
                 "name": "Subber",
+                "kind": "class",
                 "description": "Sub class",
-                "exception": False,
                 "methods": [],
                 "attributes": [],
-                "classes": []
+                "classes": [],
+                "exceptions": []
+            }
+        ],
+        "exceptions": [
+            {
+                "name": "Excepter",
+                "kind": "exception",
+                "description": "Sub exception",
+                "methods": [],
+                "attributes": [],
+                "classes": [],
+                "exceptions": []
             }
         ]
     }
 
     def test_cls(self):
 
-        self.assertEqual(sphinxter.Reader.cls(example.Basic), self.BASIC_CLASS)
+        self.assertEqual(sphinxter.Reader.cls(example.Basic), self.BASIC_EXCEPTION)
 
         self.assertEqual(sphinxter.Reader.cls(example.Complex), self.COMPLEX_CLASS)
 
@@ -406,8 +420,10 @@ class TestReader(unittest.TestCase):
                 FUNCTION
             ],
             "classes": [
-                BASIC_CLASS,
                 COMPLEX_CLASS
+            ],
+            "exceptions": [
+                BASIC_EXCEPTION
             ],
             "attributes": [
                 {

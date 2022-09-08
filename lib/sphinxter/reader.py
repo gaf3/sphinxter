@@ -422,6 +422,7 @@ class Reader:
                 sphinxter.Reader.routine(inspect.getattr_static(example, 'func'))
                 # {
                 #     "name": "func",
+                #     "kind": "function",
                 #     "description": "Some basic func",
                 #     "signature": "(a: int, b: 'str', *args, **kwargs)",
                 #     "parameters": [
@@ -555,7 +556,7 @@ class Reader:
                 sphinxter.Reader.routine(inspect.getattr_static(example.Complex, 'stat'))
                 # {
                 #     "name": "stat",
-                #     "method": "static",
+                #     "kind": "staticmethod",
                 #     "description": "Some static stat",
                 #     "signature": "(a, b, *args, **kwargs) -> list",
                 #     "parameters": [
@@ -586,7 +587,7 @@ class Reader:
                 sphinxter.Reader.routine(inspect.getattr_static(example.Complex, 'classy'))
                 # {
                 #     "name": "classy",
-                #     "method": "class",
+                #     "kind": "classmethod",
                 #     "description": "Some class meth",
                 #     "signature": "(a, b, *args, **kwargs)",
                 #     "parameters": [
@@ -617,7 +618,7 @@ class Reader:
                 sphinxter.Reader.routine(inspect.getattr_static(example.Complex, 'meth'))
                 # {
                 #     "name": "meth",
-                #     "method": "",
+                #     "kind": "method",
                 #     "description": "Some basic meth",
                 #     "signature": "(a, b, *args, **kwargs)",
                 #     "parameters": [
@@ -654,15 +655,15 @@ class Reader:
         """
 
         if isinstance(resource, staticmethod):
-            kind = "static"
+            kind = "staticmethod"
             signature = inspect.signature(resource)
             annotations = cls.annotations(resource)
         elif isinstance(resource, classmethod):
-            kind = "class"
+            kind = "classmethod"
             signature = inspect.signature(resource.__func__)
             annotations = cls.annotations(resource.__func__)
         else:
-            kind = ""
+            kind = "method"
             signature = inspect.signature(resource)
             annotations = cls.annotations(resource)
 
@@ -674,8 +675,7 @@ class Reader:
             "signature": str(signature)
         }
 
-        if method:
-            parsed["method"] = kind
+        parsed["kind"] = kind if method else "function"
 
         lookup = {}
         comments = cls.comments(resource)
@@ -964,13 +964,19 @@ class Reader:
                         \"""
                         pass
 
+                    class Excepter(Exception):
+                        \"""
+                        Sub exception
+                        \"""
+                        pass
+
             Reading all the documentation is as easy as::
 
                 sphinxter.Reader.cls(example.Complex)
                 # {
                 #     "name": "Complex",
+                #     "kind": "class",
                 #     "description": "Complex class\\n\\ncall me",
-                #     "exception": False,
                 #     "signature": "(a, b, *args, **kwargs)",
                 #     "definition": "make sure you do this::\\n\\n    wowsa\\n\\nYa sweet\\n",
                 #     "parameters": [
@@ -1012,7 +1018,7 @@ class Reader:
                 #     "methods": [
                 #         {
                 #             "name": "stat",
-                #             "method": "static",
+                #             "kind": "staticmethod",
                 #             "description": "Some static stat",
                 #             "signature": "(a, b, *args, **kwargs) -> list",
                 #             "parameters": [
@@ -1041,7 +1047,7 @@ class Reader:
                 #         },
                 #         {
                 #             "name": "classy",
-                #             "method": "class",
+                #             "kind": "classmethod",
                 #             "description": "Some class meth",
                 #             "signature": "(a, b, *args, **kwargs)",
                 #             "parameters": [
@@ -1070,7 +1076,7 @@ class Reader:
                 #         },
                 #         {
                 #             "name": "meth",
-                #             "method": "",
+                #             "kind": "method",
                 #             "description": "Some basic meth",
                 #             "signature": "(a, b, *args, **kwargs)",
                 #             "parameters": [
@@ -1108,11 +1114,23 @@ class Reader:
                 #     "classes": [
                 #         {
                 #             "name": "Subber",
+                #             "kind": "class",
                 #             "description": "Sub class",
-                #             "exception": False,
                 #             "methods": [],
                 #             "attributes": [],
-                #             "classes": []
+                #             "classes": [],
+                #             "exceptions": []
+                #         }
+                #     ],
+                #     "exceptions": [
+                #         {
+                #             "name": "Excepter",
+                #             "kind": "exception",
+                #             "description": "Sub exception",
+                #             "methods": [],
+                #             "attributes": [],
+                #             "classes": [],
+                #             "exceptions": []
                 #         }
                 #     ]
                 # }
@@ -1129,27 +1147,30 @@ class Reader:
                 sphinxter.Reader.cls(example.Basic)
                 # {
                 #     "name": "Basic",
+                #     "kind": "exception",
                 #     "description": "Basic Exception",
                 #     "exception": True,
                 #     "methods": [],
                 #     "attributes": [],
-                #     "classes": []
+                #     "classes": [],
+                #     "exceptions": []
                 # }
         """
 
         parsed = {
             "name": resource.__name__,
-            "exception": Exception in resource.__bases__,
+            "kind": "exception" if Exception in resource.__bases__ else "class",
             "attributes": [],
             "methods": [],
-            "classes": []
+            "classes": [],
+            "exceptions": []
         }
 
         parsed.update(cls.parse(resource.__doc__))
 
         try:
 
-            cls.update(parsed, cls.routine(resource.__init__, method=True), skip=["name", "method"])
+            cls.update(parsed, cls.routine(resource.__init__, method=True), skip=["name", "kind"])
 
         except TypeError:
 
@@ -1166,7 +1187,12 @@ class Reader:
 
             elif inspect.isclass(attr):
 
-                parsed["classes"].append(cls.cls(attr))
+                cls_parsed = cls.cls(attr)
+
+                if cls_parsed["kind"] == "exception":
+                    parsed["exceptions"].append(cls_parsed)
+                else:
+                    parsed["classes"].append(cls_parsed)
 
             elif name in resource.__dict__ and not name.startswith('__') and not name.endswith('__'):
 
@@ -1319,6 +1345,12 @@ class Reader:
                         \"""
                         pass
 
+                    class Excepter(Exception):
+                        \"""
+                        Sub exception
+                        \"""
+                        pass
+
             Reading all the documentation is as easy as::
 
                 sphinxter.Reader.cls(example)
@@ -1382,17 +1414,9 @@ class Reader:
                 #     ],
                 #     "classes": [
                 #         {
-                #             "name": "Basic",
-                #             "description": "Basic Exception",
-                #             "exception": True,
-                #             "methods": [],
-                #             "attributes": [],
-                #             "classes": []
-                #         },
-                #         {
                 #             "name": "Complex",
+                #             "kind": "class",
                 #             "description": "Complex class\\n\\ncall me",
-                #             "exception": False,
                 #             "signature": "(a, b, *args, **kwargs)",
                 #             "definition": "make sure you do this::\\n\\n    wowsa\\n\\nYa sweet\\n",
                 #             "parameters": [
@@ -1434,7 +1458,7 @@ class Reader:
                 #             "methods": [
                 #                 {
                 #                     "name": "classy",
-                #                     "method": "class",
+                #                     "kind": "classmethod",
                 #                     "description": "Some class meth",
                 #                     "signature": "(a, b, *args, **kwargs)",
                 #                     "parameters": [
@@ -1463,7 +1487,7 @@ class Reader:
                 #                 },
                 #                 {
                 #                     "name": "meth",
-                #                     "method": "",
+                #                     "kind": "method",
                 #                     "description": "Some basic meth",
                 #                     "signature": "(a, b, *args, **kwargs)",
                 #                     "parameters": [
@@ -1499,7 +1523,7 @@ class Reader:
                 #                 },
                 #                 {
                 #                     "name": "stat",
-                #                     "method": "static",
+                #                     "kind": "staticmethod",
                 #                     "description": "Some static stat",
                 #                     "signature": "(a, b, *args, **kwargs) -> list",
                 #                     "parameters": [
@@ -1536,9 +1560,31 @@ class Reader:
                 #                     "attributes": [],
                 #                     "classes": []
                 #                 }
+                #             ],
+                #             "exceptions": [
+                #                 {
+                #                     "name": "Excepter",
+                #                     "kind": "exception",
+                #                     "description": "Sub exception",
+                #                     "methods": [],
+                #                     "attributes": [],
+                #                     "classes": [],
+                #                     "exceptions": []
+                #                 }
                 #             ]
                 #         }
                 #     ],
+                #     "exceptions": [
+                #         {
+                #             "name": "Basic",
+                #             "kind": "exception",
+                #             "description": "Basic Exception",
+                #             "methods": [],
+                #             "attributes": [],
+                #             "classes": [],
+                #             "exceptions": []
+                #         }
+                #     ]
                 #     "attributes": [
                 #         {
                 #             "name": "a",
@@ -1563,7 +1609,8 @@ class Reader:
             "name": resource.__name__,
             "attributes": [],
             "functions": [],
-            "classes": []
+            "classes": [],
+            "exceptions": []
         }
 
         parsed.update(cls.parse(resource.__doc__))
@@ -1578,7 +1625,12 @@ class Reader:
 
             elif inspect.isclass(attr):
 
-                parsed["classes"].append(cls.cls(attr))
+                cls_parsed = cls.cls(attr)
+
+                if cls_parsed["kind"] == "exception":
+                    parsed["exceptions"].append(cls_parsed)
+                else:
+                    parsed["classes"].append(cls_parsed)
 
             elif name in attributes:
 

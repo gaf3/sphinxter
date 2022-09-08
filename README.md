@@ -3,47 +3,6 @@ sphinxter
 
 Autodoc converting YAML docstrings and code comments to sphinx documentation
 
-Setup
------
-
-To setup a package to use sphinxter:
-
-1. Install sphinxter (which includes sphinx)
-
-```
-    pip install sphinxter
-```
-
-2. Setup documentation area as `docs/source`:
-
-```
-    sphinx-quickstart docs --sep -p yourmodule -a 'Your Name' -r yourversion -l en
-```
-
-3. Create a script `docs.py` like so:
-
-```
-    #!/usr/bin/env python
-
-    import sphinxter
-    import yourmodule
-
-    sphinxter.Sphinxter(yourmodule).process()
-```
-
-4. Run that script to auto generate docs from your docstrings (they'll end up in `docs/source`):
-
-```
-    chmod a+x docs.py
-    ./docs.py
-```
-
-5. Create HTML from those documents (they'll end up in `docs/build/html`):
-
-```
-    sphinx-build -b html docs/source/ docs/build/html
-```
-
 Formatting
 ----------
 
@@ -169,3 +128,44 @@ Organization
 By default, everything ends up in the `index.rst` document. With modules, classes, and functions you can a different
 document and even the order in which they'll appear in the document. If the parent modules don't match, sphinxter will
 add a currentmodule directive so everything will be organized properly.
+
+Setup
+-----
+
+To setup a package to use sphinxter:
+
+1. Install sphinxter (which includes sphinx)
+
+```
+    pip install sphinxter
+```
+
+2. Setup documentation area as `docs/source`:
+
+```
+    sphinx-quickstart docs --sep -p yourmodule -a 'Your Name' -r yourversion -l en
+```
+
+3. Create a script `docs.py` like so:
+
+```
+    #!/usr/bin/env python
+
+    import sphinxter
+    import yourmodule
+
+    sphinxter.Sphinxter(yourmodule).process()
+```
+
+4. Run that script to auto generate docs from your docstrings (they'll end up in `docs/source`):
+
+```
+    chmod a+x docs.py
+    ./docs.py
+```
+
+5. Create HTML from those documents (they'll end up in `docs/build/html`):
+
+```
+    sphinx-build -b html docs/source/ docs/build/html
+```

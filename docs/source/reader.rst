@@ -254,13 +254,19 @@ sphinxter.Reader
                     """
                     pass
 
+                class Excepter(Exception):
+                    """
+                    Sub exception
+                    """
+                    pass
+
         Reading all the documentation is as easy as::
 
             sphinxter.Reader.cls(example.Complex)
             # {
             #     "name": "Complex",
+            #     "kind": "class",
             #     "description": "Complex class\n\ncall me",
-            #     "exception": False,
             #     "signature": "(a, b, *args, **kwargs)",
             #     "definition": "make sure you do this::\n\n    wowsa\n\nYa sweet\n",
             #     "parameters": [
@@ -302,7 +308,7 @@ sphinxter.Reader
             #     "methods": [
             #         {
             #             "name": "stat",
-            #             "method": "static",
+            #             "kind": "staticmethod",
             #             "description": "Some static stat",
             #             "signature": "(a, b, *args, **kwargs) -> list",
             #             "parameters": [
@@ -331,7 +337,7 @@ sphinxter.Reader
             #         },
             #         {
             #             "name": "classy",
-            #             "method": "class",
+            #             "kind": "classmethod",
             #             "description": "Some class meth",
             #             "signature": "(a, b, *args, **kwargs)",
             #             "parameters": [
@@ -360,7 +366,7 @@ sphinxter.Reader
             #         },
             #         {
             #             "name": "meth",
-            #             "method": "",
+            #             "kind": "method",
             #             "description": "Some basic meth",
             #             "signature": "(a, b, *args, **kwargs)",
             #             "parameters": [
@@ -398,11 +404,23 @@ sphinxter.Reader
             #     "classes": [
             #         {
             #             "name": "Subber",
+            #             "kind": "class",
             #             "description": "Sub class",
-            #             "exception": False,
             #             "methods": [],
             #             "attributes": [],
-            #             "classes": []
+            #             "classes": [],
+            #             "exceptions": []
+            #         }
+            #     ],
+            #     "exceptions": [
+            #         {
+            #             "name": "Excepter",
+            #             "kind": "exception",
+            #             "description": "Sub exception",
+            #             "methods": [],
+            #             "attributes": [],
+            #             "classes": [],
+            #             "exceptions": []
             #         }
             #     ]
             # }
@@ -419,11 +437,13 @@ sphinxter.Reader
             sphinxter.Reader.cls(example.Basic)
             # {
             #     "name": "Basic",
+            #     "kind": "exception",
             #     "description": "Basic Exception",
             #     "exception": True,
             #     "methods": [],
             #     "attributes": [],
-            #     "classes": []
+            #     "classes": [],
+            #     "exceptions": []
             # }
 
     .. classmethod:: comments(resource) -> dict
@@ -597,6 +617,12 @@ sphinxter.Reader
                     """
                     pass
 
+                class Excepter(Exception):
+                    """
+                    Sub exception
+                    """
+                    pass
+
         Reading all the documentation is as easy as::
 
             sphinxter.Reader.cls(example)
@@ -660,17 +686,9 @@ sphinxter.Reader
             #     ],
             #     "classes": [
             #         {
-            #             "name": "Basic",
-            #             "description": "Basic Exception",
-            #             "exception": True,
-            #             "methods": [],
-            #             "attributes": [],
-            #             "classes": []
-            #         },
-            #         {
             #             "name": "Complex",
+            #             "kind": "class",
             #             "description": "Complex class\n\ncall me",
-            #             "exception": False,
             #             "signature": "(a, b, *args, **kwargs)",
             #             "definition": "make sure you do this::\n\n    wowsa\n\nYa sweet\n",
             #             "parameters": [
@@ -712,7 +730,7 @@ sphinxter.Reader
             #             "methods": [
             #                 {
             #                     "name": "classy",
-            #                     "method": "class",
+            #                     "kind": "classmethod",
             #                     "description": "Some class meth",
             #                     "signature": "(a, b, *args, **kwargs)",
             #                     "parameters": [
@@ -741,7 +759,7 @@ sphinxter.Reader
             #                 },
             #                 {
             #                     "name": "meth",
-            #                     "method": "",
+            #                     "kind": "method",
             #                     "description": "Some basic meth",
             #                     "signature": "(a, b, *args, **kwargs)",
             #                     "parameters": [
@@ -777,7 +795,7 @@ sphinxter.Reader
             #                 },
             #                 {
             #                     "name": "stat",
-            #                     "method": "static",
+            #                     "kind": "staticmethod",
             #                     "description": "Some static stat",
             #                     "signature": "(a, b, *args, **kwargs) -> list",
             #                     "parameters": [
@@ -814,9 +832,31 @@ sphinxter.Reader
             #                     "attributes": [],
             #                     "classes": []
             #                 }
+            #             ],
+            #             "exceptions": [
+            #                 {
+            #                     "name": "Excepter",
+            #                     "kind": "exception",
+            #                     "description": "Sub exception",
+            #                     "methods": [],
+            #                     "attributes": [],
+            #                     "classes": [],
+            #                     "exceptions": []
+            #                 }
             #             ]
             #         }
             #     ],
+            #     "exceptions": [
+            #         {
+            #             "name": "Basic",
+            #             "kind": "exception",
+            #             "description": "Basic Exception",
+            #             "methods": [],
+            #             "attributes": [],
+            #             "classes": [],
+            #             "exceptions": []
+            #         }
+            #     ]
             #     "attributes": [
             #         {
             #             "name": "a",
@@ -937,6 +977,7 @@ sphinxter.Reader
             sphinxter.Reader.routine(inspect.getattr_static(example, 'func'))
             # {
             #     "name": "func",
+            #     "kind": "function",
             #     "description": "Some basic func",
             #     "signature": "(a: int, b: 'str', *args, **kwargs)",
             #     "parameters": [
@@ -1070,7 +1111,7 @@ sphinxter.Reader
             sphinxter.Reader.routine(inspect.getattr_static(example.Complex, 'stat'))
             # {
             #     "name": "stat",
-            #     "method": "static",
+            #     "kind": "staticmethod",
             #     "description": "Some static stat",
             #     "signature": "(a, b, *args, **kwargs) -> list",
             #     "parameters": [
@@ -1101,7 +1142,7 @@ sphinxter.Reader
             sphinxter.Reader.routine(inspect.getattr_static(example.Complex, 'classy'))
             # {
             #     "name": "classy",
-            #     "method": "class",
+            #     "kind": "classmethod",
             #     "description": "Some class meth",
             #     "signature": "(a, b, *args, **kwargs)",
             #     "parameters": [
@@ -1132,7 +1173,7 @@ sphinxter.Reader
             sphinxter.Reader.routine(inspect.getattr_static(example.Complex, 'meth'))
             # {
             #     "name": "meth",
-            #     "method": "",
+            #     "kind": "method",
             #     "description": "Some basic meth",
             #     "signature": "(a, b, *args, **kwargs)",
             #     "parameters": [

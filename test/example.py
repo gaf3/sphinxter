@@ -173,3 +173,9 @@ class Complex:
         Sub class
         """
         pass
+
+    class Excepter(Exception):
+        """
+        Sub exception
+        """
+        pass
