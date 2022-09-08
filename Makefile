@@ -19,7 +19,7 @@ PYPI=-v ${PWD}/LICENSE.txt:/opt/service/LICENSE.txt \
 	-v ${PWD}/PYPI.md:/opt/service/README.md \
 	-v ${HOME}/.pypirc:/opt/service/.pypirc
 
-.PHONY: build shell debug test lint setup sphinx tag untag testpypi pypi sphinx docs html rtd
+.PHONY: build shell debug test lint setup sphinx tag untag testpypi pypi sphinx docs html clean rtd
 
 build:
 	docker build . -t $(ACCOUNT)/$(IMAGE):$(VERSION)
@@ -69,6 +69,9 @@ docs:
 
 html:
 	docker run $(TTY) $(VOLUMES) $(ENVIRONMENT) $(ACCOUNT)/$(IMAGE):$(VERSION) sh -c "sphinx-build -b html docs/source/ docs/build/html"
+
+clean:
+	docker run $(TTY) $(VOLUMES) $(ENVIRONMENT) $(ACCOUNT)/$(IMAGE):$(VERSION) sh -c "rm -rf docs/build/html"
 
 rtd: docs html
 	open -a Firefox "file://$(PWD)/docs/build/html/index.html"

@@ -30,6 +30,7 @@ pipeline {
         stage('html') {
             steps {
                 sh 'make html'
+                sh 'make clean'
             }
         }
     }
