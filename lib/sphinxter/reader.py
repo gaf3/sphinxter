@@ -79,7 +79,7 @@ class Reader:
 
     @staticmethod
     def parse(
-            docstring:str  # the docstring (or string after an attribute)
+            docstring:str # the docstring (or string after an attribute)
         )->dict:
         """
         description: Parses a docstring into YAML, defaulting to description
