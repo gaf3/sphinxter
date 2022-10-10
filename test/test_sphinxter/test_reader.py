@@ -103,9 +103,9 @@ class TestReader(unittest.TestCase):
         })
 
         mock_log.assert_has_calls([
-            unittest.mock.call("func parameter: a"),
-            unittest.mock.call("func parameter: b"),
-            unittest.mock.call("func parameter: kwargs")
+            unittest.mock.call("%s parameter: %s", "func", "a"),
+            unittest.mock.call("%s parameter: %s", "func", "b"),
+            unittest.mock.call("%s parameter: %s", "func", "kwargs")
         ])
 
         def func(

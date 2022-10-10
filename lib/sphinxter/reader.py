@@ -79,7 +79,7 @@ class Reader:
 
     @staticmethod
     def parse(
-            docstring:str,  # the docstring (or string after an attribute)
+            docstring:str  # the docstring (or string after an attribute)
         )->dict:
         """
         description: Parses a docstring into YAML, defaulting to description
@@ -302,7 +302,7 @@ class Reader:
                         comments[param] = f"{comments[param]}\n{comment}"
 
         for param, comment in comments.items():
-            logging.info(f"{resource.__name__} parameter: {param}")
+            logging.info("%s parameter: %s", resource.__name__, param)
             parseds[param].update(cls.parse(comment))
 
         return parseds
@@ -657,7 +657,7 @@ class Reader:
                 # }
         """
 
-        logging.info(f"routine: {resource.__name__}")
+        logging.info("routine: %s", resource.__name__)
 
         if isinstance(resource, staticmethod):
             kind = "staticmethod"
