@@ -11,6 +11,8 @@ import token
 import tokenize
 import yaml
 
+import logging
+
 class Reader:
     """
     description: Static class for reading doc strings and comments into dict's
@@ -77,7 +79,7 @@ class Reader:
 
     @staticmethod
     def parse(
-            docstring:str # the docstring (or string after an attribute)
+            docstring:str,  # the docstring (or string after an attribute)
         )->dict:
         """
         description: Parses a docstring into YAML, defaulting to description
@@ -300,6 +302,7 @@ class Reader:
                         comments[param] = f"{comments[param]}\n{comment}"
 
         for param, comment in comments.items():
+            logging.info(f"{resource.__name__} parameter: {param}")
             parseds[param].update(cls.parse(comment))
 
         return parseds
@@ -654,6 +657,8 @@ class Reader:
                 # }
         """
 
+        logging.info(f"routine: {resource.__name__}")
+
         if isinstance(resource, staticmethod):
             kind = "staticmethod"
             signature = inspect.signature(resource)
@@ -809,6 +814,8 @@ class Reader:
 
             if targets and isinstance(node, ast.Expr) and isinstance(node.value, ast.Constant) and isinstance(node.value.value, str):
 
+                logging.info(f"attribute docstring: {'-'.join(targets)}")
+
                 parsed = cls.parse(node.value.value)
                 for target in targets:
                     cls.update(parseds[target], parsed)
@@ -822,11 +829,13 @@ class Reader:
 
                 source = io.StringIO(inspect.getsourcelines(resource)[0][node.end_lineno - 1][node.end_col_offset + 1:])
 
-                for parsed in tokenize.generate_tokens(source.readline):
-                    if parsed.type == token.COMMENT:
-                        comment = parsed.string[2:].rstrip()
+                for tokenized in tokenize.generate_tokens(source.readline):
+                    if tokenized.type == token.COMMENT:
+                        comment = tokenized.string[2:].rstrip()
+                        logging.info(f"attribute comment: {'-'.join(targets)}")
+                        parsed = cls.parse(comment)
                         for target in targets:
-                            parseds[target] = cls.parse(comment)
+                            parseds[target] = parsed
 
             else:
 
@@ -1157,6 +1166,8 @@ class Reader:
                 # }
         """
 
+        logging.info(f"class: {resource.__name__}")
+
         parsed = {
             "name": resource.__name__,
             "kind": "exception" if Exception in resource.__bases__ else "class",
@@ -1170,7 +1181,8 @@ class Reader:
 
         try:
 
-            cls.update(parsed, cls.routine(resource.__init__, method=True), skip=["name", "kind"])
+            if "__init__" in resource.__dict__:
+                cls.update(parsed, cls.routine(resource.__init__, method=True), skip=["name", "kind"])
 
         except TypeError:
 
@@ -1178,7 +1190,7 @@ class Reader:
 
         attributes = cls.attributes(resource)
 
-        for name, attr in {name: inspect.getattr_static(resource, name) for name in dir(resource)}.items():
+        for name, attr in {name: inspect.getattr_static(resource, name) for name in sorted(resource.__dict__.keys())}.items():
 
             if (inspect.isfunction(attr) or isinstance(attr, (staticmethod, classmethod))):
 
@@ -1604,6 +1616,8 @@ class Reader:
                 #     "usage": "Do some cool stuff::\\n\\n    like this\\n\\nIt's great\\n"
                 # }
         """
+
+        logging.info(f"module: {resource.__name__}")
 
         parsed = {
             "name": resource.__name__,

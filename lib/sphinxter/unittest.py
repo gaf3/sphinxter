@@ -1,5 +1,6 @@
 """
-Module for testing examples
+description: Module for testing examples
+document: unittest
 """
 
 # pylint: disable=exec-used,eval-used
@@ -13,7 +14,8 @@ import unittest
 
 class Block:
     """
-    Class for storing a block
+    description: Class for storing a block
+    document: unittest
     """
 
     code = None     # The code of the block
@@ -65,7 +67,8 @@ class Block:
 
 class Example:
     """
-    Class for verifying example code
+    description: Class for verifying example code
+    document: unittest
     """
 
     @staticmethod
@@ -146,10 +149,15 @@ class Example:
 
 class TestCase(unittest.TestCase):
     """
-    Extended unittest.TestCase with asserts for testing Block
+    description: Extended unittest.TestCase with asserts for testing examples
+    document: unittest
     """
 
-    def assertBlock(self, block, comment=None, transform=True):
+    def assertBlock(self,
+        block:Block,    # Block to evauluate
+        comment=None,
+        transform=True
+    ):
         """
         Asserts a block of code matches it's value
         """

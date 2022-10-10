@@ -1,21 +1,28 @@
 #!/usr/bin/env python
 
+import logging
+
 import sphinxter
+import sphinxter.unittest
+
+logging.getLogger().setLevel(logging.INFO)
 
 sphinxter.Sphinxter(
-    sphinxter,
+    [sphinxter, sphinxter.unittest],
     {
         'index': "sphinxter",
         'sphinxter': "sphinxter.Sphinxter",
         'reader': "sphinxter.Reader",
         'writer': "sphinxter.Writer",
-        'document': "sphinxter.Document"
+        'document': "sphinxter.Document",
+        'unittest': "sphinxter.unittest"
     },
     [
         'self',
         'sphinxter',
         'reader',
         'writer',
-        'document'
+        'document',
+        'unittest'
     ]
 ).process()

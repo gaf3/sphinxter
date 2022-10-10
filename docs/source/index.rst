@@ -14,6 +14,7 @@ sphinxter
     reader
     writer
     document
+    unittest
 
 .. module:: sphinxter
 
