@@ -1219,7 +1219,7 @@ sphinxter.Reader
 
         **Usage**
 
-        If you have a subclass like::
+        Consider the sub class in a test.example module::
 
             class Complex:
 
@@ -1230,17 +1230,29 @@ sphinxter.Reader
         The source for Subber would be indented from inspect.getsource()
         which can't be parsed properly because of the initial indent::
 
-            inpsect.getsource(Complex.Subber)
+            import inspect
+            import test.example
+
+            inspect.getsource(test.example.Complex.Subber)
             #     class Subber:
+            #         """
+            #         Sub class
+            #         """
+            #         pass
             #
-            #          pass
 
         This prevents that problem::
 
-            sphinxter.Reader.source(Complex.Subber)
+            import sphinxter
+            import test.example
+
+            sphinxter.Reader.source(test.example.Complex.Subber)
             # class Subber:
+            #     """
+            #     Sub class
+            #     """
+            #     pass
             #
-            #  pass
 
     .. classmethod:: update(primary: dict, secondary: dict, skip=None)
 

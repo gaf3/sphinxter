@@ -26,6 +26,10 @@ Module for testing examples
 
         The value of the block
 
+    .. attribute:: valued
+
+        Whether this block has a value
+
     .. method:: eval(locals: dict)
 
         Evalucates the value and returns it. If it can't compile, assumes the value is a string
@@ -73,9 +77,10 @@ Module for testing examples
         :param comment:
         :param transform:
 
-    .. method:: assertExample(example, comment=None)
+    .. method:: assertExample(example, comment=None, transform=True)
 
         Asserts a block of code matches it's value
 
         :param example:
         :param comment:
+        :param transform:

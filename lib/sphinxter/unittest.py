@@ -8,8 +8,27 @@ document: unittest
 import re
 import ast
 import json
-import yaml
+import inspect
+import traceback
 import unittest
+import sphinxter
+
+class CodeException(Exception):
+
+    def __init__(self, exception, code):
+
+        trace = "".join(traceback.format_exception(exception))
+
+        lines = []
+        number = 0
+
+        for line in code.split("\n"):
+            number += 1
+            lines.append(f"{number}: {line}")
+
+        lined = "\n".join(lines)
+
+        super().__init__(f"{trace}{lined}")
 
 
 class Block:
@@ -21,20 +40,19 @@ class Block:
     code = None     # The code of the block
     "type: str"
     value = None    # The value of the block
+    valued = False  # Whether this block has a value
 
     def __init__(self,
         code:str, # The code of the block
         value:str # The value of the block
     ):
 
-        if isinstance(code, list):
-            code = "\n".join(code)
+        self.code = "\n".join(code)
 
-        if isinstance(value, list):
-            value = "\n".join(value)
+        if value:
 
-        self.code = code
-        self.value = value
+            self.value = "\n".join(value)
+            self.valued = True
 
     def exec(self,
         locals:dict    # locals vars already set
@@ -43,17 +61,35 @@ class Block:
         Executes the code and returns the last value
         """
 
-        statements = list(ast.iter_child_nodes(ast.parse(self.code)))
+        try:
+            statements = list(ast.iter_child_nodes(ast.parse(self.code)))
+        except Exception as exception:
+            raise CodeException(exception, self.code)
 
-        last = statements.pop()
+        last = None
+
+        if self.valued:
+            last = statements.pop()
 
         if statements:
-            exec(compile(ast.Module(body=statements, type_ignores=[]), filename="<ast>", mode="exec"), {}, locals)
 
-        if isinstance(last, ast.Assign):
-            last = last.value
+            code = ast.Module(body=statements, type_ignores=[])
+            try:
+                exec(compile(code, filename="<ast>", mode="exec"), {}, locals)
+            except Exception as exception:
+                raise CodeException(exception, ast.unparse(code))
 
-        return eval(ast.unparse(last), {}, locals)
+        if last is not None:
+
+            if isinstance(last, ast.Assign):
+                last = last.value
+
+            code = ast.unparse(last)
+
+            try:
+                return eval(code, {}, locals)
+            except Exception as exception:
+                raise CodeException(exception, code)
 
     def eval(self,
         locals:dict    # locals vars already set
@@ -62,30 +98,31 @@ class Block:
         Evalucates the value and returns it. If it can't compile, assumes the value is a string
         """
 
-        return eval(self.value, {}, locals)
+        try:
+            return eval(self.value, {}, locals)
+        except Exception as exception:
+            raise CodeException(exception, self.value)
 
 
-class Example:
+class Section:
     """
     description: Class for verifying example code
     document: unittest
     """
 
     @staticmethod
-    def parse(name, docstring):
+    def parse(text):
         """
         Pulls all example code
         """
 
-        area = yaml.safe_load(docstring)[name]
-
-        text = []
+        lines = []
         indent = None
         code = False
 
-        for line in area.split("\n"):
+        for line in text.split("\n"):
 
-            if line.endswith("::"):
+            if line.endswith("::") and not line.endswith(".. note::") and not line.startswith(" "):
                 code = True
                 indent = None
                 continue
@@ -99,9 +136,9 @@ class Example:
                 continue
 
             if code and indent:
-                text.append(line.replace(indent, '', 1))
+                lines.append(line.replace(indent, '', 1))
 
-        return "\n".join(text)
+        return "\n".join(lines)
 
     @staticmethod
     def chunk(code):
@@ -139,11 +176,9 @@ class Example:
 
         return blocks
 
-    def __init__(self, name, docstring):
+    def __init__(self, text):
 
-        self.name = name
-        self.docstring = docstring
-        self.code = self.parse(name, self.docstring)
+        self.code = self.parse(text)
         self.blocks = self.chunk(self.code)
 
 
@@ -153,7 +188,25 @@ class TestCase(unittest.TestCase):
     document: unittest
     """
 
-    def assertBlock(self,
+    def sphinxter(self,
+        resource
+    )->dict:
+        """
+        description: Reads documntation from any resource
+        """
+
+        if inspect.ismodule(resource):
+            return sphinxter.Reader.module(resource)
+
+        if inspect.isclass(resource):
+            return sphinxter.Reader.cls(resource)
+
+        if inspect.isroutine(resource):
+            return sphinxter.Reader.routine(resource)
+
+        raise Exception(f"Unknown resource: {resource}")
+
+    def assertSphinxterBlock(self,
         block:Block,    # Block to evauluate
         comment=None,
         transform=True
@@ -163,7 +216,18 @@ class TestCase(unittest.TestCase):
         """
 
         locals = {}
+
         actual = block.exec(locals)
+
+        if not block.valued:
+            return
+
+        if isinstance(transform, dict) and comment in transform:
+            transform = transform[comment]
+
+        if isinstance(transform, list):
+            transform = transform.pop(0)
+
         expected = block.eval(locals) if transform else block.value
 
         if expected != actual:
@@ -182,14 +246,40 @@ class TestCase(unittest.TestCase):
             for line in correct.split("\n"):
                 correction.append(f"# {line}")
 
-            comment = "\n".join(correction)
+            comment = "\n".join(correction).replace("\\", "\\\\")
 
         self.assertEqual(expected, actual, comment)
 
-    def assertExample(self, example, comment=None):
+    def assertSphinxterSection(self, section, comment=None, transform=True):
+        """
+        Asserts a section is valid
+        """
+
+        if isinstance(section, Section):
+
+            for block in section.blocks:
+                self.assertSphinxterBlock(block, comment=comment, transform=transform)
+
+        elif isinstance(section, str) and "\n" in section and "::" in section:
+
+            self.assertSphinxterSection(Section(section), comment=comment, transform=transform)
+
+        elif isinstance(section, list):
+
+            for index, item in enumerate(section):
+                self.assertSphinxterSection(item, comment=f"{comment}[{index}]", transform=transform)
+
+        elif isinstance(section, dict):
+
+            for name, item in section.items():
+                if name not in ["methods", "classes", "exceptions"]:
+                    self.assertSphinxterSection(item, comment=f"{comment}.{name}", transform=transform)
+
+    def assertSphinxter(self, resource, transform=True):
         """
         Asserts a block of code matches it's value
         """
 
-        for block in example.blocks:
-            self.assertBlock(block, comment)
+        documentation = self.sphinxter(resource)
+
+        self.assertSphinxterSection(documentation, resource.__name__, transform=transform)

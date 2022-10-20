@@ -3,8 +3,8 @@ import unittest.mock
 
 import sphinxter
 from test import example
-from test.test_sphinxter.test_reader import TestReader
-from test.test_sphinxter.test_writer import TestWriter
+import test.test_sphinxter.test_reader
+import test.test_sphinxter.test_writer
 
 
 class TestSphinxter(unittest.TestCase):
@@ -111,19 +111,19 @@ class TestSphinxter(unittest.TestCase):
 
         self.assertEqual(instance.documents["index"].contents[0][0].module, "test.example")
         self.assertEqual(instance.documents["index"].contents[0][0].kind, "module")
-        self.assertEqual(instance.documents["index"].contents[0][0].parsed, TestReader.MODULE)
+        self.assertEqual(instance.documents["index"].contents[0][0].parsed, test.test_sphinxter.test_reader.TestReader.MODULE)
 
         self.assertEqual(instance.documents["index"].contents[0][1].module, "test.example")
         self.assertEqual(instance.documents["index"].contents[0][1].kind, "function")
-        self.assertEqual(instance.documents["index"].contents[0][1].parsed, TestReader.FUNCTION)
+        self.assertEqual(instance.documents["index"].contents[0][1].parsed, test.test_sphinxter.test_reader.TestReader.FUNCTION)
 
         self.assertEqual(instance.documents["index"].contents[0][2].module, "test.example")
         self.assertEqual(instance.documents["index"].contents[0][2].kind, "class")
-        self.assertEqual(instance.documents["index"].contents[0][2].parsed, TestReader.COMPLEX_CLASS)
+        self.assertEqual(instance.documents["index"].contents[0][2].parsed, test.test_sphinxter.test_reader.TestReader.COMPLEX_CLASS)
 
         self.assertEqual(instance.documents["index"].contents[0][3].module, "test.example")
         self.assertEqual(instance.documents["index"].contents[0][3].kind, "exception")
-        self.assertEqual(instance.documents["index"].contents[0][3].parsed, TestReader.BASIC_EXCEPTION)
+        self.assertEqual(instance.documents["index"].contents[0][3].parsed, test.test_sphinxter.test_reader.TestReader.BASIC_EXCEPTION)
 
         self.assertEqual(len(instance.documents["index"].contents), 1)
         self.assertEqual(len(instance.documents["index"].contents[0]), 4)
@@ -138,7 +138,7 @@ class TestSphinxter(unittest.TestCase):
 
         mock_open.assert_called_once_with("docs/source/index.rst", "w", encoding="utf-8")
 
-        self.assertEqual("\n" + "".join([call.args[0] for call in mock_open.return_value.write.mock_calls]), TestWriter.EXAMPLE)
+        self.assertEqual("\n" + "".join([call.args[0] for call in mock_open.return_value.write.mock_calls]), test.test_sphinxter.test_writer.TestWriter.EXAMPLE)
 
     @unittest.mock.patch('sphinxter.open', new_callable=unittest.mock.mock_open)
     def test_process(self, mock_open):
@@ -147,4 +147,4 @@ class TestSphinxter(unittest.TestCase):
 
         instance.process()
 
-        self.assertEqual("\n" + "".join([call.args[0] for call in mock_open.return_value.write.mock_calls]), TestWriter.EXAMPLE)
+        self.assertEqual("\n" + "".join([call.args[0] for call in mock_open.return_value.write.mock_calls]), test.test_sphinxter.test_writer.TestWriter.EXAMPLE)
