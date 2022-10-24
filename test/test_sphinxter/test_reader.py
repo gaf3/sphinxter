@@ -333,11 +333,11 @@ class TestReader(sphinxter.unittest.TestCase):
         })
 
         mock_log.assert_has_calls([
-            unittest.mock.call("attribute comment: a"),
-            unittest.mock.call("attribute comment: b"),
-            unittest.mock.call("attribute docstring: b"),
-            unittest.mock.call("attribute comment: big"),
-            unittest.mock.call("attribute docstring: big")
+            unittest.mock.call("attribute comment: %s", "a"),
+            unittest.mock.call("attribute comment: %s", "b"),
+            unittest.mock.call("attribute docstring: %s", "b"),
+            unittest.mock.call("attribute comment: %s", "big"),
+            unittest.mock.call("attribute docstring: %s", "big")
         ])
 
         self.assertEqual(sphinxter.Reader.attributes(test.example), {
@@ -442,7 +442,7 @@ class TestReader(sphinxter.unittest.TestCase):
 
         self.assertEqual(sphinxter.Reader.cls(test.example.Basic), self.BASIC_EXCEPTION)
 
-        mock_log.assert_any_call("class: Basic")
+        mock_log.assert_any_call("class: %s", "Basic")
 
         self.assertEqual(sphinxter.Reader.cls(test.example.Complex), self.COMPLEX_CLASS)
 
@@ -500,6 +500,6 @@ class TestReader(sphinxter.unittest.TestCase):
 
         self.assertEqual(sphinxter.Reader.module(test.example), self.MODULE)
 
-        mock_log.assert_any_call("module: test.example")
+        mock_log.assert_any_call("module: %s", "test.example")
 
         self.assertSphinxter(sphinxter.Reader.module)
