@@ -26,11 +26,11 @@ description: |
 
                 self.assertSphinxter(yourmodule.yourresource)
 
-    That'll look throughthe documentation, find execution example, and run them, compiling
+    That'll look through the documentation, find execution example, and run them, compiling
     even the comments directly on the next line and verifying the match the line before.
 """
 
-# pylint: disable=exec-used,eval-used
+# pylint: disable=exec-used,eval-used,line-too-long,raise-missing-from,inconsistent-return-statements
 
 import re
 import ast
@@ -57,7 +57,6 @@ class CodeException(Exception):
         exception:Exception,    # the original exception
         code:str                # the code that failed
     ):
-
 
         trace = "".join(traceback.format_exception(exception))
 
@@ -90,8 +89,8 @@ class Block:
     """
 
     def __init__(self,
-        code:str, # The code of the block
-        value:str # The value of the block
+        code:list[str], # The code of the block
+        value:list[str] # The value of the block
     ):
 
         self.code = "\n".join(code)
@@ -166,108 +165,36 @@ class Section:
         """
         description: Pulls all example code into a single block.
         usage: |
-            Given the source function in sphinxter.Reader::
+            Given the function in test.code::
 
-                class Reader:
+                def basic():
                     \"""
-                    description: Static class for reading doc strings and comments into dict's
-                    document: reader
+                    usage: |
+                        Here is some code with an examples that need to be eval'd::
+
+                            2 + 2
+                            # 4
+
+                        Even strings::
+
+                            "Hello" + " " + "world"
+                            # "Hello world"
                     \"""
-
-                    @staticmethod
-                    def source(
-                        resource # what to extract the source from
-                    ):
-                        \"""
-                        description: Reads the source, removing any overall indent
-                        parameters:
-                            resource:
-                                type:
-                                - module
-                                - function
-                                - class
-                                - method
-                        return:
-                            description: The non-indented source
-                            type: str
-                        usage: |
-                            Consider the sub class in a test.example module::
-
-                                class Complex:
-
-                                    class Subber:
-                                        \\\"""
-                                        Sub class
-                                        \\\"""
-
-                                        pass
-
-                            The source for Subber would be indented from inspect.getsource()
-                            which can't be parsed properly because of the initial indent::
-
-                                import inspect
-                                import test.example
-
-                                inspect.getsource(test.example.Complex.Subber)
-                                #     class Subber:
-                                #         \\\"""
-                                #         Sub class
-                                #         \\\"""
-                                #         pass
-                                #
-
-                            This prevents that problem::
-
-                                import sphinxter
-                                import test.example
-
-                                sphinxter.Reader.source(test.example.Complex.Subber)
-                                # class Subber:
-                                #     \\\"""
-                                #     Sub class
-                                #     \\\"""
-                                #     pass
-                                #
-                        \"""
 
             This will just pull out the executable code from the usage secton::
 
                 import yaml
-                import sphinxter
                 import sphinxter.unittest
 
-                documentation = yaml.safe_load(sphinxter.Reader.source.__doc__)
+                import test.code
+
+                documentation = yaml.safe_load(test.code.basic.__doc__)
                 sphinxter.unittest.Section.parse(documentation['usage'])
-                # class Complex:
+                # 2 + 2
+                # # 4
                 #
-                #     class Subber:
-                #         \"""
-                #         Sub class
-                #         \"""
-                #
-                #         pass
-                #
-                # import inspect
-                # import test.example
-                #
-                # inspect.getsource(test.example.Complex.Subber)
-                # #     class Subber:
-                # #         \"""
-                # #         Sub class
-                # #         \"""
-                # #         pass
-                # #
-                #
-                # import sphinxter
-                # import test.example
-                #
-                # sphinxter.Reader.source(test.example.Complex.Subber)
-                # # class Subber:
-                # #     \"""
-                # #     Sub class
-                # #     \"""
-                # #     pass
-                # #
+                # "Hello" + " " + "world"
+                # # "Hello world"
                 #
         """
 
@@ -300,168 +227,59 @@ class Section:
         """
         description: Breaks code up into blocks by commented values to compare.
         usage: |
-            Given the source function in sphinxter.Reader::
+            Given the function in test.code::
 
-                class Reader:
+                def basic():
                     \"""
-                    description: Static class for reading doc strings and comments into dict's
-                    document: reader
+                    usage: |
+                        Here is some code with an examples that need to be eval'd::
+
+                            2 + 2
+                            # 4
+
+                        Even strings::
+
+                            "Hello" + " " + "world"
+                            # "Hello world"
                     \"""
 
-                    @staticmethod
-                    def source(
-                        resource # what to extract the source from
-                    ):
-                        \"""
-                        description: Reads the source, removing any overall indent
-                        parameters:
-                            resource:
-                                type:
-                                - module
-                                - function
-                                - class
-                                - method
-                        return:
-                            description: The non-indented source
-                            type: str
-                        usage: |
-                            Consider the sub class in a test.example module::
-
-                                class Complex:
-
-                                    class Subber:
-                                        \\\"""
-                                        Sub class
-                                        \\\"""
-
-                                        pass
-
-                            The source for Subber would be indented from inspect.getsource()
-                            which can't be parsed properly because of the initial indent::
-
-                                import inspect
-                                import test.example
-
-                                inspect.getsource(test.example.Complex.Subber)
-                                #     class Subber:
-                                #         \\\"""
-                                #         Sub class
-                                #         \\\"""
-                                #         pass
-                                #
-
-                            This prevents that problem::
-
-                                import sphinxter
-                                import test.example
-
-                                sphinxter.Reader.source(test.example.Complex.Subber)
-                                # class Subber:
-                                #     \\\"""
-                                #     Sub class
-                                #     \\\"""
-                                #     pass
-                                #
-                        \"""
-
-            This pulls out the code::
+            This will just pull out the executable code from the usage secton::
 
                 import yaml
-                import sphinxter
                 import sphinxter.unittest
 
-                documentation = yaml.safe_load(sphinxter.Reader.source.__doc__)
+                import test.code
+
+                documentation = yaml.safe_load(test.code.basic.__doc__)
                 usage = sphinxter.unittest.Section.parse(documentation['usage'])
-                # class Complex:
+                # 2 + 2
+                # # 4
                 #
-                #     class Subber:
-                #         \"""
-                #         Sub class
-                #         \"""
-                #
-                #         pass
-                #
-                # import inspect
-                # import test.example
-                #
-                # inspect.getsource(test.example.Complex.Subber)
-                # #     class Subber:
-                # #         \"""
-                # #         Sub class
-                # #         \"""
-                # #         pass
-                # #
-                #
-                # import sphinxter
-                # import test.example
-                #
-                # sphinxter.Reader.source(test.example.Complex.Subber)
-                # # class Subber:
-                # #     \"""
-                # #     Sub class
-                # #     \"""
-                # #     pass
-                # #
+                # "Hello" + " " + "world"
+                # # "Hello world"
                 #
 
             And this breaks it up into Blocks, that can each be evaluated::
 
                 blocks = sphinxter.unittest.Section.chunk(usage)
 
-            The first block is up to the inspect value::
+            The first block is up to the equation value::
 
                 blocks[0].code
-                # class Complex:
-                #
-                #     class Subber:
-                #         \"""
-                #         Sub class
-                #         \"""
-                #
-                #         pass
-                #
-                # import inspect
-                # import test.example
-                #
-                # inspect.getsource(test.example.Complex.Subber)
+                # 2 + 2
 
                 blocks[0].value
-                #     class Subber:
-                #         \"""
-                #         Sub class
-                #         \"""
-                #         pass
-                #
+                # 4
 
-            The second block includes the first, plus the sphinxter value::
+            The second block includes the first, plus the concatenation::
 
                 blocks[1].code
-                # class Complex:
+                # 2 + 2
                 #
-                #     class Subber:
-                #         \"""
-                #         Sub class
-                #         \"""
-                #
-                #         pass
-                #
-                # import inspect
-                # import test.example
-                #
-                # inspect.getsource(test.example.Complex.Subber)
-                #
-                # import sphinxter
-                # import test.example
-                #
-                # sphinxter.Reader.source(test.example.Complex.Subber)
+                # "Hello" + " " + "world"
 
                 blocks[1].value
-                # class Subber:
-                #     \"""
-                #     Sub class
-                #     \"""
-                #     pass
-                #
+                # "Hello world"
 
             In both cases, to validate usage, we can execuate the code and compare it to the value.
         """
@@ -535,80 +353,34 @@ class TestCase(unittest.TestCase):
                 - function
                 - method
         usage: |
-            Given the following function is in the test.example module::
+            Given the following function is in the test.code module::
 
-                def func(
-                    a:int,   # The a
-                    b:'str', # The b
-                    *args,   #
-                    **kwargs # a: 1
-                            # b: 2
-                ):
+                def basic():
                     \"""
-                    description: Some basic func
-                    parameters:
-                    a: More stuff
-                    b:
-                        more: stuff
-                    return:
-                        description: things
-                        type:
-                        - str
-                        - None
-                    raises:
-                        Exception: if oh noes
                     usage: |
-                        Do some cool stuff::
+                        Here is some code with an examples that need to be eval'd::
 
-                            like this
+                            2 + 2
+                            # 4
 
-                        It's great
+                        Even strings::
+
+                            "Hello" + " " + "world"
+                            # "Hello world"
                     \"""
 
             We can get the approximate documentation like so::
 
                 import sphinxter.unittest
 
-                import test.example
+                import test.code
 
-                sphinxter.unittest.TestCase.sphinxter(test.example.func)
+                sphinxter.unittest.TestCase.sphinxter(test.code.basic)
                 # {
-                #     "description": "Some basic func",
                 #     "kind": "function",
-                #     "name": "func",
-                #     "parameters": [
-                #         {
-                #             "description": "The a More stuff",
-                #             "name": "a",
-                #             "type": "int"
-                #         },
-                #         {
-                #             "description": "The b",
-                #             "more": "stuff",
-                #             "name": "b",
-                #             "type": "str"
-                #         },
-                #         {
-                #             "name": "args"
-                #         },
-                #         {
-                #             "a": 1,
-                #             "b": 2,
-                #             "name": "kwargs"
-                #         }
-                #     ],
-                #     "raises": {
-                #         "Exception": "if oh noes"
-                #     },
-                #     "return": {
-                #         "description": "things",
-                #         "type": [
-                #             "str",
-                #             "None"
-                #         ]
-                #     },
-                #     "signature": "(a: int, b: 'str', *args, **kwargs)",
-                #     "usage": "Do some cool stuff::\\n\\n    like this\\n\\nIt's great\\n"
+                #     "name": "basic",
+                #     "signature": "()",
+                #     "usage": "Here is some code with an examples that need to be eval'd::\\n\\n    2 + 2\\n    # 4\\n\\nEven strings::\\n\\n    \\"Hello\\" + \\" \\" + \\"world\\"\\n    # \\"Hello world\\"\\n"
                 # }
         """
 
@@ -625,20 +397,20 @@ class TestCase(unittest.TestCase):
 
     def assertSphinxterBlock(self,
         block:Block,        # Block to assert has valid code
-        comment:str=None,   # Comment to use with assertEqual, will be appended to with bad code location
+        location:str=None,  # Comment to use with assertEqual, will be appended to with bad code location
         evaluate=True       # Whether values are to be eval'd
     ):
         """
         description: |
-            Asserts a Block of code matches its value using assertEqual and adding to the comment to show where.
+            Asserts a Block of code matches its value using assertEqual and adding to the location to show where.
 
             If the value in the comments are the exact code, evaulate should be True.
 
-            If the value in the comment are text, evaulate should be False.
+            If the value in the comments are text, evaulate should be False.
 
             The evaluate argument can also be a list, where the next evaluate value will be popped off.
 
-            The evaluate argument can also be a dict, where the evaluate value will be extracted use the comment as a the key.
+            The evaluate argument can also be a dict, where the evaluate value will be extracted use the location as a the key.
 
             This is done to work with assertSphinxterSection and assertSphinxter.
 
@@ -651,6 +423,55 @@ class TestCase(unittest.TestCase):
                 - bool
                 - list
                 - dict
+        usage: |
+            Give the follwing function is in the test.code module::
+
+                def dual():
+                    \"""
+                    definition: |
+                        Here is some code with an examples that need to be eval'd::
+
+                            2 + 2
+                            # 4
+                    usage: |
+                        Here is some code with an example that needs to not be eval'd:::
+
+                            "\\n".join(['1', '2', '3'])
+                            # 1
+                            # 2
+                            # 3
+                    \"""
+
+            You would test the blocka individually like so in the test.test_code module::
+
+                import sphinxter.unittest
+
+                import test.code
+
+                class TestDual(sphinxter.unittest.TestCase):
+
+                    maxDiff = None
+
+                    def test_definition(self):
+
+                        text = self.sphinxter(test.code.dual)["definition"]
+                        section = sphinxter.unittest.Section(text)
+                        self.assertSphinxterBlock(section.blocks[0])
+
+                    def test_usage(self):
+
+                        text = self.sphinxter(test.code.dual)["usage"]
+                        section = sphinxter.unittest.Section(text)
+                        self.assertSphinxterBlock(section.blocks[0], evaluate=False)
+
+            And we can see that it works::
+
+                import unittest
+
+                import test.test_code
+
+                unittest.TextTestRunner().run(unittest.makeSuite(test.test_code.TestDual)).wasSuccessful()
+                # True
         """
 
         locals = {}
@@ -660,8 +481,8 @@ class TestCase(unittest.TestCase):
         if not block.valued:
             return
 
-        if isinstance(evaluate, dict) and comment in evaluate:
-            evaluate = evaluate[comment]
+        if isinstance(evaluate, dict) and location in evaluate:
+            evaluate = evaluate[location]
 
         if isinstance(evaluate, list):
             evaluate = evaluate.pop(0)
@@ -677,35 +498,35 @@ class TestCase(unittest.TestCase):
             else:
                 correct = json.dumps(actual, indent=4, sort_keys=True)
 
-            correction = [comment] if comment is not None else []
+            correction = [location] if location is not None else []
 
             correction.append("Correct value:")
 
             for line in correct.split("\n"):
                 correction.append(f"# {line}")
 
-            comment = "\n".join(correction).replace("\\", "\\\\").replace('"""', '\\"""')
+            location = "\n".join(correction).replace("\\", "\\\\").replace('"""', '\\"""')
 
-        self.assertEqual(expected, actual, comment)
+        self.assertEqual(expected, actual, location)
 
     def assertSphinxterSection(self,
         section,            # Section to assert has valid code
-        comment:str=None,   # Comment to use with assertEqual, will be appended to with bad code location
+        location:str=None,  # Comment to use with assertEqual, will be appended to with bad code location
         evaluate=True       # Whether values are to be eval'd
     ):
         """
         description: |
-            Recurseivly asserts all Blocks in a Section match their values using assertSphinxterBlock and adding to the comment to show where.
+            Recurseivly asserts all Blocks in a Section match their values using assertSphinxterBlock and adding to the location to show where.
 
             If the values in the comments are all the exact code, evaulate should be True.
 
-            If the values in the comment are all text, evaulate should be False.
+            If the values in the comments are all text, evaulate should be False.
 
             If the values in the comments, vary, you can send a list or a dict.
 
             If evaulate is a list, each call to assertSphinxterBlock, pops the next value to use off the front.
 
-            If evaulate is a dict, each call to assertSphinxterBlock will use the current location as the key to the comment
+            If evaulate is a dict, each call to assertSphinxterBlock will use the current location as the key to the location
 
             .. warning::
 
@@ -722,27 +543,94 @@ class TestCase(unittest.TestCase):
                 - bool
                 - list
                 - dict
+        usage: |
+            Give the follwing function is in the test.code module::
+
+                def mixing():
+                    \"""
+                    evalme: |
+                        Here is some code with an examples that need to be eval'd::
+
+                            2 + 2
+                            # 4
+                    leaveme: |
+                        Here is some code with an example that needs to not be eval'd:::
+
+                            "\\n".join([1, 2, 3])
+                            # 1
+                            # 2
+                            # 3
+                    mixme: |
+                        Here's some code that has both eval no eval examples::
+
+                            2 + 2
+                            # 4
+
+                            "\\n".join([1, 2, 3])
+                            # 1
+                            # 2
+                            # 3
+                    \"""
+
+            You would test each section individually like so::
+
+                import sphinxter.unittest
+
+                import test.code
+
+                class TestMixing(sphinxter.unittest.TestCase):
+
+                    maxDiff = None
+
+                    def test_evalme(self):
+
+                        text = self.sphinxter(test.code.mixing)["evalme"]
+                        section = sphinxter.unittest.Section(text)
+                        self.assertSphinxterSection(section)
+
+                    def test_leaveme(self):
+
+                        text = self.sphinxter(test.code.mixing)["leaveme"]
+                        section = sphinxter.unittest.Section(text)
+                        self.assertSphinxterSection(section, evaluate=False)
+
+                    def test_mixme(self):
+
+                        text = self.sphinxter(test.code.mixing)["mixme"]
+                        section = sphinxter.unittest.Section(text)
+                        self.assertSphinxterSection(section, evaluate=[True, False])
+
+            Notice the evaluate argument for mixme. The first block is to be evaluated, the second, not.
+
+            And we can see that it works::
+
+                import unittest
+
+                import test.test_code
+
+                unittest.TextTestRunner().run(unittest.makeSuite(test.test_code.TestMixing)).wasSuccessful()
+                # True
         """
 
         if isinstance(section, Section):
 
             for block in section.blocks:
-                self.assertSphinxterBlock(block, comment=comment, evaluate=evaluate)
+                self.assertSphinxterBlock(block, location=location, evaluate=evaluate)
 
         elif isinstance(section, str) and "\n" in section and "::" in section:
 
-            self.assertSphinxterSection(Section(section), comment=comment, evaluate=evaluate)
+            self.assertSphinxterSection(Section(section), location=location, evaluate=evaluate)
 
         elif isinstance(section, list):
 
             for index, item in enumerate(section):
-                self.assertSphinxterSection(item, comment=f"{comment}[{index}]", evaluate=evaluate)
+                self.assertSphinxterSection(item, location=f"{location}[{index}]" if location else f"[{index}]", evaluate=evaluate)
 
         elif isinstance(section, dict):
 
             for name, item in section.items():
                 if name not in ["methods", "classes", "exceptions"]:
-                    self.assertSphinxterSection(item, comment=f"{comment}.{name}", evaluate=evaluate)
+                    self.assertSphinxterSection(item, location=f"{location}.{name}" if location else name, evaluate=evaluate)
 
     def assertSphinxter(self,
         resource,       # Resource to assert has valid code exanmples
@@ -750,17 +638,17 @@ class TestCase(unittest.TestCase):
     ):
         """
         description: |
-            Recurseivly asserts all Sections in documentation match their values using assertSphinxterSection and adding to the comment to show where.
+            Recurseivly asserts all Sections in documentation match their values using assertSphinxterSection and adding to the location to show where.
 
             If the values in the comments are all the exact code, evaulate should be True.
 
-            If the values in the comment are all text, evaulate should be False.
+            If the values in the comments are all text, evaulate should be False.
 
             If the values in the comments, vary, you can send a list or a dict.
 
             If evaulate is a list, each call to assertSphinxterBlock, pops the next value to use off the front.
 
-            If evaulate is a dict, each call to assertSphinxterBlock will use the current location as the key to the comment
+            If evaulate is a dict, each call to assertSphinxterBlock will use the current location as the key to the location
 
             .. warning::
 
@@ -777,8 +665,60 @@ class TestCase(unittest.TestCase):
                 - bool
                 - list
                 - dict
+        usage: |
+            Given the follwing function is in the test.code module::
+
+                def depth():
+                    \"""
+                    deepme:
+                        evalme: |
+                            All eval'd::
+
+                                2 + 2
+                                # 4
+
+                                "Hello" + " " + "world"
+                                # "Hello world"
+                        mixme: |
+                            Lil of both::
+                                2 + 2
+                                # 4
+
+                                "\\n".join(['1', '2', '3'])
+                                # 1
+                                # 2
+                                # 3
+                    \"""
+
+            You would test the whole thing like so::
+
+                import sphinxter.unittest
+
+                import test.code
+
+                class TestDepth(sphinxter.unittest.TestCase):
+
+                    def test_all(self):
+
+                        self.assertSphinxter(test.code.depth, evaluate={
+                            "deepme.evalme": True,
+                            "deepme.mixme": [True, False]
+                        })
+
+            Notice the evaluate argument. All off evalme is to be eval'd, so we just set that section to True.
+
+            In the mixme section, the first is tobe eval'd, the second not, so we just set that section to [True, False].
+
+            And we can see that it works::
+
+                import unittest
+
+                import test.test_code
+
+                unittest.TextTestRunner().run(unittest.makeSuite(test.test_code.TestDepth)).wasSuccessful()
+                # True
         """
 
         documentation = self.sphinxter(resource)
 
-        self.assertSphinxterSection(documentation, resource.__name__, evaluate=evaluate)
+        self.assertSphinxterSection(documentation, evaluate=evaluate)

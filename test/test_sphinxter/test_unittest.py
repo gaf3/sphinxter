@@ -282,7 +282,7 @@ class TestTestCase(sphinxter.unittest.TestCase):
             block.value = True
             block.valued = True
 
-            self.assertSphinxterBlock(block, comment="nope", evaluate=False)
+            self.assertSphinxterBlock(block, location="nope", evaluate=False)
 
             mock_equal.assert_called_with(True, False, "nope\nCorrect value:\n# False")
 
@@ -300,13 +300,15 @@ class TestTestCase(sphinxter.unittest.TestCase):
                 "yep": [False]
             }
 
-            self.assertSphinxterBlock(block, comment="yep", evaluate=evaluate)
+            self.assertSphinxterBlock(block, location="yep", evaluate=evaluate)
 
             mock_equal.assert_called_with("nope", "yep", "yep\nCorrect value:\n# yep")
 
         self.assertEqual(evaluate, {
             "yep": []
         })
+
+        self.assertSphinxter(sphinxter.unittest.TestCase.assertSphinxterBlock)
 
 
     class Convert:
@@ -345,51 +347,57 @@ class TestTestCase(sphinxter.unittest.TestCase):
                 # nope
         """
 
-    @unittest.mock.patch("unittest.TestCase.assertEqual")
-    def test_assertSphinxterSection(self, mock_equal):
+    def test_assertSphinxterSection(self):
 
-        # as is
+        with unittest.mock.patch("unittest.TestCase.assertEqual") as mock_equal:
 
-        section = sphinxter.unittest.Section(yaml.safe_load(self.Leave.__doc__)["usage"])
+            # as is
 
-        self.assertSphinxterSection(section, "dude", evaluate=False)
+            section = sphinxter.unittest.Section(yaml.safe_load(self.Leave.__doc__)["usage"])
 
-        mock_equal.assert_called_with("nope", "yep", 'dude\nCorrect value:\n# yep')
+            self.assertSphinxterSection(section, "dude", evaluate=False)
 
-        # section
+            mock_equal.assert_called_with("nope", "yep", 'dude\nCorrect value:\n# yep')
 
-        section = sphinxter.unittest.Section(yaml.safe_load(self.Convert.__doc__)["usage"])
+            # section
 
-        self.assertSphinxterSection(section, "dude")
+            section = sphinxter.unittest.Section(yaml.safe_load(self.Convert.__doc__)["usage"])
 
-        mock_equal.assert_called_with({"a": 2}, {"a": 1}, 'dude\nCorrect value:\n# {\n#     "a": 1\n# }')
+            self.assertSphinxterSection(section, "dude")
 
-        # str
+            mock_equal.assert_called_with({"a": 2}, {"a": 1}, 'dude\nCorrect value:\n# {\n#     "a": 1\n# }')
 
-        mock_equal.reset_mock()
+            # str
 
-        self.assertSphinxterSection(yaml.safe_load(self.Convert.__doc__)["usage"], "dude")
+            mock_equal.reset_mock()
 
-        mock_equal.assert_called_with({"a": 2}, {"a": 1}, 'dude\nCorrect value:\n# {\n#     "a": 1\n# }')
+            self.assertSphinxterSection(yaml.safe_load(self.Convert.__doc__)["usage"], "dude")
 
-        # list
+            mock_equal.assert_called_with({"a": 2}, {"a": 1}, 'dude\nCorrect value:\n# {\n#     "a": 1\n# }')
 
-        self.assertSphinxterSection([yaml.safe_load(self.Convert.__doc__)["usage"]], "dude")
+            # list
 
-        mock_equal.assert_called_with({"a": 2}, {"a": 1}, 'dude[0]\nCorrect value:\n# {\n#     "a": 1\n# }')
+            self.assertSphinxterSection([yaml.safe_load(self.Convert.__doc__)["usage"]], "dude")
 
-        # dict
+            mock_equal.assert_called_with({"a": 2}, {"a": 1}, 'dude[0]\nCorrect value:\n# {\n#     "a": 1\n# }')
 
-        self.assertSphinxterSection({"a": yaml.safe_load(self.Convert.__doc__)["usage"]}, "dude")
+            # dict
 
-        mock_equal.assert_called_with({"a": 2}, {"a": 1}, 'dude.a\nCorrect value:\n# {\n#     "a": 1\n# }')
+            self.assertSphinxterSection({"a": yaml.safe_load(self.Convert.__doc__)["usage"]}, "dude")
 
-    @unittest.mock.patch("unittest.TestCase.assertEqual")
-    def test_assertSphinxter(self, mock_equal):
+            mock_equal.assert_called_with({"a": 2}, {"a": 1}, 'dude.a\nCorrect value:\n# {\n#     "a": 1\n# }')
 
-        self.assertSphinxter(self.Convert)
+        self.assertSphinxter(sphinxter.unittest.TestCase.assertSphinxter)
 
-        mock_equal.assert_has_calls([
-            unittest.mock.call(1, 1, 'Convert.usage'),
-            unittest.mock.call({"a": 2}, {"a": 1}, 'Convert.usage\nCorrect value:\n# {\n#     "a": 1\n# }')
-        ])
+    def test_assertSphinxter(self):
+
+        with unittest.mock.patch("unittest.TestCase.assertEqual") as mock_equal:
+
+            self.assertSphinxter(self.Convert)
+
+            mock_equal.assert_has_calls([
+                unittest.mock.call(1, 1, 'usage'),
+                unittest.mock.call({"a": 2}, {"a": 1}, 'usage\nCorrect value:\n# {\n#     "a": 1\n# }')
+            ])
+
+        self.assertSphinxter(sphinxter.unittest.TestCase.assertSphinxter)

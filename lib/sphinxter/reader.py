@@ -866,7 +866,7 @@ class Reader:
 
             if targets and isinstance(node, ast.Expr) and isinstance(node.value, ast.Constant) and isinstance(node.value.value, str):
 
-                logging.info(f"attribute docstring: {'-'.join(targets)}")
+                logging.info("attribute docstring: %s", '-'.join(targets))
 
                 parsed = cls.parse(node.value.value)
                 for target in targets:
@@ -884,7 +884,7 @@ class Reader:
                 for tokenized in tokenize.generate_tokens(source.readline):
                     if tokenized.type == token.COMMENT:
                         comment = tokenized.string[2:].rstrip()
-                        logging.info(f"attribute comment: {'-'.join(targets)}")
+                        logging.info("attribute comment: %s", '-'.join(targets))
                         parsed = cls.parse(comment)
                         for target in targets:
                             parseds[target] = parsed
@@ -1225,7 +1225,7 @@ class Reader:
                 # }
         """
 
-        logging.info(f"class: {resource.__name__}")
+        logging.info("class: %s", resource.__name__)
 
         parsed = {
             "name": resource.__name__,
@@ -1708,7 +1708,7 @@ class Reader:
                 # }
         """
 
-        logging.info(f"module: {resource.__name__}")
+        logging.info("module: %s", resource.__name__)
 
         parsed = {
             "name": resource.__name__,
