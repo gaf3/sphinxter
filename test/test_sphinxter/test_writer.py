@@ -39,7 +39,7 @@ a
 
 """)
 
-        self.assertSphinxter(sphinxter.Writer.line, transform=False)
+        self.assertSphinxter(sphinxter.Writer.line, evaluate=False)
 
     def test_lines(self):
 
@@ -54,7 +54,7 @@ a
 
 """)
 
-        self.assertSphinxter(sphinxter.Writer.lines, transform=False)
+        self.assertSphinxter(sphinxter.Writer.lines, evaluate=False)
 
     def test_types(self):
 
@@ -76,7 +76,7 @@ a
     b
 """)
 
-        self.assertSphinxter(sphinxter.Writer.description, transform=False)
+        self.assertSphinxter(sphinxter.Writer.description, evaluate=False)
 
     def test_parameter(self):
 
@@ -102,7 +102,7 @@ a
     :type big: int
 """)
 
-        self.assertSphinxter(sphinxter.Writer.parameter, transform=False)
+        self.assertSphinxter(sphinxter.Writer.parameter, evaluate=False)
 
     def test_parameters(self):
 
@@ -130,7 +130,7 @@ a
     :type big: int
 """)
 
-        self.assertSphinxter(sphinxter.Writer.parameters, transform=False)
+        self.assertSphinxter(sphinxter.Writer.parameters, evaluate=False)
 
     def test_returns(self):
 
@@ -151,7 +151,7 @@ a
     :rtype: int
 """)
 
-        self.assertSphinxter(sphinxter.Writer.returns, transform=False)
+        self.assertSphinxter(sphinxter.Writer.returns, evaluate=False)
 
     def test_raises(self):
 
@@ -170,7 +170,7 @@ a
     :raises Exception: oh no
 """)
 
-        self.assertSphinxter(sphinxter.Writer.raises, transform=False)
+        self.assertSphinxter(sphinxter.Writer.raises, evaluate=False)
 
     def test_routine(self):
 
@@ -209,7 +209,7 @@ a
     :raises Exception: oh no
 """)
 
-        self.assertSphinxter(sphinxter.Writer.routine, transform=False)
+        self.assertSphinxter(sphinxter.Writer.routine, evaluate=False)
 
     def test_usage(self):
 
@@ -230,7 +230,7 @@ a
     b
 """)
 
-        self.assertSphinxter(sphinxter.Writer.usage, transform=[True, False, False])
+        self.assertSphinxter(sphinxter.Writer.usage, evaluate=[True, False, False])
 
     def test_function(self):
 
@@ -260,7 +260,7 @@ a
         It's great
 """)
 
-        self.assertSphinxter(sphinxter.Writer.function, transform=[True, False])
+        self.assertSphinxter(sphinxter.Writer.function, evaluate=[True, False])
 
     def test_attribute(self):
 
@@ -291,7 +291,7 @@ a
         stuff
 """)
 
-        self.assertSphinxter(sphinxter.Writer.attribute, transform=False)
+        self.assertSphinxter(sphinxter.Writer.attribute, evaluate=False)
 
     def test_attributes(self):
 
@@ -323,7 +323,7 @@ a
         stuff
 """)
 
-        self.assertSphinxter(sphinxter.Writer.attributes, transform=False)
+        self.assertSphinxter(sphinxter.Writer.attributes, evaluate=False)
 
     def test_method(self):
 
@@ -351,7 +351,7 @@ a
         It's great
 """)
 
-        self.assertSphinxter(sphinxter.Writer.method, transform=[True, False, True, False, True, False])
+        self.assertSphinxter(sphinxter.Writer.method, evaluate=[True, False, True, False, True, False])
 
     def test_definition(self):
 
@@ -372,7 +372,7 @@ a
     b
 """)
 
-        self.assertSphinxter(sphinxter.Writer.definition, transform=[True, False, False])
+        self.assertSphinxter(sphinxter.Writer.definition, evaluate=[True, False, False])
 
     def test_cls(self):
 
@@ -483,7 +483,7 @@ a
             Sub exception
 """)
 
-        self.assertSphinxter(sphinxter.Writer.cls, transform=[True, False, True, False])
+        self.assertSphinxter(sphinxter.Writer.cls, evaluate=[True, False, True, False])
 
     def test_module(self):
 
@@ -517,7 +517,7 @@ a
         Bunch a
 """)
 
-        self.assertSphinxter(sphinxter.Writer.module, transform=[True, False])
+        self.assertSphinxter(sphinxter.Writer.module, evaluate=[True, False])
 
     def test_toctree(self):
 
@@ -533,7 +533,7 @@ a
         *
 """)
 
-        self.assertSphinxter(sphinxter.Writer.toctree, transform=False)
+        self.assertSphinxter(sphinxter.Writer.toctree, evaluate=False)
 
     EXAMPLE = """
 .. created by sphinxter
@@ -792,4 +792,4 @@ It's great
     It's great
 """)
 
-        self.assertSphinxter(sphinxter.Writer.dump, transform=[True, False])
+        self.assertSphinxter(sphinxter.Writer.dump, evaluate=[True, False])

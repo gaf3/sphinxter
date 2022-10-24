@@ -113,7 +113,7 @@ class TestBlock(unittest.TestCase):
 
         self.assertRaisesRegex(sphinxter.unittest.CodeException, "NameError", block.eval, {})
 
-class TestSection(unittest.TestCase):
+class TestSection(sphinxter.unittest.TestCase):
 
     DOCSTRING = """
 description: Reads the source, removing any overall indent
@@ -175,6 +175,8 @@ sphinxter.Reader.source(Complex.Subber)
 
         self.assertEqual(sphinxter.unittest.Section.parse(docstring["usage"]), self.PARSE)
 
+        self.assertSphinxter(sphinxter.unittest.Section.parse, evaluate=False)
+
     BLOCK_0_CODE = """class Complex:
 
     class Subber:
@@ -210,6 +212,8 @@ sphinxter.Reader.source(Complex.Subber)"""
         self.assertEqual(blocks[1].code, self.BLOCK_1_CODE)
         self.assertEqual(blocks[1].value, self.BLOCK_1_VALUE)
 
+        self.assertSphinxter(sphinxter.unittest.Section.chunk, evaluate=False)
+
     def test___init__(self):
 
         section = sphinxter.unittest.Section(yaml.safe_load(self.DOCSTRING)["usage"])
@@ -241,6 +245,8 @@ class TestTestCase(sphinxter.unittest.TestCase):
         self.assertEqual(self.sphinxter(test.example.Complex.meth)["description"], test.test_sphinxter.test_reader.TestReader.METHOD["description"])
 
         self.assertRaisesRegex(Exception, "Unknown resource: False", self.sphinxter, False)
+
+        self.assertSphinxter(sphinxter.unittest.TestCase.sphinxter)
 
     def test_assertSphinxterBlock(self):
 
@@ -276,7 +282,7 @@ class TestTestCase(sphinxter.unittest.TestCase):
             block.value = True
             block.valued = True
 
-            self.assertSphinxterBlock(block, comment="nope", transform=False)
+            self.assertSphinxterBlock(block, comment="nope", evaluate=False)
 
             mock_equal.assert_called_with(True, False, "nope\nCorrect value:\n# False")
 
@@ -284,21 +290,21 @@ class TestTestCase(sphinxter.unittest.TestCase):
 
             block = sphinxter.unittest.Block(["a = 'yep'"], ["nope"])
 
-            self.assertSphinxterBlock(block, transform=False)
+            self.assertSphinxterBlock(block, evaluate=False)
 
             mock_equal.assert_called_with("nope", "yep", "Correct value:\n# yep")
 
-            # transform
+            # evaluate
 
-            transform = {
+            evaluate = {
                 "yep": [False]
             }
 
-            self.assertSphinxterBlock(block, comment="yep", transform=transform)
+            self.assertSphinxterBlock(block, comment="yep", evaluate=evaluate)
 
             mock_equal.assert_called_with("nope", "yep", "yep\nCorrect value:\n# yep")
 
-        self.assertEqual(transform, {
+        self.assertEqual(evaluate, {
             "yep": []
         })
 
@@ -346,7 +352,7 @@ class TestTestCase(sphinxter.unittest.TestCase):
 
         section = sphinxter.unittest.Section(yaml.safe_load(self.Leave.__doc__)["usage"])
 
-        self.assertSphinxterSection(section, "dude", transform=False)
+        self.assertSphinxterSection(section, "dude", evaluate=False)
 
         mock_equal.assert_called_with("nope", "yep", 'dude\nCorrect value:\n# yep')
 

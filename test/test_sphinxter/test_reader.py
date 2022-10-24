@@ -35,7 +35,7 @@ class TestReader(sphinxter.unittest.TestCase):
         self.assertEqual(sphinxter.Reader.source(test.example.Basic), self.BASIC_SOURCE)
         self.assertEqual(sphinxter.Reader.source(test.example.Complex.Subber), self.SUBBER_SOURCE)
 
-        self.assertSphinxter(sphinxter.Reader.source, transform=False)
+        self.assertSphinxter(sphinxter.Reader.source, evaluate=False)
 
     def test_parse(self):
 

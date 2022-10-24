@@ -35,15 +35,30 @@ sphinxter.Writer
 
         If there's just a name::
 
+            import io
+            import sphinxter
+
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
+
             parsed = {
                 "name": "small"
             }
 
-            writer.attribute(parsed, 1
+            writer.attribute(parsed, 1)
+            handle.getvalue()
             #
-            #      .. attribute:: small
+            #     .. attribute:: small
+            #
 
         If there's a description and type::
+
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
 
             parsed = {
                 "name": "big",
@@ -52,11 +67,13 @@ sphinxter.Writer
             }
 
             writer.attribute(parsed, 1)
+            handle.getvalue()
             #
             #     .. attribute:: big
             #         :type: int
             #
             #         stuff
+            #
 
     .. method:: attributes(parsed: dict, indent: int)
 
@@ -70,6 +87,14 @@ sphinxter.Writer
         **Usage**
 
         If there's attributes::
+
+            import io
+            import sphinxter
+
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
 
             parsed = {
                 "attributes": [
@@ -85,6 +110,7 @@ sphinxter.Writer
             }
 
             writer.attributes(parsed, indent=1)
+            handle.getvalue()
             #
             #     .. attribute:: small
             #
@@ -92,12 +118,20 @@ sphinxter.Writer
             #         :type: int
             #
             #         stuff
+            #
 
-        If there's nothing, do nothing:
+        If there's nothing, do nothing::
+
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
 
             parsed = {}
 
             writer.attributes(parsed, 1)
+            handle.getvalue()
+            #
 
     .. method:: cls(parsed: dict, indent: int = 0)
 
@@ -110,7 +144,7 @@ sphinxter.Writer
 
         **Usage**
 
-        Given this class is part of the example module::
+        Given this class is part of the test.example module::
 
             class Complex:
                 """
@@ -224,176 +258,194 @@ sphinxter.Writer
                         It's great
                     """
 
+                class Subber:
+                    """
+                    Sub class
+                    """
+                    pass
+
                 class Excepter(Exception):
                     """
                     Sub exception
                     """
                     pass
 
-            parsed = sphinxter.Reader.cls(example.Complex)
+        The documentation can be generated as such::
+
+            import io
+            import sphinxter
+            import test.example
+
+            parsed = sphinxter.Reader.cls(test.example.Complex)
             # {
-            #     "name": "Complex",
-            #     "kind": "class",
-            #     "description": "Complex class\n\ncall me",
-            #     "signature": "(a, b, *args, **kwargs)",
-            #     "definition": "make sure you do this::\n\n    wowsa\n\nYa sweet\n",
-            #     "parameters": [
-            #         {
-            #             "name": "a",
-            #             "description": "The a More stuff"
-            #         },
-            #         {
-            #             "name": "b",
-            #             "description": "The b",
-            #             "more": "stuff"
-            #         },
-            #         {
-            #             "name": "args"
-            #         },
-            #         {
-            #             "name": "kwargs",
-            #             "a": 1,
-            #             "b": 2
-            #         }
-            #     ],
-            #     "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n",
             #     "attributes": [
             #         {
-            #             "name": "a",
-            #             "description": "The a team"
+            #             "description": "The a team",
+            #             "name": "a"
             #         },
             #         {
-            #             "name": "b",
-            #             "description": "The b team\n\nNot as good as the a team"
+            #             "description": "The b team\n\nNot as good as the a team",
+            #             "name": "b"
             #         },
             #         {
-            #             "name": "big",
             #             "a": 1,
             #             "b": 2,
-            #             "description": "Bunch a"
+            #             "description": "Bunch a",
+            #             "name": "big"
             #         }
             #     ],
+            #     "classes": [
+            #         {
+            #             "attributes": [],
+            #             "classes": [],
+            #             "description": "Sub class",
+            #             "exceptions": [],
+            #             "kind": "class",
+            #             "methods": [],
+            #             "name": "Subber"
+            #         }
+            #     ],
+            #     "definition": "make sure you do this::\n\n    wowsa\n\nYa sweet\n",
+            #     "description": "Complex class\n\ncall me",
+            #     "exceptions": [
+            #         {
+            #             "attributes": [],
+            #             "classes": [],
+            #             "description": "Sub exception",
+            #             "exceptions": [],
+            #             "kind": "exception",
+            #             "methods": [],
+            #             "name": "Excepter"
+            #         }
+            #     ],
+            #     "kind": "class",
             #     "methods": [
             #         {
-            #             "name": "stat",
-            #             "kind": "staticmethod",
-            #             "description": "Some static stat",
-            #             "signature": "(a, b, *args, **kwargs) -> list",
+            #             "description": "Some class meth",
+            #             "kind": "classmethod",
+            #             "name": "classy",
             #             "parameters": [
             #                 {
-            #                     "name": "a",
-            #                     "description": "The a More stuff"
+            #                     "description": "The a More stuff",
+            #                     "name": "a"
             #                 },
             #                 {
-            #                     "name": "b",
             #                     "description": "The b",
-            #                     "more": "stuff"
+            #                     "more": "stuff",
+            #                     "name": "b"
             #                 },
             #                 {
             #                     "name": "args"
             #                 },
             #                 {
-            #                     "name": "kwargs",
             #                     "a": 1,
-            #                     "b": 2
+            #                     "b": 2,
+            #                     "name": "kwargs"
+            #                 }
+            #             ],
+            #             "return": {
+            #                 "description": "things",
+            #                 "type": "str"
+            #             },
+            #             "signature": "(a, b, *args, **kwargs)"
+            #         },
+            #         {
+            #             "description": "Some basic meth",
+            #             "kind": "method",
+            #             "name": "meth",
+            #             "parameters": [
+            #                 {
+            #                     "description": "The a More stuff",
+            #                     "name": "a"
+            #                 },
+            #                 {
+            #                     "description": "The b",
+            #                     "more": "stuff",
+            #                     "name": "b"
+            #                 },
+            #                 {
+            #                     "name": "args"
+            #                 },
+            #                 {
+            #                     "a": 1,
+            #                     "b": 2,
+            #                     "name": "kwargs"
+            #                 }
+            #             ],
+            #             "raises": {
+            #                 "Exception": "if oh noes"
+            #             },
+            #             "return": {
+            #                 "description": "things",
+            #                 "type": [
+            #                     "str",
+            #                     "None"
+            #                 ]
+            #             },
+            #             "signature": "(a, b, *args, **kwargs)",
+            #             "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n"
+            #         },
+            #         {
+            #             "description": "Some static stat",
+            #             "kind": "staticmethod",
+            #             "name": "stat",
+            #             "parameters": [
+            #                 {
+            #                     "description": "The a More stuff",
+            #                     "name": "a"
+            #                 },
+            #                 {
+            #                     "description": "The b",
+            #                     "more": "stuff",
+            #                     "name": "b"
+            #                 },
+            #                 {
+            #                     "name": "args"
+            #                 },
+            #                 {
+            #                     "a": 1,
+            #                     "b": 2,
+            #                     "name": "kwargs"
             #                 }
             #             ],
             #             "return": {
             #                 "description": "things",
             #                 "type": "list"
-            #             }
-            #         },
-            #         {
-            #             "name": "classy",
-            #             "kind": "classmethod",
-            #             "description": "Some class meth",
-            #             "signature": "(a, b, *args, **kwargs)",
-            #             "parameters": [
-            #                 {
-            #                     "name": "a",
-            #                     "description": "The a More stuff"
-            #                 },
-            #                 {
-            #                     "name": "b",
-            #                     "description": "The b",
-            #                     "more": "stuff"
-            #                 },
-            #                 {
-            #                     "name": "args"
-            #                 },
-            #                 {
-            #                     "name": "kwargs",
-            #                     "a": 1,
-            #                     "b": 2
-            #                 }
-            #             ],
-            #             "return": {
-            #                 "description": "things",
-            #                 "type": 'str'
-            #             }
-            #         },
-            #         {
-            #             "name": "meth",
-            #             "kind": "method",
-            #             "description": "Some basic meth",
-            #             "signature": "(a, b, *args, **kwargs)",
-            #             "parameters": [
-            #                 {
-            #                     "name": "a",
-            #                     "description": "The a More stuff"
-            #                 },
-            #                 {
-            #                     "name": "b",
-            #                     "description": "The b",
-            #                     "more": "stuff"
-            #                 },
-            #                 {
-            #                     "name": "args"
-            #                 },
-            #                 {
-            #                     "name": "kwargs",
-            #                     "a": 1,
-            #                     "b": 2
-            #                 }
-            #             ],
-            #             "return": {
-            #                 "description": "things",
-            #                 "type": [
-            #                     'str',
-            #                     'None'
-            #                 ]
             #             },
-            #             "raises": {
-            #                 "Exception": "if oh noes"
-            #             },
-            #             "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n"
+            #             "signature": "(a, b, *args, **kwargs) -> list"
             #         }
             #     ],
-            #     "classes": [
+            #     "name": "Complex",
+            #     "parameters": [
             #         {
-            #             "name": "Subber",
-            #             "kind": "class",
-            #             "description": "Sub class",
-            #             "methods": [],
-            #             "attributes": [],
-            #             "classes": [],
-            #             "exceptions": []
+            #             "description": "The a More stuff",
+            #             "name": "a"
+            #         },
+            #         {
+            #             "description": "The b",
+            #             "more": "stuff",
+            #             "name": "b"
+            #         },
+            #         {
+            #             "name": "args"
+            #         },
+            #         {
+            #             "a": 1,
+            #             "b": 2,
+            #             "name": "kwargs"
             #         }
             #     ],
-            #     "exceptions": [
-            #         {
-            #             "name": "Excepter",
-            #             "kind": "exception",
-            #             "description": "Sub exception",
-            #             "methods": [],
-            #             "attributes": [],
-            #             "classes": [],
-            #             "exceptions": []
-            #         }
-            #     ]
+            #     "signature": "(a, b, *args, **kwargs)",
+            #     "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n"
             # }
 
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
+
             writer.cls(parsed, indent=1)
+            handle.getvalue()
             #
             #     .. class:: Complex(a, b, *args, **kwargs)
             #
@@ -485,30 +537,40 @@ sphinxter.Writer
             #         .. exception:: Excepter
             #
             #             Sub exception
+            #
 
-        Exceptions are indicatd as such::
+        Say the test.exmaple module has this Exception::
 
             class Basic(Exception):
                 """
                 Basic Exception
                 """
 
-            parsed = sphinxter.Reader.cls(example.Basic)
+        It's documentation is generated the same as any class::
+
+            parsed = sphinxter.Reader.cls(test.example.Basic)
             # {
-            #     "name": "Basic",
-            #     "kind": "exception",
-            #     "description": "Basic Exception",
-            #     "exception": True,
-            #     "methods": [],
             #     "attributes": [],
-            #     "classes": []
+            #     "classes": [],
+            #     "description": "Basic Exception",
+            #     "exceptions": [],
+            #     "kind": "exception",
+            #     "methods": [],
+            #     "name": "Basic"
             # }
 
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
+
             writer.cls(parsed, indent=1)
+            handle.getvalue()
             #
             #     .. exception:: Basic
             #
             #         Basic Exception
+            #
 
     .. method:: definition(parsed: dict, indent: int)
 
@@ -523,6 +585,15 @@ sphinxter.Writer
 
         If there's definition, write with a header and proper blank lines::
 
+            import io
+            import yaml
+            import sphinxter
+
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
+
             class Example():
                 """
                 definition: |
@@ -532,11 +603,13 @@ sphinxter.Writer
                             pass
                 """
 
-            parsed = {
-                "definition": "Try this::\n\n    class Example:\n        pass"
-            }
+            parsed = yaml.safe_load(Example.__doc__)
+            # {
+            #     "definition": "Try this::\n\n    class Example:\n        pass\n"
+            # }
 
             writer.definition(parsed, 1)
+            handle.getvalue()
             #
             #     **Definition**
             #
@@ -544,12 +617,20 @@ sphinxter.Writer
             #
             #         class Example:
             #             pass
+            #
 
         If there's nothing, do nothing::
+
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
 
             parsed = {}
 
             writer.definition(parsed, 1)
+            handle.getvalue()
+            #
 
     .. method:: description(parsed: dict, indent: int)
 
@@ -565,20 +646,36 @@ sphinxter.Writer
 
         If there's a description in the documentation, it writes it out with a preceeding blank line::
 
+            import io
+            import sphinxter
+
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
+
             parsed = {
                 "description": "It is what it is"
             }
 
             writer.description(parsed, indent=1)
+            handle.getvalue()
             #
             #     It is what it is
             #
 
         If there's no description, it does nothing::
 
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
+
             parsed = {}
 
             writer.description(parsed, indent=1)
+            handle.getvalue()
+            #
 
     .. method:: dump()
 
@@ -586,7 +683,7 @@ sphinxter.Writer
 
         **Usage**
 
-        Give the entire example module::
+        Give the entire test.example module::
 
             """
             description: mod me
@@ -770,275 +867,267 @@ sphinxter.Writer
                     """
                     pass
 
-            parsed = sphinxter.Reader.module(example)
+        Generatig the whole shebang::
+
+            import io
+            import sphinxter
+            import test.example
+
+            parsed = sphinxter.Reader.module(test.example)
             # {
-            #     "name": "example",
-            #     "description": "mod me",
             #     "attributes": [
             #         {
-            #             "name": "a",
-            #             "description": "The a team"
+            #             "description": "The a team",
+            #             "name": "a"
             #         },
             #         {
-            #             "name": "b",
-            #             "description": "The b team\n\nNot as good as the a team"
+            #             "description": "The b team\n\nNot as good as the a team",
+            #             "name": "b"
             #         },
             #         {
-            #             "name": "big",
             #             "a": 1,
             #             "b": 2,
-            #             "description": "Bunch a"
+            #             "description": "Bunch a",
+            #             "name": "big"
+            #         }
+            #     ],
+            #     "classes": [
+            #         {
+            #             "attributes": [
+            #                 {
+            #                     "description": "The a team",
+            #                     "name": "a"
+            #                 },
+            #                 {
+            #                     "description": "The b team\n\nNot as good as the a team",
+            #                     "name": "b"
+            #                 },
+            #                 {
+            #                     "a": 1,
+            #                     "b": 2,
+            #                     "description": "Bunch a",
+            #                     "name": "big"
+            #                 }
+            #             ],
+            #             "classes": [
+            #                 {
+            #                     "attributes": [],
+            #                     "classes": [],
+            #                     "description": "Sub class",
+            #                     "exceptions": [],
+            #                     "kind": "class",
+            #                     "methods": [],
+            #                     "name": "Subber"
+            #                 }
+            #             ],
+            #             "definition": "make sure you do this::\n\n    wowsa\n\nYa sweet\n",
+            #             "description": "Complex class\n\ncall me",
+            #             "exceptions": [
+            #                 {
+            #                     "attributes": [],
+            #                     "classes": [],
+            #                     "description": "Sub exception",
+            #                     "exceptions": [],
+            #                     "kind": "exception",
+            #                     "methods": [],
+            #                     "name": "Excepter"
+            #                 }
+            #             ],
+            #             "kind": "class",
+            #             "methods": [
+            #                 {
+            #                     "description": "Some class meth",
+            #                     "kind": "classmethod",
+            #                     "name": "classy",
+            #                     "parameters": [
+            #                         {
+            #                             "description": "The a More stuff",
+            #                             "name": "a"
+            #                         },
+            #                         {
+            #                             "description": "The b",
+            #                             "more": "stuff",
+            #                             "name": "b"
+            #                         },
+            #                         {
+            #                             "name": "args"
+            #                         },
+            #                         {
+            #                             "a": 1,
+            #                             "b": 2,
+            #                             "name": "kwargs"
+            #                         }
+            #                     ],
+            #                     "return": {
+            #                         "description": "things",
+            #                         "type": "str"
+            #                     },
+            #                     "signature": "(a, b, *args, **kwargs)"
+            #                 },
+            #                 {
+            #                     "description": "Some basic meth",
+            #                     "kind": "method",
+            #                     "name": "meth",
+            #                     "parameters": [
+            #                         {
+            #                             "description": "The a More stuff",
+            #                             "name": "a"
+            #                         },
+            #                         {
+            #                             "description": "The b",
+            #                             "more": "stuff",
+            #                             "name": "b"
+            #                         },
+            #                         {
+            #                             "name": "args"
+            #                         },
+            #                         {
+            #                             "a": 1,
+            #                             "b": 2,
+            #                             "name": "kwargs"
+            #                         }
+            #                     ],
+            #                     "raises": {
+            #                         "Exception": "if oh noes"
+            #                     },
+            #                     "return": {
+            #                         "description": "things",
+            #                         "type": [
+            #                             "str",
+            #                             "None"
+            #                         ]
+            #                     },
+            #                     "signature": "(a, b, *args, **kwargs)",
+            #                     "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n"
+            #                 },
+            #                 {
+            #                     "description": "Some static stat",
+            #                     "kind": "staticmethod",
+            #                     "name": "stat",
+            #                     "parameters": [
+            #                         {
+            #                             "description": "The a More stuff",
+            #                             "name": "a"
+            #                         },
+            #                         {
+            #                             "description": "The b",
+            #                             "more": "stuff",
+            #                             "name": "b"
+            #                         },
+            #                         {
+            #                             "name": "args"
+            #                         },
+            #                         {
+            #                             "a": 1,
+            #                             "b": 2,
+            #                             "name": "kwargs"
+            #                         }
+            #                     ],
+            #                     "return": {
+            #                         "description": "things",
+            #                         "type": "list"
+            #                     },
+            #                     "signature": "(a, b, *args, **kwargs) -> list"
+            #                 }
+            #             ],
+            #             "name": "Complex",
+            #             "parameters": [
+            #                 {
+            #                     "description": "The a More stuff",
+            #                     "name": "a"
+            #                 },
+            #                 {
+            #                     "description": "The b",
+            #                     "more": "stuff",
+            #                     "name": "b"
+            #                 },
+            #                 {
+            #                     "name": "args"
+            #                 },
+            #                 {
+            #                     "a": 1,
+            #                     "b": 2,
+            #                     "name": "kwargs"
+            #                 }
+            #             ],
+            #             "signature": "(a, b, *args, **kwargs)",
+            #             "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n"
+            #         }
+            #     ],
+            #     "description": "mod me",
+            #     "exceptions": [
+            #         {
+            #             "attributes": [],
+            #             "classes": [],
+            #             "description": "Basic Exception",
+            #             "exceptions": [],
+            #             "kind": "exception",
+            #             "methods": [],
+            #             "name": "Basic"
             #         }
             #     ],
             #     "functions": [
             #         {
-            #             "name": "func",
-            #             "kind": "function",
             #             "description": "Some basic func",
-            #             "signature": "(a: int, b: 'str', *args, **kwargs)",
+            #             "kind": "function",
+            #             "name": "func",
             #             "parameters": [
             #                 {
-            #                     "name": "a",
             #                     "description": "The a More stuff",
+            #                     "name": "a",
             #                     "type": "int"
             #                 },
             #                 {
-            #                     "name": "b",
             #                     "description": "The b",
             #                     "more": "stuff",
+            #                     "name": "b",
             #                     "type": "str"
             #                 },
             #                 {
             #                     "name": "args"
             #                 },
             #                 {
-            #                     "name": "kwargs",
             #                     "a": 1,
-            #                     "b": 2
+            #                     "b": 2,
+            #                     "name": "kwargs"
             #                 }
             #             ],
-            #             "return": {
-            #                 "description": "things",
-            #                 "type": [
-            #                     'str',
-            #                     'None'
-            #                 ]
-            #             },
             #             "raises": {
             #                 "Exception": "if oh noes"
             #             },
+            #             "return": {
+            #                 "description": "things",
+            #                 "type": [
+            #                     "str",
+            #                     "None"
+            #                 ]
+            #             },
+            #             "signature": "(a: int, b: 'str', *args, **kwargs)",
             #             "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n"
             #         }
             #     ],
-            #     "classes": [
-            #         {
-            #             "name": "Complex",
-            #             "kind": "class",
-            #             "description": "Complex class\n\ncall me",
-            #             "signature": "(a, b, *args, **kwargs)",
-            #             "definition": "make sure you do this::\n\n    wowsa\n\nYa sweet\n",
-            #             "parameters": [
-            #                 {
-            #                     "name": "a",
-            #                     "description": "The a More stuff"
-            #                 },
-            #                 {
-            #                     "name": "b",
-            #                     "description": "The b",
-            #                     "more": "stuff"
-            #                 },
-            #                 {
-            #                     "name": "args"
-            #                 },
-            #                 {
-            #                     "name": "kwargs",
-            #                     "a": 1,
-            #                     "b": 2
-            #                 }
-            #             ],
-            #             "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n",
-            #             "attributes": [
-            #                 {
-            #                     "name": "a",
-            #                     "description": "The a team"
-            #                 },
-            #                 {
-            #                     "name": "b",
-            #                     "description": "The b team\n\nNot as good as the a team"
-            #                 },
-            #                 {
-            #                     "name": "big",
-            #                     "a": 1,
-            #                     "b": 2,
-            #                     "description": "Bunch a"
-            #                 }
-            #             ],
-            #             "methods": [
-            #                 {
-            #                     "name": "classy",
-            #                     "kind": "classmethod",
-            #                     "description": "Some class meth",
-            #                     "signature": "(a, b, *args, **kwargs)",
-            #                     "parameters": [
-            #                         {
-            #                             "name": "a",
-            #                             "description": "The a More stuff"
-            #                         },
-            #                         {
-            #                             "name": "b",
-            #                             "description": "The b",
-            #                             "more": "stuff"
-            #                         },
-            #                         {
-            #                             "name": "args"
-            #                         },
-            #                         {
-            #                             "name": "kwargs",
-            #                             "a": 1,
-            #                             "b": 2
-            #                         }
-            #                     ],
-            #                     "return": {
-            #                         "description": "things",
-            #                         "type": 'str'
-            #                     }
-            #                 },
-            #                 {
-            #                     "name": "meth",
-            #                     "kind": "method",
-            #                     "description": "Some basic meth",
-            #                     "signature": "(a, b, *args, **kwargs)",
-            #                     "parameters": [
-            #                         {
-            #                             "name": "a",
-            #                             "description": "The a More stuff"
-            #                         },
-            #                         {
-            #                             "name": "b",
-            #                             "description": "The b",
-            #                             "more": "stuff"
-            #                         },
-            #                         {
-            #                             "name": "args"
-            #                         },
-            #                         {
-            #                             "name": "kwargs",
-            #                             "a": 1,
-            #                             "b": 2
-            #                         }
-            #                     ],
-            #                     "return": {
-            #                         "description": "things",
-            #                         "type": [
-            #                             'str',
-            #                             'None'
-            #                         ]
-            #                     },
-            #                     "raises": {
-            #                         "Exception": "if oh noes"
-            #                     },
-            #                     "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n"
-            #                 },
-            #                 {
-            #                     "name": "stat",
-            #                     "kind": "staticmethod",
-            #                     "description": "Some static stat",
-            #                     "signature": "(a, b, *args, **kwargs) -> list",
-            #                     "parameters": [
-            #                         {
-            #                             "name": "a",
-            #                             "description": "The a More stuff"
-            #                         },
-            #                         {
-            #                             "name": "b",
-            #                             "description": "The b",
-            #                             "more": "stuff"
-            #                         },
-            #                         {
-            #                             "name": "args"
-            #                         },
-            #                         {
-            #                             "name": "kwargs",
-            #                             "a": 1,
-            #                             "b": 2
-            #                         }
-            #                     ],
-            #                     "return": {
-            #                         "description": "things",
-            #                         "type": "list"
-            #                     }
-            #                 }
-            #             ],
-            #             "classes": [
-            #                 {
-            #                     "name": "Subber",
-            #                     "description": "Sub class",
-            #                     "exception": False,
-            #                     "methods": [],
-            #                     "attributes": [],
-            #                     "classes": []
-            #                 }
-            #             ],
-            #             "exceptions": [
-            #                 {
-            #                     "name": "Excepter",
-            #                     "kind": "exception",
-            #                     "description": "Sub exception",
-            #                     "methods": [],
-            #                     "attributes": [],
-            #                     "classes": [],
-            #                     "exceptions": []
-            #                 }
-            #             ]
-            #         }
-            #     ],
-            #     "exceptions": [
-            #         {
-            #             "name": "Basic",
-            #             "kind": "exception",
-            #             "description": "Basic Exception",
-            #             "methods": [],
-            #             "attributes": [],
-            #             "classes": [],
-            #             "exceptions": []
-            #         }
-            #     ]
-            #     "attributes": [
-            #         {
-            #             "name": "a",
-            #             "description": "The a team"
-            #         },
-            #         {
-            #             "name": "b",
-            #             "description": "The b team\n\nNot as good as the a team"
-            #         },
-            #         {
-            #             "name": "big",
-            #             "a": 1,
-            #             "b": 2,
-            #             "description": "Bunch a"
-            #         }
-            #     ],
+            #     "name": "test.example",
             #     "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n"
             # }
 
-            document = Document("docs/source/index.rst", "example", ['self', '*'], '    ')
-
-            document.add("example", "module", parsed, 0)
+            document = sphinxter.Document(None, "test.example", ['self', '*'], '    ')
 
             for function in parsed["functions"]:
-                document.add("example", "function", function, 0)
+                document.add("test.example", "function", function, 0)
 
             for cls in parsed["classes"]:
-                document.add("example", "class", cls, 0)
+                document.add("test.example", "class", cls, 0)
 
-            with open(document.path, "w", encoding="utf-8") as file:
-                Writer(document, file).dump()
+            handle = io.StringIO()
 
+            writer = sphinxter.Writer(document, handle)
+
+            writer.dump()
+            handle.getvalue()
             # .. created by sphinxter
             # .. default-domain:: py
             #
-            # example
+            # test.example
             # ============
             #
             # .. toctree::
@@ -1049,31 +1138,7 @@ sphinxter.Writer
             #     self
             #     *
             #
-            # .. module:: example
-            #
-            # mod me
-            #
-            # **Usage**
-            #
-            # Do some cool stuff::
-            #
-            #     like this
-            #
-            # It's great
-            #
-            # .. attribute:: a
-            #
-            #     The a team
-            #
-            # .. attribute:: b
-            #
-            #     The b team
-            #
-            #     Not as good as the a team
-            #
-            # .. attribute:: big
-            #
-            #     Bunch a
+            # .. currentmodule:: test.example
             #
             # .. function:: func(a: int, b: 'str', *args, **kwargs)
             #
@@ -1188,9 +1253,6 @@ sphinxter.Writer
             #
             #         Sub exception
             #
-            # .. exception:: Basic
-            #
-            #     Basic Exception
 
     .. method:: function(parsed: dict, indent: int = 0)
 
@@ -1203,21 +1265,21 @@ sphinxter.Writer
 
         **Usage**
 
-        Given the following function as part of the example module::
+        Given the following function as part of the test.example module::
 
             def func(
                 a:int,   # The a
                 b:'str', # The b
                 *args,   #
                 **kwargs # a: 1
-                         # b: 2
+                        # b: 2
             ):
                 """
                 description: Some basic func
                 parameters:
-                    a: More stuff
-                    b:
-                        more: stuff
+                a: More stuff
+                b:
+                    more: stuff
                 return:
                     description: things
                     type:
@@ -1233,9 +1295,19 @@ sphinxter.Writer
                     It's great
                 """
 
-                pass
+        Generating the docs is easy as::
 
-            parsed = sphinxter.Reader.routine(inspect.getattr_static(example, 'func'))
+            import io
+            import inspect
+            import sphinxter
+            import test.example
+
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
+
+            parsed = sphinxter.Reader.routine(inspect.getattr_static(test.example, 'func'))
             # {
             #     "name": "func",
             #     "kind": "function",
@@ -1276,6 +1348,7 @@ sphinxter.Writer
             # }
 
             writer.function(parsed, indent=1)
+            handle.getvalue()
             #
             #     .. function:: func(a: int, b: 'str', *args, **kwargs)
             #
@@ -1298,6 +1371,7 @@ sphinxter.Writer
             #             like this
             #
             #         It's great
+            #
 
     .. method:: line(line: str = '', indent: int = 0, before: bool = False, after: bool = False)
 
@@ -1316,19 +1390,43 @@ sphinxter.Writer
 
         This can just write a line of text::
 
+            import io
+            import sphinxter
+
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
+
             writer.line("Hello, world!")
-            # Hello world!
+            handle.getvalue()
+            # Hello, world!
+            #
 
         It can indent::
 
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
+
             writer.line("Hello, world!", indent=1)
-            #     Hello world!
+            handle.getvalue()
+            #     Hello, world!
+            #
 
         And it can add lines (with no indent) before and after::
 
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
+
             writer.line("Hello, world!", indent=1, before=True, after=True)
+            handle.getvalue()
             #
-            #     Hello world!
+            #     Hello, world!
+            #
             #
 
     .. method:: lines(lines: str, indent: int, before: bool = False, after: bool = False)
@@ -1348,22 +1446,46 @@ sphinxter.Writer
 
         This can just write lines of text::
 
-            writer.line("Hello\nworld!")
+            import io
+            import sphinxter
+
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
+
+            writer.lines("Hello\nworld!", indent=0)
+            handle.getvalue()
             # Hello
             # world!
+            #
 
         It can indent::
 
-            writer.line("Hello\nworld!", indent=1)
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
+
+            writer.lines("Hello\nworld!", indent=1)
+            handle.getvalue()
             #     Hello
             #     world!
+            #
 
         And it can add lines (with no indent) before and after::
 
-            writer.line("Hello\nworld!", indent=1, before=True, after=True)
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
+
+            writer.lines("Hello\nworld!", indent=1, before=True, after=True)
+            handle.getvalue()
             #
             #     Hello
             #     world!
+            #
             #
 
     .. method:: method(parsed: dict, indent: int)
@@ -1377,7 +1499,7 @@ sphinxter.Writer
 
         **Usage**
 
-        For a regular method, assuming the Complex class as part of the example module::
+        For a regular method, assuming the Complex class as part of the test.example module::
 
             class Complex:
 
@@ -1447,7 +1569,14 @@ sphinxter.Writer
                         It's great
                     """
 
-            parsed = sphinxter.Reader.routine(inspect.getattr_static(example.Complex, 'stat'))
+        Generating docs for a static method::
+
+            import io
+            import inspect
+            import sphinxter
+            import test.example
+
+            parsed = sphinxter.Reader.routine(inspect.getattr_static(test.example.Complex, 'stat'), method=True)
             # {
             #     "name": "stat",
             #     "kind": "staticmethod",
@@ -1478,7 +1607,13 @@ sphinxter.Writer
             #     }
             # }
 
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
+
             writer.method(parsed, indent=1)
+            handle.getvalue()
             #
             #     .. staticmethod:: stat(a, b, *args, **kwargs) -> list
             #
@@ -1490,8 +1625,11 @@ sphinxter.Writer
             #         :param kwargs:
             #         :return: things
             #         :rtype: list
+            #
 
-            parsed = sphinxter.Reader.routine(inspect.getattr_static(example.Complex, 'classy'))
+        For a class method::
+
+            parsed = sphinxter.Reader.routine(inspect.getattr_static(test.example.Complex, 'classy'), method=True)
             # {
             #     "name": "classy",
             #     "kind": "classmethod",
@@ -1522,7 +1660,13 @@ sphinxter.Writer
             #     }
             # }
 
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
+
             writer.method(parsed, indent=1)
+            handle.getvalue()
             #
             #     .. classmethod:: classy(a, b, *args, **kwargs)
             #
@@ -1534,8 +1678,11 @@ sphinxter.Writer
             #         :param kwargs:
             #         :return: things
             #         :rtype: str
+            #
 
-            parsed = sphinxter.Reader.routine(inspect.getattr_static(example.Complex, 'meth'))
+        And for a regular ol' method::
+
+            parsed = sphinxter.Reader.routine(inspect.getattr_static(test.example.Complex, 'meth'), method=True)
             # {
             #     "name": "meth",
             #     "kind": "method",
@@ -1573,7 +1720,13 @@ sphinxter.Writer
             #     "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n"
             # }
 
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
+
             writer.method(parsed, indent=1)
+            handle.getvalue()
             #
             #     .. method:: meth(a, b, *args, **kwargs)
             #
@@ -1594,6 +1747,7 @@ sphinxter.Writer
             #             like this
             #
             #         It's great
+            #
 
     .. method:: module(parsed: dict, indent: int = 0)
 
@@ -1663,103 +1817,392 @@ sphinxter.Writer
                     It's great
                 """
 
+
             class Basic(Exception):
                 """
                 Basic Exception
                 """
 
-            parsed = sphinxter.Reader.module(example)
+
+            class Complex:
+                """
+                description: Complex class
+                definition: |
+                    make sure you do this::
+
+                        wowsa
+
+                    Ya sweet
+                """
+
+                a = None # The a team
+                b = None # The b team
+                """
+                Not as good as the a team
+                """
+                big = """
+                Stuff
+                """ # Bunch a
+                """
+                a: 1
+                b: 2
+                """
+
+                def __init__(
+                    self,
+                    a,       # The a
+                    b,       # The b
+                    *args,   #
+                    **kwargs # a: 1
+                            # b: 2
+                ):
+                    """
+                    description: call me
+                    parameters:
+                    a: More stuff
+                    b:
+                        more: stuff
+                    usage: |
+                        Do some cool stuff::
+
+                            like this
+
+                        It's great
+                    """
+
+                @staticmethod
+                def stat(
+                    a,       # The a
+                    b,       # The b
+                    *args,   #
+                    **kwargs # a: 1
+                            # b: 2
+                )->list:
+                    """
+                    description: Some static stat
+                    parameters:
+                    a: More stuff
+                    b:
+                        more: stuff
+                    return: things
+                    """
+
+                @classmethod
+                def classy(
+                    cls,
+                    a,       # The a
+                    b,       # The b
+                    *args,   #
+                    **kwargs # a: 1
+                            # b: 2
+                ):
+                    """
+                    description: Some class meth
+                    parameters:
+                    a: More stuff
+                    b:
+                        more: stuff
+                    return:
+                        description: things
+                        type: str
+                    """
+
+                def meth(
+                    self,
+                    a,       # The a
+                    b,       # The b
+                    *args,   #
+                    **kwargs # a: 1
+                            # b: 2
+                ):
+                    """
+                    description: Some basic meth
+                    parameters:
+                    a: More stuff
+                    b:
+                        more: stuff
+                    return:
+                        description: things
+                        type:
+                        - str
+                        - None
+                    raises:
+                        Exception: if oh noes
+                    usage: |
+                        Do some cool stuff::
+
+                            like this
+
+                        It's great
+                    """
+
+                class Subber:
+                    """
+                    Sub class
+                    """
+                    pass
+
+                class Excepter(Exception):
+                    """
+                    Sub exception
+                    """
+                    pass
+
+
+        The documentation can be generated as such::
+
+            import io
+            import sphinxter
+            import test.example
+
+            parsed = sphinxter.Reader.module(test.example)
             # {
-            #     "name": "example",
-            #     "description": "mod me",
             #     "attributes": [
             #         {
-            #             "name": "a",
-            #             "description": "The a team"
+            #             "description": "The a team",
+            #             "name": "a"
             #         },
             #         {
-            #             "name": "b",
-            #             "description": "The b team\n\nNot as good as the a team"
+            #             "description": "The b team\n\nNot as good as the a team",
+            #             "name": "b"
             #         },
             #         {
-            #             "name": "big",
             #             "a": 1,
             #             "b": 2,
-            #             "description": "Bunch a"
+            #             "description": "Bunch a",
+            #             "name": "big"
+            #         }
+            #     ],
+            #     "classes": [
+            #         {
+            #             "attributes": [
+            #                 {
+            #                     "description": "The a team",
+            #                     "name": "a"
+            #                 },
+            #                 {
+            #                     "description": "The b team\n\nNot as good as the a team",
+            #                     "name": "b"
+            #                 },
+            #                 {
+            #                     "a": 1,
+            #                     "b": 2,
+            #                     "description": "Bunch a",
+            #                     "name": "big"
+            #                 }
+            #             ],
+            #             "classes": [
+            #                 {
+            #                     "attributes": [],
+            #                     "classes": [],
+            #                     "description": "Sub class",
+            #                     "exceptions": [],
+            #                     "kind": "class",
+            #                     "methods": [],
+            #                     "name": "Subber"
+            #                 }
+            #             ],
+            #             "definition": "make sure you do this::\n\n    wowsa\n\nYa sweet\n",
+            #             "description": "Complex class\n\ncall me",
+            #             "exceptions": [
+            #                 {
+            #                     "attributes": [],
+            #                     "classes": [],
+            #                     "description": "Sub exception",
+            #                     "exceptions": [],
+            #                     "kind": "exception",
+            #                     "methods": [],
+            #                     "name": "Excepter"
+            #                 }
+            #             ],
+            #             "kind": "class",
+            #             "methods": [
+            #                 {
+            #                     "description": "Some class meth",
+            #                     "kind": "classmethod",
+            #                     "name": "classy",
+            #                     "parameters": [
+            #                         {
+            #                             "description": "The a More stuff",
+            #                             "name": "a"
+            #                         },
+            #                         {
+            #                             "description": "The b",
+            #                             "more": "stuff",
+            #                             "name": "b"
+            #                         },
+            #                         {
+            #                             "name": "args"
+            #                         },
+            #                         {
+            #                             "a": 1,
+            #                             "b": 2,
+            #                             "name": "kwargs"
+            #                         }
+            #                     ],
+            #                     "return": {
+            #                         "description": "things",
+            #                         "type": "str"
+            #                     },
+            #                     "signature": "(a, b, *args, **kwargs)"
+            #                 },
+            #                 {
+            #                     "description": "Some basic meth",
+            #                     "kind": "method",
+            #                     "name": "meth",
+            #                     "parameters": [
+            #                         {
+            #                             "description": "The a More stuff",
+            #                             "name": "a"
+            #                         },
+            #                         {
+            #                             "description": "The b",
+            #                             "more": "stuff",
+            #                             "name": "b"
+            #                         },
+            #                         {
+            #                             "name": "args"
+            #                         },
+            #                         {
+            #                             "a": 1,
+            #                             "b": 2,
+            #                             "name": "kwargs"
+            #                         }
+            #                     ],
+            #                     "raises": {
+            #                         "Exception": "if oh noes"
+            #                     },
+            #                     "return": {
+            #                         "description": "things",
+            #                         "type": [
+            #                             "str",
+            #                             "None"
+            #                         ]
+            #                     },
+            #                     "signature": "(a, b, *args, **kwargs)",
+            #                     "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n"
+            #                 },
+            #                 {
+            #                     "description": "Some static stat",
+            #                     "kind": "staticmethod",
+            #                     "name": "stat",
+            #                     "parameters": [
+            #                         {
+            #                             "description": "The a More stuff",
+            #                             "name": "a"
+            #                         },
+            #                         {
+            #                             "description": "The b",
+            #                             "more": "stuff",
+            #                             "name": "b"
+            #                         },
+            #                         {
+            #                             "name": "args"
+            #                         },
+            #                         {
+            #                             "a": 1,
+            #                             "b": 2,
+            #                             "name": "kwargs"
+            #                         }
+            #                     ],
+            #                     "return": {
+            #                         "description": "things",
+            #                         "type": "list"
+            #                     },
+            #                     "signature": "(a, b, *args, **kwargs) -> list"
+            #                 }
+            #             ],
+            #             "name": "Complex",
+            #             "parameters": [
+            #                 {
+            #                     "description": "The a More stuff",
+            #                     "name": "a"
+            #                 },
+            #                 {
+            #                     "description": "The b",
+            #                     "more": "stuff",
+            #                     "name": "b"
+            #                 },
+            #                 {
+            #                     "name": "args"
+            #                 },
+            #                 {
+            #                     "a": 1,
+            #                     "b": 2,
+            #                     "name": "kwargs"
+            #                 }
+            #             ],
+            #             "signature": "(a, b, *args, **kwargs)",
+            #             "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n"
+            #         }
+            #     ],
+            #     "description": "mod me",
+            #     "exceptions": [
+            #         {
+            #             "attributes": [],
+            #             "classes": [],
+            #             "description": "Basic Exception",
+            #             "exceptions": [],
+            #             "kind": "exception",
+            #             "methods": [],
+            #             "name": "Basic"
             #         }
             #     ],
             #     "functions": [
             #         {
-            #             "name": "func",
-            #             "kind": "function",
             #             "description": "Some basic func",
-            #             "signature": "(a: int, b: 'str', *args, **kwargs)",
+            #             "kind": "function",
+            #             "name": "func",
             #             "parameters": [
             #                 {
-            #                     "name": "a",
             #                     "description": "The a More stuff",
+            #                     "name": "a",
             #                     "type": "int"
             #                 },
             #                 {
-            #                     "name": "b",
             #                     "description": "The b",
             #                     "more": "stuff",
+            #                     "name": "b",
             #                     "type": "str"
             #                 },
             #                 {
             #                     "name": "args"
             #                 },
             #                 {
-            #                     "name": "kwargs",
             #                     "a": 1,
-            #                     "b": 2
+            #                     "b": 2,
+            #                     "name": "kwargs"
             #                 }
             #             ],
-            #             "return": {
-            #                 "description": "things",
-            #                 "type": [
-            #                     'str',
-            #                     'None'
-            #                 ]
-            #             },
             #             "raises": {
             #                 "Exception": "if oh noes"
             #             },
+            #             "return": {
+            #                 "description": "things",
+            #                 "type": [
+            #                     "str",
+            #                     "None"
+            #                 ]
+            #             },
+            #             "signature": "(a: int, b: 'str', *args, **kwargs)",
             #             "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n"
             #         }
             #     ],
-            #     "exceptions": [
-            #         {
-            #             "name": "Basic",
-            #             "kind": "exception",
-            #             "description": "Basic Exception",
-            #             "methods": [],
-            #             "attributes": [],
-            #             "classes": []
-            #         }
-            #     ],
-            #     "attributes": [
-            #         {
-            #             "name": "a",
-            #             "description": "The a team"
-            #         },
-            #         {
-            #             "name": "b",
-            #             "description": "The b team\n\nNot as good as the a team"
-            #         },
-            #         {
-            #             "name": "big",
-            #             "a": 1,
-            #             "b": 2,
-            #             "description": "Bunch a"
-            #         }
-            #     ],
+            #     "name": "test.example",
             #     "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n"
             # }
 
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
+
             writer.module(parsed, indent=1)
+            handle.getvalue()
             #
-            #     .. module:: example
+            #     .. module:: test.example
+            #
+            #     mod me
             #
             #     **Usage**
             #
@@ -1782,6 +2225,7 @@ sphinxter.Writer
             #     .. attribute:: big
             #
             #         Bunch a
+            #
 
         Notice how no functions or classes are written.
 
@@ -1799,14 +2243,29 @@ sphinxter.Writer
 
         If there's only a name::
 
+            import io
+            import sphinxter
+
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
+
             parsed = {
                 "name": "arg"
             }
 
             writer.parameter(parsed, indent=1)
+            handle.getvalue()
             #     :param arg:
+            #
 
         If there's also a description::
+
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
 
             parsed = {
                 "name": "arg",
@@ -1814,9 +2273,16 @@ sphinxter.Writer
             }
 
             writer.parameter(parsed, indent=1)
+            handle.getvalue()
             #     :param arg: an argument
+            #
 
         If there's also a type::
+
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
 
             parsed = {
                 "name": "arg",
@@ -1825,8 +2291,10 @@ sphinxter.Writer
             }
 
             writer.parameter(parsed, indent=1)
+            handle.getvalue()
             #     :param arg: an argument
             #     :type arg: bool
+            #
 
     .. method:: parameters(parsed: dict, indent: int)
 
@@ -1840,6 +2308,14 @@ sphinxter.Writer
         **Usage**
 
         If parameters are present, write them::
+
+            import io
+            import sphinxter
+
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
 
             parsed = {
                 "parameters": [
@@ -1855,15 +2331,24 @@ sphinxter.Writer
             }
 
             writer.parameters(parsed, 1)
+            handle.getvalue()
             #     :param small:
             #     :param big: stuff
             #     :type big: int
+            #
 
         If not, do nothing::
+
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
 
             parsed = {}
 
             writer.parameters(parsed, 1)
+            handle.getvalue()
+            #
 
     .. method:: raises(parsed: dict, indent: int)
 
@@ -1878,6 +2363,14 @@ sphinxter.Writer
 
         If there's raises, write them (alphabetically)::
 
+            import io
+            import sphinxter
+
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
+
             parsed = {
                 "raises": {
                     "Exception": "whoops",
@@ -1886,14 +2379,23 @@ sphinxter.Writer
             }
 
             writer.raises(parsed, 1)
+            handle.getvalue()
             #     :raises Error: oh no
             #     :raises Exception: whoops
+            #
 
         If there's nothing, do nothing::
+
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
 
             parsed = {}
 
             writer.raises(parsed, 1)
+            handle.getvalue()
+            #
 
     .. method:: returns(parsed: dict, indent: int)
 
@@ -1908,6 +2410,14 @@ sphinxter.Writer
 
         If there's a description::
 
+            import io
+            import sphinxter
+
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
+
             parsed = {
                 "return": {
                     "description": "stuff"
@@ -1915,9 +2425,16 @@ sphinxter.Writer
             }
 
             writer.returns(parsed, 1)
+            handle.getvalue()
             #     :return: stuff
+            #
 
         If there's also a type::
+
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
 
             parsed = {
                 "return": {
@@ -1927,10 +2444,17 @@ sphinxter.Writer
             }
 
             writer.returns(parsed, 1)
+            handle.getvalue()
             #     :return: stuff
             #     :rtype: int
+            #
 
         If there's only a type::
+
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
 
             parsed = {
                 "return": {
@@ -1939,13 +2463,22 @@ sphinxter.Writer
             }
 
             writer.returns(parsed, 1)
+            handle.getvalue()
             #     :rtype: int
+            #
 
         If there's nothing, do nothing::
+
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
 
             parsed = {}
 
             writer.returns(parsed, 1)
+            handle.getvalue()
+            #
 
     .. method:: routine(parsed: dict, indent: int)
 
@@ -1959,6 +2492,14 @@ sphinxter.Writer
         **Usage**
 
         If there's parameters, return, and/or raises, write them, preceeding by a blank line::
+
+            import io
+            import sphinxter
+
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
 
             parsed = {
                 "parameters": [
@@ -1982,6 +2523,7 @@ sphinxter.Writer
             }
 
             writer.routine(parsed, 1)
+            handle.getvalue()
             #
             #     :param small:
             #     :param big: stuff
@@ -1990,12 +2532,20 @@ sphinxter.Writer
             #     :rtype: int
             #     :raises Error: oh no
             #     :raises Exception: whoops
+            #
 
         If there's nothing, do nothing::
+
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
 
             parsed = {}
 
             writer.routine(parsed, 1)
+            handle.getvalue()
+            #
 
     .. method:: toctree(paths: 'list[str]', indent: int = 0)
 
@@ -2008,14 +2558,27 @@ sphinxter.Writer
 
         **Usage**
 
-        writer.toctree(['self', '*'], indent=1)
-        #     .. toctree::
-        #         :maxdepth: 1
-        #         :glob:
-        #         :hidden:
-        #
-        #         *
-        #         self
+        Generating a toctree::
+
+            import io
+            import sphinxter
+
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
+
+            writer.toctree(['self', '*'], indent=1)
+            handle.getvalue()
+            #
+            #     .. toctree::
+            #         :maxdepth: 1
+            #         :glob:
+            #         :hidden:
+            #
+            #         self
+            #         *
+            #
 
     .. staticmethod:: types(types: 'str or list')
 
@@ -2028,12 +2591,14 @@ sphinxter.Writer
 
         If just a single type, it returns that::
 
-            spinxter.Writer.types("str")
+            import sphinxter
+
+            sphinxter.Writer.types("str")
             # "str"
 
         If a list of types, return types, concatenated with ' or '::
 
-            spinxter.Writer.types(["str", "list"])
+            sphinxter.Writer.types(["str", "list"])
             # "str or list"
 
     .. method:: usage(parsed: dict, indent: int)
@@ -2049,6 +2614,15 @@ sphinxter.Writer
 
         If there's usages, write with a header and proper blank lines::
 
+            import io
+            import yaml
+            import sphinxter
+
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
+
             def example():
                 """
                 usage: |
@@ -2059,11 +2633,13 @@ sphinxter.Writer
                     Cool, huh?
                 """
 
-            parsed = {
-                "usage": "Here's a neat trick::\n\n    print("Hello, world!")\n\nCool, huh?"
-            }
+            parsed = yaml.safe_load(example.__doc__)
+            # {
+            #     "usage": "Here's a neat trick::\n\n    print(\"Hello, world!\")\n\nCool, huh?\n"
+            # }
 
             writer.usage(parsed, 1)
+            handle.getvalue()
             #
             #     **Usage**
             #
@@ -2072,9 +2648,17 @@ sphinxter.Writer
             #         print("Hello, world!")
             #
             #     Cool, huh?
+            #
 
         If there's nothing, do nothing::
+
+            document = sphinxter.Document(None, "test.example", None, '    ')
+            handle = io.StringIO()
+
+            writer = sphinxter.Writer(document, handle)
 
             parsed = {}
 
             writer.usage(parsed, 1)
+            handle.getvalue()
+            #
