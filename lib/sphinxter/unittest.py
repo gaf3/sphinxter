@@ -89,8 +89,8 @@ class Block:
     """
 
     def __init__(self,
-        code:list[str], # The code of the block
-        value:list[str] # The value of the block
+        code:list, # The code of the block
+        value:list # The value of the block
     ):
 
         self.code = "\n".join(code)

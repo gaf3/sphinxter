@@ -41,7 +41,8 @@ setup:
 	python setup.py install && \
 	python -m sphinxter.reader && \
 	python -m sphinxter.document && \
-	python -m sphinxter.writer"
+	python -m sphinxter.writer && \
+	python -m sphinxter.unittest"
 
 tag:
 	-git tag -a $(VERSION) -m "Version $(VERSION)"

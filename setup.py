@@ -20,7 +20,8 @@ setup(
         'sphinxter',
         'sphinxter.reader',
         'sphinxter.document',
-        'sphinxter.writer'
+        'sphinxter.writer',
+        'sphinxter.unittest'
     ],
     install_requires=[
         'Sphinx==5.1.1',
