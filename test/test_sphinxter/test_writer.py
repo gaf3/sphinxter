@@ -1,13 +1,14 @@
 import unittest
 import unittest.mock
+import sphinxter.unittest
 
 import io
 
 import sphinxter
 from test import example
-from test.test_sphinxter.test_reader import TestReader
+import test.test_sphinxter.test_reader
 
-class TestWriter(unittest.TestCase):
+class TestWriter(sphinxter.unittest.TestCase):
 
     maxDiff = None
 
@@ -38,6 +39,8 @@ a
 
 """)
 
+        self.assertSphinxter(sphinxter.Writer.line, evaluate=False)
+
     def test_lines(self):
 
         self.writer.lines("a", 0, before=True)
@@ -51,10 +54,14 @@ a
 
 """)
 
+        self.assertSphinxter(sphinxter.Writer.lines, evaluate=False)
+
     def test_types(self):
 
         self.assertEqual(self.writer.types("people"), "people")
         self.assertEqual(self.writer.types(["stuff", "things"]), "stuff or things")
+
+        self.assertSphinxter(sphinxter.Writer.types)
 
     def test_description(self):
 
@@ -68,6 +75,8 @@ a
     a
     b
 """)
+
+        self.assertSphinxter(sphinxter.Writer.description, evaluate=False)
 
     def test_parameter(self):
 
@@ -92,6 +101,8 @@ a
     :param big: stuff
     :type big: int
 """)
+
+        self.assertSphinxter(sphinxter.Writer.parameter, evaluate=False)
 
     def test_parameters(self):
 
@@ -119,6 +130,8 @@ a
     :type big: int
 """)
 
+        self.assertSphinxter(sphinxter.Writer.parameters, evaluate=False)
+
     def test_returns(self):
 
         self.writer.returns({}, 1)
@@ -138,6 +151,8 @@ a
     :rtype: int
 """)
 
+        self.assertSphinxter(sphinxter.Writer.returns, evaluate=False)
+
     def test_raises(self):
 
         self.writer.raises({}, 1)
@@ -154,6 +169,8 @@ a
         self.assertEqual(self.file.getvalue(), """
     :raises Exception: oh no
 """)
+
+        self.assertSphinxter(sphinxter.Writer.raises, evaluate=False)
 
     def test_routine(self):
 
@@ -192,6 +209,8 @@ a
     :raises Exception: oh no
 """)
 
+        self.assertSphinxter(sphinxter.Writer.routine, evaluate=False)
+
     def test_usage(self):
 
         self.writer.usage({}, 1)
@@ -211,9 +230,11 @@ a
     b
 """)
 
+        self.assertSphinxter(sphinxter.Writer.usage, evaluate=[True, False, False])
+
     def test_function(self):
 
-        self.writer.function(TestReader.FUNCTION, 1)
+        self.writer.function(test.test_sphinxter.test_reader.TestReader.FUNCTION, 1)
         self.assertEqual(self.file.getvalue(), """
 
     .. function:: func(a: int, b: 'str', *args, **kwargs)
@@ -238,6 +259,8 @@ a
 
         It's great
 """)
+
+        self.assertSphinxter(sphinxter.Writer.function, evaluate=[True, False])
 
     def test_attribute(self):
 
@@ -267,6 +290,8 @@ a
 
         stuff
 """)
+
+        self.assertSphinxter(sphinxter.Writer.attribute, evaluate=False)
 
     def test_attributes(self):
 
@@ -298,9 +323,11 @@ a
         stuff
 """)
 
+        self.assertSphinxter(sphinxter.Writer.attributes, evaluate=False)
+
     def test_method(self):
 
-        self.writer.method(TestReader.METHOD, 1)
+        self.writer.method(test.test_sphinxter.test_reader.TestReader.METHOD, 1)
         self.assertEqual(self.file.getvalue(), """
 
     .. method:: meth(a, b, *args, **kwargs)
@@ -324,6 +351,8 @@ a
         It's great
 """)
 
+        self.assertSphinxter(sphinxter.Writer.method, evaluate=[True, False, True, False, True, False])
+
     def test_definition(self):
 
         self.writer.definition({}, 1)
@@ -343,9 +372,11 @@ a
     b
 """)
 
+        self.assertSphinxter(sphinxter.Writer.definition, evaluate=[True, False, False])
+
     def test_cls(self):
 
-        self.writer.cls(TestReader.BASIC_EXCEPTION, 1)
+        self.writer.cls(test.test_sphinxter.test_reader.TestReader.BASIC_EXCEPTION, 1)
         self.assertEqual(self.file.getvalue(), """
 
     .. exception:: Basic
@@ -353,7 +384,7 @@ a
         Basic Exception
 """)
 
-        self.writer.cls(TestReader.COMPLEX_CLASS, 1)
+        self.writer.cls(test.test_sphinxter.test_reader.TestReader.COMPLEX_CLASS, 1)
         self.assertEqual(self.file.getvalue(), """
 
     .. exception:: Basic
@@ -452,9 +483,11 @@ a
             Sub exception
 """)
 
+        self.assertSphinxter(sphinxter.Writer.cls, evaluate=[True, False, True, False])
+
     def test_module(self):
 
-        self.writer.module(TestReader.MODULE, 1)
+        self.writer.module(test.test_sphinxter.test_reader.TestReader.MODULE, 1)
         self.assertEqual(self.file.getvalue(), """
 
     .. module:: test.example
@@ -484,6 +517,8 @@ a
         Bunch a
 """)
 
+        self.assertSphinxter(sphinxter.Writer.module, evaluate=[True, False])
+
     def test_toctree(self):
 
         self.writer.toctree(['*'], 1)
@@ -497,6 +532,8 @@ a
 
         *
 """)
+
+        self.assertSphinxter(sphinxter.Writer.toctree, evaluate=False)
 
     EXAMPLE = """
 .. created by sphinxter
@@ -663,13 +700,13 @@ It's great
 
         self.writer.document = sphinxter.Document(None, "test.example", ['self', '*'], '    ')
 
-        self.writer.document.add("test.example", "module", TestReader.MODULE, 0)
+        self.writer.document.add("test.example", "module", test.test_sphinxter.test_reader.TestReader.MODULE, 0)
 
-        self.writer.document.add("test.example", "function", TestReader.FUNCTION, 0)
+        self.writer.document.add("test.example", "function", test.test_sphinxter.test_reader.TestReader.FUNCTION, 0)
 
-        self.writer.document.add("test.example", "class", TestReader.COMPLEX_CLASS, 0)
+        self.writer.document.add("test.example", "class", test.test_sphinxter.test_reader.TestReader.COMPLEX_CLASS, 0)
 
-        self.writer.document.add("test.example", "exception", TestReader.BASIC_EXCEPTION, 0)
+        self.writer.document.add("test.example", "exception", test.test_sphinxter.test_reader.TestReader.BASIC_EXCEPTION, 0)
 
         self.writer.dump()
 
@@ -683,11 +720,11 @@ It's great
 
         writer = sphinxter.Writer(document, file)
 
-        writer.document.add("people", "module", TestReader.MODULE, 0)
+        writer.document.add("people", "module", test.test_sphinxter.test_reader.TestReader.MODULE, 0)
 
-        writer.document.add("stuff", "function", TestReader.FUNCTION, 20)
+        writer.document.add("stuff", "function", test.test_sphinxter.test_reader.TestReader.FUNCTION, 20)
 
-        writer.document.add("things", "exception", TestReader.BASIC_EXCEPTION, 10)
+        writer.document.add("things", "exception", test.test_sphinxter.test_reader.TestReader.BASIC_EXCEPTION, 10)
 
         writer.dump()
 
@@ -754,3 +791,5 @@ It's great
 
     It's great
 """)
+
+        self.assertSphinxter(sphinxter.Writer.dump, evaluate=[True, False])

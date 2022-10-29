@@ -1,26 +1,41 @@
 import unittest
 import unittest.mock
+import sphinxter.unittest
 
 import inspect
 
 import sphinxter
-from test import example
+import test.example
 
-class TestReader(unittest.TestCase):
+class Complex:
+
+    class Subber:
+
+        pass
+
+class TestReader(sphinxter.unittest.TestCase):
 
     maxDiff = None
 
-    @unittest.mock.patch("inspect.getsourcelines")
-    def test_source(self, mock_lines):
+    BASIC_SOURCE = """class Basic(Exception):
+    \"""
+    Basic Exception
+    \"""
+"""
 
-        def lines(source):
-            return ([f"{line}\n" for line in source.split("\n")],)
+    SUBBER_SOURCE = """class Subber:
+    \"""
+    Sub class
+    \"""
+    pass
+"""
 
-        mock_lines.side_effect = lines
+    def test_source(self):
 
-        self.assertEqual(sphinxter.Reader.source("people"), "people\n")
-        self.assertEqual(sphinxter.Reader.source("  stuff\n    people"), "stuff\n  people\n")
-        self.assertEqual(sphinxter.Reader.source("\tstuff\n\t\tpeople"), "stuff\n\tpeople\n")
+        self.assertEqual(sphinxter.Reader.source(test.example.Basic), self.BASIC_SOURCE)
+        self.assertEqual(sphinxter.Reader.source(test.example.Complex.Subber), self.SUBBER_SOURCE)
+
+        self.assertSphinxter(sphinxter.Reader.source, evaluate=False)
 
     def test_parse(self):
 
@@ -39,6 +54,8 @@ class TestReader(unittest.TestCase):
         self.assertEqual(sphinxter.Reader.parse("a: 1"), {
             "a": 1
         })
+
+        self.assertSphinxter(sphinxter.Reader.parse)
 
     def test_update(self):
 
@@ -82,9 +99,12 @@ class TestReader(unittest.TestCase):
             "b": 2
         })
 
-    def test_comments(self):
+        self.assertSphinxter(sphinxter.Reader.update)
 
-        self.assertEqual(sphinxter.Reader.comments(example.func), {
+    @unittest.mock.patch("logging.info")
+    def test_comments(self, mock_log):
+
+        self.assertEqual(sphinxter.Reader.comments(test.example.func), {
             "a": {
                 "description": "The a"
             },
@@ -97,6 +117,12 @@ class TestReader(unittest.TestCase):
                 "b": 2
             }
         })
+
+        mock_log.assert_has_calls([
+            unittest.mock.call("%s parameter: %s", "func", "a"),
+            unittest.mock.call("%s parameter: %s", "func", "b"),
+            unittest.mock.call("%s parameter: %s", "func", "kwargs")
+        ])
 
         def func(
             a,              # The a
@@ -113,9 +139,11 @@ class TestReader(unittest.TestCase):
             }
         })
 
+        self.assertSphinxter(sphinxter.Reader.comments)
+
     def test_annotations(self):
 
-        self.assertEqual(sphinxter.Reader.annotations(example.func), {
+        self.assertEqual(sphinxter.Reader.annotations(test.example.func), {
             "parameters": {
                 "a": {
                     "type": "int"
@@ -127,12 +155,14 @@ class TestReader(unittest.TestCase):
             "return": {}
         })
 
-        self.assertEqual(sphinxter.Reader.annotations(example.Complex.stat), {
+        self.assertEqual(sphinxter.Reader.annotations(test.example.Complex.stat), {
             "parameters": {},
             "return": {
                 "type": "list"
             }
         })
+
+        self.assertSphinxter(sphinxter.Reader.annotations)
 
     FUNCTION = {
             "name": "func",
@@ -270,19 +300,25 @@ class TestReader(unittest.TestCase):
         "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n"
     }
 
-    def test_routine(self):
+    @unittest.mock.patch("logging.info")
+    def test_routine(self, mock_log):
 
-        self.assertEqual(sphinxter.Reader.routine(inspect.getattr_static(example, 'func')), self.FUNCTION)
+        self.assertEqual(sphinxter.Reader.routine(inspect.getattr_static(test.example, 'func')), self.FUNCTION)
 
-        self.assertEqual(sphinxter.Reader.routine(inspect.getattr_static(example.Complex, 'stat'), method=True), self.STATICMETHOD)
+        mock_log.assert_any_call("routine: %s", "func")
 
-        self.assertEqual(sphinxter.Reader.routine(inspect.getattr_static(example.Complex, 'classy'), method=True), self.CLASSMETHOD)
+        self.assertEqual(sphinxter.Reader.routine(inspect.getattr_static(test.example.Complex, 'stat'), method=True), self.STATICMETHOD)
 
-        self.assertEqual(sphinxter.Reader.routine(inspect.getattr_static(example.Complex, 'meth'), method=True), self.METHOD)
+        self.assertEqual(sphinxter.Reader.routine(inspect.getattr_static(test.example.Complex, 'classy'), method=True), self.CLASSMETHOD)
 
-    def test_attributes(self):
+        self.assertEqual(sphinxter.Reader.routine(inspect.getattr_static(test.example.Complex, 'meth'), method=True), self.METHOD)
 
-        self.assertEqual(sphinxter.Reader.attributes(example.Complex), {
+        self.assertSphinxter(sphinxter.Reader.routine)
+
+    @unittest.mock.patch("logging.info")
+    def test_attributes(self, mock_log):
+
+        self.assertEqual(sphinxter.Reader.attributes(test.example.Complex), {
             "a": {
                 "description": "The a team"
             },
@@ -296,7 +332,15 @@ class TestReader(unittest.TestCase):
             }
         })
 
-        self.assertEqual(sphinxter.Reader.attributes(example), {
+        mock_log.assert_has_calls([
+            unittest.mock.call("attribute comment: %s", "a"),
+            unittest.mock.call("attribute comment: %s", "b"),
+            unittest.mock.call("attribute docstring: %s", "b"),
+            unittest.mock.call("attribute comment: %s", "big"),
+            unittest.mock.call("attribute docstring: %s", "big")
+        ])
+
+        self.assertEqual(sphinxter.Reader.attributes(test.example), {
             "a": {
                 "description": "The a team"
             },
@@ -309,6 +353,8 @@ class TestReader(unittest.TestCase):
                 "description": "Bunch a"
             }
         })
+
+        self.assertSphinxter(sphinxter.Reader.attributes)
 
     BASIC_EXCEPTION = {
         "name": "Basic",
@@ -391,11 +437,16 @@ class TestReader(unittest.TestCase):
         ]
     }
 
-    def test_cls(self):
+    @unittest.mock.patch("logging.info")
+    def test_cls(self, mock_log):
 
-        self.assertEqual(sphinxter.Reader.cls(example.Basic), self.BASIC_EXCEPTION)
+        self.assertEqual(sphinxter.Reader.cls(test.example.Basic), self.BASIC_EXCEPTION)
 
-        self.assertEqual(sphinxter.Reader.cls(example.Complex), self.COMPLEX_CLASS)
+        mock_log.assert_any_call("class: %s", "Basic")
+
+        self.assertEqual(sphinxter.Reader.cls(test.example.Complex), self.COMPLEX_CLASS)
+
+        self.assertSphinxter(sphinxter.Reader.cls)
 
     MODULE = {
             "name": "test.example",
@@ -444,6 +495,11 @@ class TestReader(unittest.TestCase):
             "usage": "Do some cool stuff::\n\n    like this\n\nIt's great\n"
         }
 
-    def test_module(self):
+    @unittest.mock.patch("logging.info")
+    def test_module(self, mock_log):
 
-        self.assertEqual(sphinxter.Reader.module(example), self.MODULE)
+        self.assertEqual(sphinxter.Reader.module(test.example), self.MODULE)
+
+        mock_log.assert_any_call("module: %s", "test.example")
+
+        self.assertSphinxter(sphinxter.Reader.module)
