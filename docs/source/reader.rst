@@ -425,7 +425,7 @@ sphinxter.Reader
             #     ]
             # }
 
-        Notfice that the __init__ method documentation has been super imposed over the class documentation.
+        Notfice that the __init__ method documentation has been super-imposed over the class documentation.
 
         If a class is exception, it'll capture that::
 
@@ -882,7 +882,7 @@ sphinxter.Reader
 
         :param docstring: the docstring (or string after an attribute)
         :type docstring: str
-        :return: The parsed doctring
+        :return: The parsed docstring
         :rtype: dict
 
         **Usage**

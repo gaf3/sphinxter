@@ -69,7 +69,7 @@ sphinxter.Writer
 
         **Usage**
 
-        If there's attributes::
+        If there are attributes::
 
             parsed = {
                 "attributes": [
@@ -521,7 +521,7 @@ sphinxter.Writer
 
         **Usage**
 
-        If there's definition, write with a header and proper blank lines::
+        If there's a definition, write with a header and proper blank lines::
 
             class Example():
                 """
@@ -1876,7 +1876,7 @@ sphinxter.Writer
 
         **Usage**
 
-        If there's raises, write them (alphabetically)::
+        If there are raises, write them (alphabetically)::
 
             parsed = {
                 "raises": {
@@ -1958,7 +1958,7 @@ sphinxter.Writer
 
         **Usage**
 
-        If there's parameters, return, and/or raises, write them, preceeding by a blank line::
+        If there are parameters, return, and/or raises, write them, preceeding by a blank line::
 
             parsed = {
                 "parameters": [
@@ -2047,7 +2047,7 @@ sphinxter.Writer
 
         **Usage**
 
-        If there's usages, write with a header and proper blank lines::
+        If there are usages, write with a header and proper blank lines::
 
             def example():
                 """

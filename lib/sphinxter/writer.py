@@ -304,7 +304,7 @@ class Writer:
         """
         description: Writes raises information if present
         usage: |
-            If there's raises, write them (alphabetically)::
+            If there are raises, write them (alphabetically)::
 
                 parsed = {
                     "raises": {
@@ -337,7 +337,7 @@ class Writer:
         """
         description: Writes documentation for that which can be excuted
         usage: |
-            If there's parameters, return, and/or raises, write them, preceeding by a blank line::
+            If there are parameters, return, and/or raises, write them, preceeding by a blank line::
 
                 parsed = {
                     "parameters": [
@@ -396,7 +396,7 @@ class Writer:
         """
         description: Writes a usage block if present
         usage: |
-            If there's usages, write with a header and proper blank lines::
+            If there are usages, write with a header and proper blank lines::
 
                 def example():
                     \"""
@@ -592,7 +592,7 @@ class Writer:
         """
         description: Writes attributes content if present
         usage: |
-            If there's attributes::
+            If there are attributes::
 
                 parsed = {
                     "attributes": [
@@ -868,7 +868,7 @@ class Writer:
         """
         description: Writes a definition block if present, for describing how to define a class, ie models
         usage: |
-            If there's definition, write with a header and proper blank lines::
+            If there's a definition, write with a header and proper blank lines::
 
                 class Example():
                     \"""

@@ -82,7 +82,7 @@ class Reader:
         """
         description: Parses a docstring into YAML, defaulting to description
         return:
-            description: The parsed doctring
+            description: The parsed docstring
         usage: |
             If you just have a plain docstring, it'll return a dict
             with that docstring as the description::
@@ -1135,7 +1135,7 @@ class Reader:
                 #     ]
                 # }
 
-            Notfice that the __init__ method documentation has been super imposed over the class documentation.
+            Notfice that the __init__ method documentation has been super-imposed over the class documentation.
 
             If a class is exception, it'll capture that::
 

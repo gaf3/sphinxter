@@ -11,7 +11,7 @@ I wanted something that generated readable HTML documentation from readable Code
 Even if you've done nothing to your code to use sphinxter, it'll generate decent documentation assuming non YAML
 docstrings are descriptions for their resources.
 
-Say this is yourmodule
+Say this is yourmodule:
 
 ```python
 """
@@ -125,8 +125,8 @@ That's the goal of sphinxter.
 Organization
 ------------
 
-By default, everything ends up in the `index.rst` document. With modules, classes, and functions you can a different
-document and even the order in which they'll appear in the document. If the parent modules don't match, sphinxter will
+By default, everything ends up in the `index.rst` document. You can write modules, classes, and functions to a different
+document and even choose the order in which they'll appear in the document. If the parent modules don't match, sphinxter will
 add a currentmodule directive so everything will be organized properly.
 
 Setup

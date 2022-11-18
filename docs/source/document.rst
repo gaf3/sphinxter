@@ -28,7 +28,7 @@ sphinxter.Document
         order is used as the key in the contents dict, to a list of contents
         for that order. That way, if nothing is specified, everything is added
         alphabetically. However, if you want a more obscure resource to go last,
-        you just need to set the order greater that zero. Two resources at the
+        you just need to set the order greater that zero. Two resources with the
         same order are displayed the order in which they were added.
 
     .. attribute:: indent
