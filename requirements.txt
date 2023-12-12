@@ -1,5 +1,5 @@
 Sphinx==5.1.1
-PyYAML==6.0
+PyYAML==6.0.1
 ptvsd==4.3.2
 coverage==6.4.2
 pylint==2.14.5

@@ -25,7 +25,7 @@ setup(
     ],
     install_requires=[
         'Sphinx==5.1.1',
-        'PyYAML==6.0'
+        'PyYAML>=6.0.1'
     ],
     url=f"https://sphinxter.readthedocs.io/en/{version}/",
     download_url="https://github.com/gaf3/sphinxter",
