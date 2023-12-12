@@ -87,7 +87,7 @@ even the comments directly on the next line and verifying the match the line bef
                             # 3
                 """
 
-        You would test teh whole thing like so::
+        You would test the whole thing like so::
 
             import sphinxter.unittest
 
@@ -451,7 +451,7 @@ even the comments directly on the next line and verifying the match the line bef
             # # "Hello world"
             #
 
-.. class:: Block(code: list[str], value: list[str])
+.. class:: Block(code: list, value: list)
 
     Class for storing a block, a pair for code to execute and (optional) value to compare to
 
