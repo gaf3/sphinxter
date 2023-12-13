@@ -463,8 +463,8 @@ sphinxter.Writer
             #
             #         :param a: The a More stuff
             #         :param b: The b
-            #         :param args:
-            #         :param kwargs:
+            #         :param args: args
+            #         :param kwargs: kwargs
             #
             #         **Usage**
             #
@@ -494,8 +494,8 @@ sphinxter.Writer
             #
             #             :param a: The a More stuff
             #             :param b: The b
-            #             :param args:
-            #             :param kwargs:
+            #             :param args: args
+            #             :param kwargs: kwargs
             #             :return: things
             #             :rtype: str
             #
@@ -505,8 +505,8 @@ sphinxter.Writer
             #
             #             :param a: The a More stuff
             #             :param b: The b
-            #             :param args:
-            #             :param kwargs:
+            #             :param args: args
+            #             :param kwargs: kwargs
             #             :return: things
             #             :rtype: str or None
             #             :raises Exception: if oh noes
@@ -525,8 +525,8 @@ sphinxter.Writer
             #
             #             :param a: The a More stuff
             #             :param b: The b
-            #             :param args:
-            #             :param kwargs:
+            #             :param args: args
+            #             :param kwargs: kwargs
             #             :return: things
             #             :rtype: list
             #
@@ -1148,8 +1148,8 @@ sphinxter.Writer
             #     :type a: int
             #     :param b: The b
             #     :type b: str
-            #     :param args:
-            #     :param kwargs:
+            #     :param args: args
+            #     :param kwargs: kwargs
             #     :return: things
             #     :rtype: str or None
             #     :raises Exception: if oh noes
@@ -1178,8 +1178,8 @@ sphinxter.Writer
             #
             #     :param a: The a More stuff
             #     :param b: The b
-            #     :param args:
-            #     :param kwargs:
+            #     :param args: args
+            #     :param kwargs: kwargs
             #
             #     **Usage**
             #
@@ -1209,8 +1209,8 @@ sphinxter.Writer
             #
             #         :param a: The a More stuff
             #         :param b: The b
-            #         :param args:
-            #         :param kwargs:
+            #         :param args: args
+            #         :param kwargs: kwargs
             #         :return: things
             #         :rtype: str
             #
@@ -1220,8 +1220,8 @@ sphinxter.Writer
             #
             #         :param a: The a More stuff
             #         :param b: The b
-            #         :param args:
-            #         :param kwargs:
+            #         :param args: args
+            #         :param kwargs: kwargs
             #         :return: things
             #         :rtype: str or None
             #         :raises Exception: if oh noes
@@ -1240,8 +1240,8 @@ sphinxter.Writer
             #
             #         :param a: The a More stuff
             #         :param b: The b
-            #         :param args:
-            #         :param kwargs:
+            #         :param args: args
+            #         :param kwargs: kwargs
             #         :return: things
             #         :rtype: list
             #
@@ -1358,8 +1358,8 @@ sphinxter.Writer
             #         :type a: int
             #         :param b: The b
             #         :type b: str
-            #         :param args:
-            #         :param kwargs:
+            #         :param args: args
+            #         :param kwargs: kwargs
             #         :return: things
             #         :rtype: str or None
             #         :raises Exception: if oh noes
@@ -1621,8 +1621,8 @@ sphinxter.Writer
             #
             #         :param a: The a More stuff
             #         :param b: The b
-            #         :param args:
-            #         :param kwargs:
+            #         :param args: args
+            #         :param kwargs: kwargs
             #         :return: things
             #         :rtype: list
             #
@@ -1674,8 +1674,8 @@ sphinxter.Writer
             #
             #         :param a: The a More stuff
             #         :param b: The b
-            #         :param args:
-            #         :param kwargs:
+            #         :param args: args
+            #         :param kwargs: kwargs
             #         :return: things
             #         :rtype: str
             #
@@ -1734,8 +1734,8 @@ sphinxter.Writer
             #
             #         :param a: The a More stuff
             #         :param b: The b
-            #         :param args:
-            #         :param kwargs:
+            #         :param args: args
+            #         :param kwargs: kwargs
             #         :return: things
             #         :rtype: str or None
             #         :raises Exception: if oh noes
@@ -2257,7 +2257,7 @@ sphinxter.Writer
 
             writer.parameter(parsed, indent=1)
             handle.getvalue()
-            #     :param arg:
+            #     :param arg: arg
             #
 
         If there's also a description::
@@ -2332,7 +2332,7 @@ sphinxter.Writer
 
             writer.parameters(parsed, 1)
             handle.getvalue()
-            #     :param small:
+            #     :param small: small
             #     :param big: stuff
             #     :type big: int
             #
@@ -2525,7 +2525,7 @@ sphinxter.Writer
             writer.routine(parsed, 1)
             handle.getvalue()
             #
-            #     :param small:
+            #     :param small: small
             #     :param big: stuff
             #     :type big: int
             #     :return: stuff

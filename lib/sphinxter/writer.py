@@ -241,7 +241,7 @@ class Writer:
 
                 writer.parameter(parsed, indent=1)
                 handle.getvalue()
-                #     :param arg:
+                #     :param arg: arg
                 #
 
             If there's also a description::
@@ -284,7 +284,7 @@ class Writer:
         if "description" in parsed:
             self.line(f":param {parsed['name']}: {parsed['description']}", indent)
         else:
-            self.line(f":param {parsed['name']}:", indent)
+            self.line(f":param {parsed['name']}: {parsed['name']}", indent)
 
         if "type" in parsed:
             self.line(f":type {parsed['name']}: {self.types(parsed['type'])}", indent)
@@ -321,7 +321,7 @@ class Writer:
 
                 writer.parameters(parsed, 1)
                 handle.getvalue()
-                #     :param small:
+                #     :param small: small
                 #     :param big: stuff
                 #     :type big: int
                 #
@@ -526,7 +526,7 @@ class Writer:
                 writer.routine(parsed, 1)
                 handle.getvalue()
                 #
-                #     :param small:
+                #     :param small: small
                 #     :param big: stuff
                 #     :type big: int
                 #     :return: stuff
@@ -726,8 +726,8 @@ class Writer:
                 #         :type a: int
                 #         :param b: The b
                 #         :type b: str
-                #         :param args:
-                #         :param kwargs:
+                #         :param args: args
+                #         :param kwargs: kwargs
                 #         :return: things
                 #         :rtype: str or None
                 #         :raises Exception: if oh noes
@@ -994,8 +994,8 @@ class Writer:
                 #
                 #         :param a: The a More stuff
                 #         :param b: The b
-                #         :param args:
-                #         :param kwargs:
+                #         :param args: args
+                #         :param kwargs: kwargs
                 #         :return: things
                 #         :rtype: list
                 #
@@ -1047,8 +1047,8 @@ class Writer:
                 #
                 #         :param a: The a More stuff
                 #         :param b: The b
-                #         :param args:
-                #         :param kwargs:
+                #         :param args: args
+                #         :param kwargs: kwargs
                 #         :return: things
                 #         :rtype: str
                 #
@@ -1107,8 +1107,8 @@ class Writer:
                 #
                 #         :param a: The a More stuff
                 #         :param b: The b
-                #         :param args:
-                #         :param kwargs:
+                #         :param args: args
+                #         :param kwargs: kwargs
                 #         :return: things
                 #         :rtype: str or None
                 #         :raises Exception: if oh noes
@@ -1519,8 +1519,8 @@ class Writer:
                 #
                 #         :param a: The a More stuff
                 #         :param b: The b
-                #         :param args:
-                #         :param kwargs:
+                #         :param args: args
+                #         :param kwargs: kwargs
                 #
                 #         **Usage**
                 #
@@ -1550,8 +1550,8 @@ class Writer:
                 #
                 #             :param a: The a More stuff
                 #             :param b: The b
-                #             :param args:
-                #             :param kwargs:
+                #             :param args: args
+                #             :param kwargs: kwargs
                 #             :return: things
                 #             :rtype: str
                 #
@@ -1561,8 +1561,8 @@ class Writer:
                 #
                 #             :param a: The a More stuff
                 #             :param b: The b
-                #             :param args:
-                #             :param kwargs:
+                #             :param args: args
+                #             :param kwargs: kwargs
                 #             :return: things
                 #             :rtype: str or None
                 #             :raises Exception: if oh noes
@@ -1581,8 +1581,8 @@ class Writer:
                 #
                 #             :param a: The a More stuff
                 #             :param b: The b
-                #             :param args:
-                #             :param kwargs:
+                #             :param args: args
+                #             :param kwargs: kwargs
                 #             :return: things
                 #             :rtype: list
                 #
@@ -2636,8 +2636,8 @@ class Writer:
                 #     :type a: int
                 #     :param b: The b
                 #     :type b: str
-                #     :param args:
-                #     :param kwargs:
+                #     :param args: args
+                #     :param kwargs: kwargs
                 #     :return: things
                 #     :rtype: str or None
                 #     :raises Exception: if oh noes
@@ -2666,8 +2666,8 @@ class Writer:
                 #
                 #     :param a: The a More stuff
                 #     :param b: The b
-                #     :param args:
-                #     :param kwargs:
+                #     :param args: args
+                #     :param kwargs: kwargs
                 #
                 #     **Usage**
                 #
@@ -2697,8 +2697,8 @@ class Writer:
                 #
                 #         :param a: The a More stuff
                 #         :param b: The b
-                #         :param args:
-                #         :param kwargs:
+                #         :param args: args
+                #         :param kwargs: kwargs
                 #         :return: things
                 #         :rtype: str
                 #
@@ -2708,8 +2708,8 @@ class Writer:
                 #
                 #         :param a: The a More stuff
                 #         :param b: The b
-                #         :param args:
-                #         :param kwargs:
+                #         :param args: args
+                #         :param kwargs: kwargs
                 #         :return: things
                 #         :rtype: str or None
                 #         :raises Exception: if oh noes
@@ -2728,8 +2728,8 @@ class Writer:
                 #
                 #         :param a: The a More stuff
                 #         :param b: The b
-                #         :param args:
-                #         :param kwargs:
+                #         :param args: args
+                #         :param kwargs: kwargs
                 #         :return: things
                 #         :rtype: list
                 #
