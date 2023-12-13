@@ -351,7 +351,7 @@ even the comments directly on the next line and verifying the match the line bef
 
         Breaks code up into blocks by commented values to compare.
 
-        :param code:
+        :param code: code
 
         **Usage**
 
@@ -415,7 +415,7 @@ even the comments directly on the next line and verifying the match the line bef
 
         Pulls all example code into a single block.
 
-        :param text:
+        :param text: text
 
         **Usage**
 

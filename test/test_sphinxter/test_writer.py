@@ -86,7 +86,7 @@ a
 
         self.writer.parameter(parsed, 1)
         self.assertEqual(self.file.getvalue(), """
-    :param small:
+    :param small: small
 """)
 
         parsed = {
@@ -97,7 +97,7 @@ a
 
         self.writer.parameter(parsed, 1)
         self.assertEqual(self.file.getvalue(), """
-    :param small:
+    :param small: small
     :param big: stuff
     :type big: int
 """)
@@ -125,7 +125,7 @@ a
 
         self.writer.parameters(parsed, 1)
         self.assertEqual(self.file.getvalue(), """
-    :param small:
+    :param small: small
     :param big: stuff
     :type big: int
 """)
@@ -201,7 +201,7 @@ a
         self.writer.routine(parsed, 1)
         self.assertEqual(self.file.getvalue(), """
 
-    :param small:
+    :param small: small
     :param big: stuff
     :type big: int
     :return: stuff
@@ -245,8 +245,8 @@ a
         :type a: int
         :param b: The b
         :type b: str
-        :param args:
-        :param kwargs:
+        :param args: args
+        :param kwargs: kwargs
         :return: things
         :rtype: str or None
         :raises Exception: if oh noes
@@ -336,8 +336,8 @@ a
 
         :param a: The a More stuff
         :param b: The b
-        :param args:
-        :param kwargs:
+        :param args: args
+        :param kwargs: kwargs
         :return: things
         :rtype: str or None
         :raises Exception: if oh noes
@@ -407,8 +407,8 @@ a
 
         :param a: The a More stuff
         :param b: The b
-        :param args:
-        :param kwargs:
+        :param args: args
+        :param kwargs: kwargs
 
         **Usage**
 
@@ -438,8 +438,8 @@ a
 
             :param a: The a More stuff
             :param b: The b
-            :param args:
-            :param kwargs:
+            :param args: args
+            :param kwargs: kwargs
             :return: things
             :rtype: str
 
@@ -449,8 +449,8 @@ a
 
             :param a: The a More stuff
             :param b: The b
-            :param args:
-            :param kwargs:
+            :param args: args
+            :param kwargs: kwargs
             :return: things
             :rtype: str or None
             :raises Exception: if oh noes
@@ -469,8 +469,8 @@ a
 
             :param a: The a More stuff
             :param b: The b
-            :param args:
-            :param kwargs:
+            :param args: args
+            :param kwargs: kwargs
             :return: things
             :rtype: list
 
@@ -584,8 +584,8 @@ It's great
     :type a: int
     :param b: The b
     :type b: str
-    :param args:
-    :param kwargs:
+    :param args: args
+    :param kwargs: kwargs
     :return: things
     :rtype: str or None
     :raises Exception: if oh noes
@@ -614,8 +614,8 @@ It's great
 
     :param a: The a More stuff
     :param b: The b
-    :param args:
-    :param kwargs:
+    :param args: args
+    :param kwargs: kwargs
 
     **Usage**
 
@@ -645,8 +645,8 @@ It's great
 
         :param a: The a More stuff
         :param b: The b
-        :param args:
-        :param kwargs:
+        :param args: args
+        :param kwargs: kwargs
         :return: things
         :rtype: str
 
@@ -656,8 +656,8 @@ It's great
 
         :param a: The a More stuff
         :param b: The b
-        :param args:
-        :param kwargs:
+        :param args: args
+        :param kwargs: kwargs
         :return: things
         :rtype: str or None
         :raises Exception: if oh noes
@@ -676,8 +676,8 @@ It's great
 
         :param a: The a More stuff
         :param b: The b
-        :param args:
-        :param kwargs:
+        :param args: args
+        :param kwargs: kwargs
         :return: things
         :rtype: list
 
@@ -777,8 +777,8 @@ It's great
     :type a: int
     :param b: The b
     :type b: str
-    :param args:
-    :param kwargs:
+    :param args: args
+    :param kwargs: kwargs
     :return: things
     :rtype: str or None
     :raises Exception: if oh noes
