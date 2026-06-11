@@ -55,6 +55,12 @@ class TestReader(sphinxter.unittest.TestCase):
             "a": 1
         })
 
+        # plain prose that isn't valid YAML (a colon mid sentence) -> description
+
+        self.assertEqual(sphinxter.Reader.parse("Some prose\nthat has a colon: in the middle"), {
+            "description": "Some prose\nthat has a colon: in the middle"
+        })
+
         self.assertSphinxter(sphinxter.Reader.parse)
 
     def test_update(self):
@@ -447,6 +453,38 @@ class TestReader(sphinxter.unittest.TestCase):
         self.assertEqual(sphinxter.Reader.cls(test.example.Complex), self.COMPLEX_CLASS)
 
         self.assertSphinxter(sphinxter.Reader.cls)
+
+    @unittest.mock.patch("logging.info")
+    def test_cls_dunders(self, mock_log):
+
+        class Dunderful:
+            """
+            A class that customizes dunders
+            """
+
+            def __new__(cls, *args, **kwargs):
+                return object.__new__(cls)
+
+            def __init__(self, a):
+                """
+                description: build it
+                parameters:
+                    a: the a
+                """
+
+            def __getattr__(self, name):
+                return None
+
+            def meth(self):
+                """
+                a real method
+                """
+
+        parsed = sphinxter.Reader.cls(Dunderful)
+
+        # __new__ and __getattr__ are skipped, __init__ is folded in, meth is documented
+
+        self.assertEqual([method["name"] for method in parsed["methods"]], ["meth"])
 
     MODULE = {
             "name": "test.example",

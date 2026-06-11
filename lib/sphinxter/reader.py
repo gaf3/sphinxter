@@ -9,6 +9,7 @@ import ast
 import inspect
 import token
 import tokenize
+import textwrap
 import yaml
 
 import logging
@@ -132,10 +133,27 @@ class Reader:
 
                 sphinxter.Reader.parse("")
                 # {}
+
+            If the docstring is plain prose that happens to contain a colon
+            (so it isn't valid YAML) it's kept as the description::
+
+                def coloned():
+                    \"""
+                    Some prose
+                    that has a colon: in the middle
+                    \"""
+
+                sphinxter.Reader.parse(coloned.__doc__)
+                # {
+                #     "description": "Some prose\\nthat has a colon: in the middle"
+                # }
         """
 
         if docstring:
-            parsed = yaml.safe_load(docstring)
+            try:
+                parsed = yaml.safe_load(docstring)
+            except yaml.YAMLError:
+                parsed = textwrap.dedent(docstring).strip()
             if isinstance(parsed, str):
                 parsed = {"description": parsed}
         else:
@@ -900,7 +918,12 @@ class Reader:
         resource # what to extract documentation from
     )->dict:
         """
-        description: Reads all the documentation from a class for :any:`Writer.cls`
+        description: |
+            Reads all the documentation from a class for :any:`Writer.cls`
+
+            The ``__init__`` method is folded into the class documentation. Other dunder
+            methods (``__new__``, ``__getattr__``, etc.) are skipped, so classes that
+            customize them document cleanly.
         parameters:
             resource:
                 type: class
@@ -1247,7 +1270,7 @@ class Reader:
 
             if (inspect.isfunction(attr) or isinstance(attr, (staticmethod, classmethod))):
 
-                if name != "__init__":
+                if name != "__init__" and not (name.startswith("__") and name.endswith("__")):
                     parsed["methods"].append(cls.routine(attr, method=True))
 
             elif inspect.isclass(attr):
