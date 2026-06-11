@@ -1,6 +1,6 @@
 ACCOUNT=gaf3
 IMAGE=sphinxter
-INSTALL=python:3.8.5-alpine3.12
+INSTALL=python:3.10.5-alpine3.16
 VERSION?=$(shell cat VERSION)
 DEBUG_PORT=5678
 TTY=$(shell if tty -s; then echo "-it"; fi)
@@ -38,7 +38,7 @@ lint:
 
 setup:
 	docker run $(TTY) $(VOLUMES) $(PYPI) $(INSTALL) sh -c "cp -r /opt/service /opt/install && cd /opt/install/ && \
-	python setup.py install && \
+	pip install . && \
 	python -m sphinxter.reader && \
 	python -m sphinxter.document && \
 	python -m sphinxter.writer && \
