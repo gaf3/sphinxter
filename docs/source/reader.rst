@@ -140,6 +140,10 @@ sphinxter.Reader
 
         Reads all the documentation from a class for :any:`Writer.cls`
 
+        The ``__init__`` method is folded into the class documentation. Other dunder
+        methods (``__new__``, ``__getattr__``, etc.) are skipped, so classes that
+        customize them document cleanly.
+
         :param resource: what to extract documentation from
         :type resource: class
         :rtype: dict
@@ -988,6 +992,20 @@ sphinxter.Reader
 
             sphinxter.Reader.parse("")
             # {}
+
+        If the docstring is plain prose that happens to contain a colon
+        (so it isn't valid YAML) it's kept as the description::
+
+            def coloned():
+                """
+                Some prose
+                that has a colon: in the middle
+                """
+
+            sphinxter.Reader.parse(coloned.__doc__)
+            # {
+            #     "description": "Some prose\nthat has a colon: in the middle"
+            # }
 
     .. classmethod:: routine(resource, method: bool = False) -> dict
 
